@@ -55,7 +55,9 @@ files) :
   - JSON
   - LWP::UserAgent
   - MIME::Base64
-  
+
+install:
+
 	#on ubuntu
 	sudo aptitude install libjson-perl libmime-base64-perl libwww-perl
 
