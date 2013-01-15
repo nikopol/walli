@@ -18,6 +18,7 @@ device.
   - slideshow mode by directory
   - download a zip of selected images
   - permalink supported
+  - google analytics supported
 
 **LOULOU THEME SCREENSHOTS**
 
@@ -94,7 +95,8 @@ if you do, don't hesitate to pull request =)
 **TODO**
 
   - more themes
+  - mini admin mode (delete/upload/blacklist?)
   - improve layout for phone
   - support for audio files
   - star/notation system?
-  - plugeable transition system
+  - pluggable transition system
