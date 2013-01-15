@@ -41,6 +41,14 @@ $ROOT_DIR = dirname($_SERVER['SCRIPT_FILENAME']).'/';
 //0=disabled
 $REFRESH_DELAY = 0;
 
+//set to false to disable comments
+//need $SYS_DIR correctly set to work
+$WITH_COMMENTS = true;
+
+//set to false tyo disable admin options
+$ADMIN_LOGIN = "root";
+$ADMIN_PWD   = "42";
+
 //you can setup all previous parameters in an external file
 //ignored if the file is not found
 @include('config.inc.php');
@@ -350,6 +358,8 @@ function GET_zip(){
 
 /*MAIN*/
 
+session_start();
+
 if(!empty($_REQUEST['!'])){
 	$do = $_SERVER['REQUEST_METHOD'].'_'.$_REQUEST['!'];
 	if(!function_exists($do)) die("$do is not a function"); 
@@ -357,7 +367,23 @@ if(!empty($_REQUEST['!'])){
 	exit;
 }
 
-$withcom = file_exists($SYS_DIR);
+//admin login
+if($_SERVER["QUERY_STRING"]=="admin"){
+	if(!isset($_SERVER['PHP_AUTH_USER'])) {
+		if($ADMIN_LOGIN) header('WWW-Authenticate: Basic realm="'.$TITLE.'"');
+    	header('HTTP/1.0 401 Unauthorized');
+    	echo 'same player shoot again';
+    	exit;
+    } else if( $_SERVER['PHP_AUTH_USER']==$ADMIN_LOGIN && $_SERVER['PHP_AUTH_PW']==$ADMIN_PWD) {
+		 $_SESSION['godmode'] = 1;
+    } else {
+    	session_unset("godmode");
+		header('HTTP/1.0 401 Unauthorized');
+		exit;
+    }
+} 
+
+$withcom = $WITH_COMMENTS && $SYS_DIR && file_exists($SYS_DIR);
 ?>
 <!doctype html>
 <!--
@@ -430,7 +456,8 @@ https://github.com/nikopol/walli
 	<script>
 		ready(function(){
 			walli.setup({
-				comments: <?php print($withcom?'true':'false')?>
+				comments: <?php print($withcom?'true':'false')?>,
+				admin: <?php print($_SESSION['godmode']?'true':'false')?> 
 			});
 		});
 	</script>
