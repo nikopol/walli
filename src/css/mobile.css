@@ -1,0 +1,25 @@
+#thumb,
+#thumb.active,
+li.diapo.loaded,
+li.diapo.loaded img,
+li.diapo.loaded:hover {
+	-webkit-transition: none;
+	-moz-transition: none;
+	transition: none;
+}
+
+li.diapo.loaded:hover {
+	-webkit-transform: none;
+	-moz-transform: none;
+	-webkit-box-shadow: none;
+	-moz-box-shadow: none;
+	box-shadow: none;
+	text-shadow: none;
+}
+
+/*#thumbbar h1 {
+	font: bold 30px "Baumans";
+	line-height: 24px;
+	height: 20px;
+	z-index: 0;
+}*/

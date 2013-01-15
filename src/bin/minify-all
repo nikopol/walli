@@ -1,0 +1,15 @@
+#!/bin/bash
+
+cd $(dirname $0)/..
+
+[[ -f css/walli.css ]] && mv -f css/walli.css css/walli.css.last
+
+for FILE in $(cd css/themes;ls *.css)
+do
+	F=${FILE%.css}
+	echo -e "\n==[ $F template ]==========================================\n";
+	ln -sf themes/$F.css css/walli.css
+	bin/minify < walli.php > ../index-$F.php
+done
+
+[[ -f css/walli.css.last ]] && mv -f css/walli.css.last css/walli.css

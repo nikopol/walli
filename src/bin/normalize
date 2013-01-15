@@ -1,0 +1,17 @@
+#!/bin/bash
+#normalize all file in path
+#niko 2012-2013
+
+if [[ -z "`which convert 2>/dev/null`" ]]
+then
+	echo "install imagemagick"
+	exit 1
+fi
+PATH='.'
+[ "$1" ] && PATH=$1
+
+for f in "`find $PATH | grep 'png|jpe?g'`"
+do
+	echo $f
+	convert $f -auto-orient -resize 1280x1280\> norm_$f
+done
