@@ -19,17 +19,15 @@ device.
   - download a zip of selected images
   - permalink supported
 
-**SCREENSHOT**
-
-loulou theme
+**LOULOU THEME SCREENSHOTS**
 
 ![screenshot](https://github.com/nikopol/walli/blob/master/screenshots/loulou-thumb.png?raw=true "thumbnail in loulou theme")
 ![screenshot](https://github.com/nikopol/walli/blob/master/screenshots/loulou-zoom.png?raw=true "zoom with comments panel in loulou theme")
 
-black theme
+**BLACK THEME SCREENSHOTS**
 
-![screenshot](https://github.com/nikopol/walli/blob/master/screenshots/loulou-thumb.png?raw=true "thumbnail in black theme")
-![screenshot](https://github.com/nikopol/walli/blob/master/screenshots/loulou-zoom.png?raw=true "zoom with comments panel in black theme")
+![screenshot](https://github.com/nikopol/walli/blob/master/screenshots/black-thumb.png?raw=true "thumbnail in black theme")
+![screenshot](https://github.com/nikopol/walli/blob/master/screenshots/black-zoom.png?raw=true "zoom with comments panel in black theme")
 
 
 **INSTALL**
@@ -57,7 +55,7 @@ files) :
   - JSON
   - LWP::UserAgent
   - MIME::Base64
-
+  
 	#on ubuntu
 	sudo aptitude install libjson-perl libmime-base64-perl libwww-perl
 
