@@ -14,7 +14,11 @@ var
 				bprev: 'previous',
 				bcom: 'comments',
 				bthumb: 'thumbnail',
-				bplay: 'slideshow'
+				bplay: 'slideshow',
+				bupload: 'upload images',
+				bflush: 'reset cache',
+				bdiag: 'diagnostic',
+				bdel: 'delete selected images'
 			},
 			holder: {
 				who: 'enter your name…',
@@ -43,7 +47,11 @@ var
 			dlsel: 'download selected',
 			zip: 'compressing…',
 			nozip: 'nothing to download',
-			updir: ''
+			updir: '',
+			uploadfiles: 'upload %nb image%s (%z) ?',
+			flushed: '%nb file%s flushed',
+			uploaded: '%nb file%s uploaded',
+			deleted: '%nb file%s deleted',
 		},
 		fr: {
 			title: {
@@ -51,7 +59,11 @@ var
 				bprev: 'précèdente',
 				bcom: 'commentaires',
 				bthumb: 'miniatures',
-				bplay: 'diaporama'
+				bplay: 'diaporama',
+				bupload: 'ajoute des images',
+				bflush: 'vide le cache',
+				bdiag: 'diagnostique',
+				bdel: "efface les images sélectionnées"
 			},
 			holder: {
 				who: 'entrez votre nom…',
@@ -79,7 +91,11 @@ var
 			dlsel: 'télécharger la sélection',
 			zip: 'compression…',
 			nozip: 'rien à télécharger',
-			updir: ''
+			updir: '',
+			uploadfiles: 'poster %nb image%s (%z) ?',
+			flushed: '%nb fichier%s supprimé%s',
+			uploaded: '%nb image%s ajoutée%s',
+			deleted: '%nb image%s effacée%s'
 		}
 	},
 	loc,
@@ -106,7 +122,15 @@ var
 			if(e<604800)  return fmt(loc.date.day,e/86400);
 			if(e<2592000) return fmt(loc.date.week,e/604800);
 			return fmt(loc.date.month,e/2592000)
-		};		
+		};
+		loc.tpl = function(c,h) {
+			var t = loc[c];
+			for(var k in h) {
+				t = t.replace(RegExp("%"+k,"g"),h[k]);
+				if(k=="nb") t = t.replace(RegExp("%s","g"),h.nb>1?"s":"");
+			}
+			return t;
+		};
 
 		//set dom element's text
 		if(loc.title)  for(k in loc.title)  if(o=_('#'+k)) o.setAttribute('title',loc.title[k]);
@@ -119,7 +143,7 @@ ready(function(){ setlocale(navigator.language) });
 
 var log = (function(){
 	var
-		L, _l,
+		L, d,
 		start = new Date().getTime(),
 		level = { debug:1, info:2, warn:3, error:4},
 		ull = hash.get('log'),
@@ -140,13 +164,13 @@ var log = (function(){
 	} else {
 		ready(function(){
 			append(document.body,'<div id="log"></div>');
-			_l = _('#log');
+			d = _('#log');
 		});
 		L = function(lev,args){
-			if(_l && level[lev] >= ll) {
+			if(d && level[lev] >= ll) {
 				var k, t=('000000'+(new Date().getTime()-start)).substr(-6);
-				for(k in args) append(_l,'<div class="'+lev+'"><span class="timer">'+t+'</span>'+args[k].replace(' ','&nbsp;')+'</div>');
-				_l.scrollTop = _l.scrollHeight;
+				for(k in args) append(d,'<div class="'+lev+'"><span class="timer">'+t+'</span>'+args[k].replace(' ','&nbsp;')+'</div>');
+				d.scrollTop = d.scrollHeight;
 			}
 		};
 	}
@@ -160,42 +184,56 @@ var log = (function(){
 
 /*OSD INFO*/
 
-var osd = (function(){
-	var _o, lab, max, val, cb, timerid = false;
-	ready(function(){ _o=_('#osd') });
+var osd;
+osd = (function(){
+	var o, p, lab, max, val, cb, timerid = false;
+	ready(function(){ 
+		o=_('#osd');
+		p=_('#progress');
+	});
 	return {
+		/*TEXT*/
 		hide: function(){
 			timerid = false;
-			css(_o,'-active');
+			css(o,'-active');
 		},
 		show: function(){
-			css(_o,'+active');
+			css(o,'+active');
 		},
-		loading: function(n,callback,msg){
-			lab = msg || 'LOADING';
+		error: function(msg){
+			log.error(msg);
+			osd.info(msg,'error',3000);
+		},
+		info: function(msg,cls,duration){
+			_(o,msg).className = cls || '';
+			osd.show();
+			if(timerid) clearTimeout(timerid);
+			timerid = setTimeout(osd.hide,duration || 1500);
+		},
+		loc: function(m,v){
+			osd.info(loc.tpl(m,v));
+		},
+		/*PROGRESS BAR*/
+		start: function(n,callback,msg){
+			lab = msg || '%v/%m';
 			max = n;
 			cb = callback;
-			this.show();
-			this.set(0);
+			if(max) {
+				css(p,'+active');
+				osd.set(0);
+			}
 		},
 		set: function(n){
 			val = n;
-			_(_o,lab+' '+n+'/'+max);
+			var t = _('#progresstext')
+			_(t,lab.replace(/%v/,n).replace(/%m/,max));
 			if(n >= max) {
-				this.hide();
+				css(p,'-active');
 				if(cb) cb();
 			}
+			_('#progressbar').style.width = max ? Math.floor(position(t).width*n/max)+'px' : 0;
 		},
-		inc: function(){ this.set(++val) },
-		error: function(msg){
-			this.info(msg,'error',3000);
-		},
-		info: function(msg,cls,duration){
-			_(_o,msg).className = cls || '';
-			this.show();
-			if(timerid) clearTimeout(timerid);
-			timerid = setTimeout(this.hide,duration || 1500);
-		}
+		inc: function(){ osd.set(++val) }
 	};
 })();
 
@@ -214,7 +252,7 @@ walli = (function(){
 		path,              //current path
 		files = [],        //files for current directory
 		dirs = [],         //sub dirs for current directory
-		tozip = [],        //selected files
+		chkfiles = [],        //selected files
 		idx = false,       //current file
 		nimg = 0,          //current img element
 		img = [],          //img elements
@@ -231,8 +269,23 @@ walli = (function(){
 		comon,             //comments panel flag
 		mode,              //display mode thumb/tof/zik/video
 		cul,               //comments ul container
-		comok;             //comments flag
+		comok,             //comments flag
+		god = false,       //godmode flag
+		zip = true;        //zip download flag
 
+	function layout(){
+		//auto resize diapos
+		var p = position('#thumbbar');
+		_('#diapos').style.top = (p.top+p.height)+'px';
+	}
+
+	function setbzip(c,t) {
+		if(zip) {
+			_('#bzip',t).className=c;
+			layout();
+		}
+	}
+	
 	function loadimg(n,cb){
 		var f = files[n],i,t=Date.now();
 		i = new Image();
@@ -289,8 +342,9 @@ walli = (function(){
 		unsetcheck();
 		log.debug('loading path '+(p || '/'));
 		var diapos = _('#diapos',''), rail = _('#path','');
-		_('#bzip',loc.dlall).className='hide';
-		tozip=[];
+		setbzip('hide',loc.dlall);
+		if(god) _('#bdel').className='hide';
+		chkfiles=[];
 		ajax('?!=ls&path='+p, function(ls){
 			path = ls.path;
 			log.info((path || '/')+'loaded with '+ls.dirs.length+' subdirs and '+ls.files.length+' files found');
@@ -301,6 +355,14 @@ walli = (function(){
 				d.setAttribute('title',loc.updir);
 				d.onclick = function(){loadpath(sub)};
 				diapos.appendChild(d);
+				var rp = '';
+				path.split('/').forEach(function(n){
+					if(n){
+						rp += n+'/';
+						append(rail,'<button onclick="walli.cd(\''+rp+'\')">'+n+'</button>');
+					}
+				});
+				layout();
 			}
 			var add = function(url,click,cls,id){
 				var image = (function(){
@@ -309,6 +371,7 @@ walli = (function(){
 						o = document.createElement('img'),
 						u = url;
 					o.onload = function(){
+						osd.inc();
 						log.debug(u+' loaded');
 						css(this.parentNode,'+loaded');
 					};
@@ -322,7 +385,7 @@ walli = (function(){
 				d.setAttribute('title',cleantitle(url));
 				if(id != undefined){
 					image.id = 'diapo'+id;
-					append(d,'<input type="checkbox" id="chk'+id+'" n="'+id+'" onchange="walli.zwap('+id+')"/><label for="chk'+id+'"></label>');
+					if(zip || god) append(d,'<input type="checkbox" id="chk'+id+'" n="'+id+'" onchange="walli.zwap('+id+')"/><label for="chk'+id+'"></label>');
 				}
 				if((coms[url]||[]).length)
 					append(d,'<span class="minicom">'+numk(coms[url].length)+'</span>');
@@ -332,21 +395,12 @@ walli = (function(){
 			files = ls.files;
 			dirs = ls.dirs;
 			coms = ls.coms;
-			refresh = ls.refresh;
+			if(cb) cb();
+			osd.start(files.length+dirs.length);
 			ls.dirs.forEach(function(d){ add(d,function(){loadpath(d)},'dir') });
 			ls.files.forEach(function(d,i){ add(files[i],function(){walli.show(i,0)},'',i) });
-			if(ls.files.length) _('#bzip').className='all';
+			if(ls.files.length && zip) setbzip('all');
 			sethash();
-			if(path){
-				var rp = '';
-				path.split('/').forEach(function(n){
-					if(n){
-						rp += n+'/';
-						append(rail,'<button onclick="walli.cd(\''+rp+'\')">'+n+'</button>');
-					}
-				});
-			}
-			if(cb) cb();
 			setupcheck();
 		});
 	}
@@ -367,7 +421,7 @@ walli = (function(){
 			left: Math.floor((ww-w)/2+(ww*p))+'px',
 			top: Math.floor((wh-h)/2)+'px'
 		});
-		log.debug("calcpos("+n+","+p+")="+img[n].style.left);
+		//log.debug("calcpos("+n+","+p+")="+img[n].style.left);
 	}
 
 	function setplaytimer(){
@@ -383,12 +437,12 @@ walli = (function(){
 		if(b){
 			setplaytimer();
 			css('#bplay','active');
-			osd.info(loc.play);
+			osd.loc('play');
 		} else {
 			if(slideid) clearTimeout(slideid);
 			slideid = false;
 			css('#bplay','');
-			osd.info(loc.stop);
+			osd.loc('stop');
 		}
 	}
 
@@ -473,18 +527,12 @@ walli = (function(){
 			url: '?!=comment',
 			data: { file:files[idx], who:name, what:msg },
 			ok: function(d){
-				if(d.error)
-					osd.error(d.error);
-				else {
-					coms[d.file] = d.coms;
-					loadcoms(files[idx]);
-					setminicom(d.coms.length);
-					what.value = '';
-				}
+				coms[d.file] = d.coms;
+				loadcoms(files[idx]);
+				setminicom(d.coms.length);
+				what.value = '';
 			},
-			error: function(xhr){
-				osd.error(xhr.statusText);
-			}
+			error: osd.error
 		});
 	}
 
@@ -494,17 +542,11 @@ walli = (function(){
 			url: '?!=uncomment',
 			data: { file:file, id:id },
 			ok: function(d){
-				if(d.error)
-					osd.error(d.error);
-				else {
-					coms[d.file] = d.coms;
-					loadcoms(files[idx]);
-					setminicom(d.coms.length);
-				}
+				coms[d.file] = d.coms;
+				loadcoms(files[idx]);
+				setminicom(d.coms.length);
 			},
-			error: function(xhr){
-				osd.error(xhr.statusText);
-			}
+			error: osd.error
 		});
 	}
 
@@ -546,14 +588,21 @@ walli = (function(){
 		return false;
 	}
 
+	function fullscreen(){
+		var e = document.documentElement;
+		if(e.requestFullscreen)            e.requestFullscreen();
+		else if(e.mozRequestFullScreen)    e.mozRequestFullScreen();
+		else if(e.webkitRequestFullScreen) e.webkitRequestFullScreen();
+	}
+
 	return {
 		setup: function(o) {
 			comok = o.comments;
-
-			var b = document.body;
-
+			refresh = o.refresh;
+			god = o.god;
+			zip = o.zip;
+	
 			view = _('#view');
-			//view.onclick = walli.thumb;
 			cul = _('#coms');
 
 			slide = _('#slide');
@@ -614,8 +663,6 @@ walli = (function(){
 			};
 		
 			img = [_('#img0'), _('#img1')];
-			//img[0].onclick =
-			//img[1].onclick = walli.next;
 			slide.ondragstart = 
 			img[0].ondragstart =
 			img[1].ondragstart = function(e){
@@ -623,7 +670,14 @@ walli = (function(){
 				return false;
 			};
 			
-			window.onresize = function(){ if(showing) calcpos(nimg,0); };
+			window.onresize = function(){ 
+				if(showing) {
+					img[1-nimg].className = '';
+					calcpos(1-nimg,1);
+					calcpos(nimg,0);
+				}
+				layout();
+			};
 			window.onorientationchange = function(){
 				var
 					v = _('#viewport'),
@@ -655,6 +709,8 @@ walli = (function(){
 			_('#bthumb').onclick   = walli.thumb;
 			_('#bzip').onclick     = walli.dlzip;
 
+			if(!zip) _('#bzip').className = 'hide';
+
 			if(comok) {
 				who = _('#who');
 				what = _('#what');
@@ -664,6 +720,51 @@ walli = (function(){
 				_('#bcom').onclick     = walli.togglecom;
 				_('#bsend').onclick    = walli.sendcom;
 			}
+
+			if(god) {
+				//logout
+				_('#blogout').onclick=walli.logout;
+				//upload
+				if(FormData) {
+					_('#iupload').onchange=function(e){
+						var fdata = new FormData(), size=0, files=this.files, i, f, c;
+						for(i=0; i<files.length; ++i) {
+							f = files[i];
+							size += f.size;				
+							fdata.append('file'+i,f);
+						}
+						c = loc.tpl('uploadfiles',{z:size,nb:files.length});
+						if(confirm(c)) {
+							var xhr = new XMLHttpRequest();
+							xhr.open('POST', 'walli.php?!=img&&path='+path);
+							xhr.onload = function(){
+								if(xhr.status == 200) {
+									var d = JSON.parse(xhr.responseText);
+									osd.loc('uploaded',{nb:d.added});
+									if(d.added) loadpath(path);
+								} else 
+									osd.error("error "+xhr.status);
+							};
+							osd.start(100);
+							xhr.upload.onprogress = function(e){ 
+								if(event.lengthComputable) osd.set(Math.round(100*e.loaded/e.total));
+							};
+							xhr.send(fdata);
+						}
+					};
+					_('#bupload').onclick=function(){
+						_('#iupload').click();
+					};
+				} else
+					css('#bupload',{diplay:'none'});
+				//del
+				_('#bdel').onclick=walli.del;
+				//diag
+				_('#bdiag').onclick=walli.diag;
+				//reset
+				_('#bflush').onclick=walli.flush;
+			} else if(o.admin)
+				_('#blogin').onclick=walli.login;
 			
 			log.info("show on!");
 
@@ -684,36 +785,93 @@ walli = (function(){
 			}
 			hash.onchange(gethash);
 		},
+		login: function(){
+			document.location = '?login'+document.location.hash;
+		},
+		logout: function(){
+			document.location = '?logout'+document.location.hash;
+		},
+		del: function(){
+			if(god) {
+				var lst = files.filter(function(f,n){return chkfiles.indexOf(n)!=-1});
+				if(chkfiles.length){
+					ajax({
+						url: '?!=del',
+						type: 'POST',
+						data: {files:lst.join('*')},
+						ok: function(d){
+							osd.loc('deleted',{nb:d.deleted});
+							if(d.deleted) loadpath(path);
+						},
+						error: osd.error
+					});
+				} else
+					osd.error(loc.noselection);
+			}
+		},
+		diag: function(){
+			if(god)
+				ajax({
+					url: '?!=diag',
+					type: 'GET',
+					ok: function(d){
+						var h = _('#diag'), l = '<ul>';
+						for(var k in d.stats) l += '<li class="stat">'+d.stats[k]+' '+k+'</li>';
+						for(var k in d.checks) l += '<li class="'+(d.checks[k]?'ok':'bad')+'">'+k+'</li>';
+						if(!h){
+							h = document.createElement('div');
+							h.id='diag';
+							h.onclick=function(){ document.body.removeChild(h) };
+							document.body.appendChild(h);
+						}
+						h.innerHTML = l;
+					},
+					error: osd.error
+				});
+		},
+		flush: function(){
+			if(god)
+				ajax({
+					url: '?!=flush',
+					type: 'GET',
+					ok: function(d){
+						osd.loc('flushed',{nb:d.flushed});
+					},
+					error: osd.error
+				});
+		},
 		dlzip: function(){
-			var lst = tozip.length
-				? files.filter(function(f,n){return tozip.indexOf(n)!=-1})
+			var lst = chkfiles.length
+				? files.filter(function(f,n){return chkfiles.indexOf(n)!=-1})
 				: files;
-			if(lst.length){
+			if(zip && lst.length){
 				_('#bzip',loc.zip);
 				ajax({
 					url: '?!=zip',
 					type: 'POST',
 					data: {files:lst.join('*')},
 					ok: function(d){
-						if(d.error) osd.error(d.error);
-						else document.location='?!=zip&zip='+d.zip;
+						document.location='?!=zip&zip='+d.zip;
 						walli.zwap();
 					},
-					error: function(e){
-						osd.error(e);
-						walli.zwap();
-					}
+					error: osd.error
 				});
 			} else
-				osd.info(loc.nozip);
+				osd.loc('nozip');
 		},
 		zwap: function(n) {
 			if(n!=undefined) {
-				if(tozip.indexOf(n)==-1) tozip.push(n);
-				else tozip=tozip.filter(function(i){return i!=n});
+				if(chkfiles.indexOf(n)==-1) chkfiles.push(n);
+				else chkfiles=chkfiles.filter(function(i){return i!=n});
 			}
-			if(tozip.length) _('#bzip',loc.dlsel.replace('%d',tozip.length)).className='selected';
-			else             _('#bzip',loc.dlall).className='all';
+			if(chkfiles.length) {
+				setbzip('selected',loc.tpl('dlsel',{nb:chkfiles.length}));
+				if(god) _('#bdel').className='';
+			} else {
+				setbzip('all',loc.dlall);
+				if(god) _('#bdel').className='hide';
+			}
+
 		},
 		thumb: function() {
 			setmode('thumb');
@@ -725,6 +883,7 @@ walli = (function(){
 				n >= files.length ? n%files.length :
 				n;
 			//log.debug('display #'+idx+' '+files[idx]);
+			if(!showing) setmode('tof');
 			css('#mask','+active');
 			loadimg(idx,function(ni,i){
 				//log.debug("load "+ni+" ok p="+p);
@@ -732,7 +891,6 @@ walli = (function(){
 				if(showing) {
 					nimg = 1-nimg;
 				} else {
-					setmode('tof');
 					p=0;
 				}
 				att[nimg] = { w:i.width, h:i.height };
@@ -806,10 +964,10 @@ walli = (function(){
 		},
 		sendcom: function(){
 			if(who.value.length<1) {
-				osd.info(loc.emptywho);
+				osd.loc('emptywho');
 				who.focus();
 			} else if(what.value.length<1) {
-				osd.info(loc.emptywhat);
+				osd.loc('emptywhat');
 				what.focus();
 			} else
 				addcom(who.value,what.value);

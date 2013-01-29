@@ -79,13 +79,15 @@ steps:
 	cp black.css yours.css
 	
 	#setup your dev/test environment
+	#  return in walli/src/css
 	cd ..
 	ln -sf themes/yours.css walli.css
 
 	#configure your http server to handle walli/ directory
-	#test it via http://localhost/pathtobomb/walli/src/walli.php
+	#test it via http://localhost/pathtwalli/walli/src/walli.php
 	#when it's done, to minify it
-	cd walli/src
+	#  return walli/src
+	cd ..
 	bin/minify < walli.php > ../index-yours.php
 	#or
 	bin/minify-all
@@ -100,3 +102,8 @@ if you do, don't hesitate to pull request =)
   - support for audio files
   - star/notation system?
   - pluggable transition system
+
+**CREDITS**
+
+  * some icons from http://gemicon.net
+  * favicon from http://tango.freedesktop.org
