@@ -1,8 +1,6 @@
-// WALLI JS
+// WALLi JS
 // https://github.com/nikopol/walli
 // niko 2012-2013
-
-"use strict";
 
 /*LOCALE*/
 
@@ -25,8 +23,8 @@ var
 				what: 'enter your comment…'
 			},
 			text: {
+				//bsend: '&#10004;',
 				loading: 'loading…'
-				//bsend: '&#10004;'
 			},
 			date: {
 				now: 'now',
@@ -48,10 +46,10 @@ var
 			zip: 'compressing…',
 			nozip: 'nothing to download',
 			updir: '',
-			uploadfiles: 'upload %nb image%s (%z) ?',
+			uploadfiles: 'upload %nb image%s (%z bytes) ?',
 			flushed: '%nb file%s flushed',
 			uploaded: '%nb file%s uploaded',
-			deleted: '%nb file%s deleted',
+			deleted: '%nb file%s deleted'
 		},
 		fr: {
 			title: {
@@ -92,7 +90,7 @@ var
 			zip: 'compression…',
 			nozip: 'rien à télécharger',
 			updir: '',
-			uploadfiles: 'poster %nb image%s (%z) ?',
+			uploadfiles: 'poster %nb image%s (%z octets) ?',
 			flushed: '%nb fichier%s supprimé%s',
 			uploaded: '%nb image%s ajoutée%s',
 			deleted: '%nb image%s effacée%s'
@@ -100,6 +98,7 @@ var
 	},
 	loc,
 	setlocale = function(l){
+		"use strict";
 		var k, t, o;
 		loc = locales[l]?locales[l]:locales.en;
 
@@ -123,6 +122,12 @@ var
 			if(e<2592000) return fmt(loc.date.week,e/604800);
 			return fmt(loc.date.month,e/2592000)
 		};
+		loc.size = function(s) {
+			if(s<2048)       return s+'b';
+			if(s<1000000)    return Math.round(s/1024)+'kb';
+			if(s<1000000000) return Math.round(s/1000000)+'M';
+			return Math.round(s/1000000000)+'G';
+		};
 		loc.tpl = function(c,h) {
 			var t = loc[c];
 			for(var k in h) {
@@ -142,6 +147,7 @@ ready(function(){ setlocale(navigator.language) });
 /*LOG*/
 
 var log = (function(){
+	"use strict";
 	var
 		L, d,
 		start = new Date().getTime(),
@@ -186,6 +192,7 @@ var log = (function(){
 
 var osd;
 osd = (function(){
+	"use strict";
 	var o, p, lab, max, val, cb, timerid = false;
 	ready(function(){ 
 		o=_('#osd');
@@ -223,15 +230,18 @@ osd = (function(){
 				osd.set(0);
 			}
 		},
-		set: function(n){
+		set: function(n,m){
+			if(!!m && m != max) {
+				max = m;
+				css(p,'+active');
+			}
 			val = n;
-			var t = _('#progresstext')
-			_(t,lab.replace(/%v/,n).replace(/%m/,max));
+			_('#progresstext',lab.replace(/%v/,n).replace(/%m/,max));
 			if(n >= max) {
 				css(p,'-active');
 				if(cb) cb();
 			}
-			_('#progressbar').style.width = max ? Math.floor(position(t).width*n/max)+'px' : 0;
+			_('#progressbar').style.width = max ? Math.floor(position('#progress').width*n/max)+'px' : 0;
 		},
 		inc: function(){ osd.set(++val) }
 	};
@@ -241,7 +251,7 @@ osd = (function(){
 
 var walli;
 walli = (function(){
-
+	"use strict";
 	var
 		DELAY = 5,         //delay for slideshow
 		TOUCHDELTA=80,     //touch move delta
@@ -398,10 +408,11 @@ walli = (function(){
 			if(cb) cb();
 			osd.start(files.length+dirs.length);
 			ls.dirs.forEach(function(d){ add(d,function(){loadpath(d)},'dir') });
-			ls.files.forEach(function(d,i){ add(files[i],function(){walli.show(i,0)},'',i) });
+			ls.files.forEach(function(d,i){ add(d,function(){walli.show(i,0)},'',i) });
 			if(ls.files.length && zip) setbzip('all');
 			sethash();
 			setupcheck();
+			if(god && _('#diag')) walli.diag();
 		});
 	}
 
@@ -727,14 +738,13 @@ walli = (function(){
 				//upload
 				if(FormData) {
 					_('#iupload').onchange=function(e){
-						var fdata = new FormData(), size=0, files=this.files, i, f, c;
-						for(i=0; i<files.length; ++i) {
-							f = files[i];
-							size += f.size;				
+						var fdata = new FormData(), size=0, files=this.files;
+						for(var f,i=0;i<files.length;++i) {
+							f=files[i];
+							size += f.size;
 							fdata.append('file'+i,f);
 						}
-						c = loc.tpl('uploadfiles',{z:size,nb:files.length});
-						if(confirm(c)) {
+						if(confirm(loc.tpl('uploadfiles',{z:loc.size(size),nb:files.length}))) {
 							var xhr = new XMLHttpRequest();
 							xhr.open('POST', 'walli.php?!=img&&path='+path);
 							xhr.onload = function(){
@@ -745,9 +755,9 @@ walli = (function(){
 								} else 
 									osd.error("error "+xhr.status);
 							};
-							osd.start(100);
-							xhr.upload.onprogress = function(e){ 
-								if(event.lengthComputable) osd.set(Math.round(100*e.loaded/e.total));
+							xhr.upload.onprogress = function(e){
+								if(event.lengthComputable)
+									osd.set(e.loaded,e.total);
 							};
 							xhr.send(fdata);
 						}
@@ -760,7 +770,7 @@ walli = (function(){
 				//del
 				_('#bdel').onclick=walli.del;
 				//diag
-				_('#bdiag').onclick=walli.diag;
+				_('#bdiag').onclick=walli.switchdiag;
 				//reset
 				_('#bflush').onclick=walli.flush;
 			} else if(o.admin)
@@ -796,8 +806,8 @@ walli = (function(){
 				var lst = files.filter(function(f,n){return chkfiles.indexOf(n)!=-1});
 				if(chkfiles.length){
 					ajax({
-						url: '?!=del',
 						type: 'POST',
+						url: '?!=del',
 						data: {files:lst.join('*')},
 						ok: function(d){
 							osd.loc('deleted',{nb:d.deleted});
@@ -809,15 +819,19 @@ walli = (function(){
 					osd.error(loc.noselection);
 			}
 		},
+		switchdiag: function(){
+			var b = _('#diag');
+			if(b) document.body.removeChild(b); else walli.diag();
+		},
 		diag: function(){
 			if(god)
 				ajax({
 					url: '?!=diag',
-					type: 'GET',
+					data: {path:path},
 					ok: function(d){
 						var h = _('#diag'), l = '<ul>';
-						for(var k in d.stats) l += '<li class="stat">'+d.stats[k]+' '+k+'</li>';
-						for(var k in d.checks) l += '<li class="'+(d.checks[k]?'ok':'bad')+'">'+k+'</li>';
+						for(var k in d.stats) l += '<li class="stat">'+(k=='size'?loc.size(d.stats[k]):d.stats[k]+' '+k)+'</li>';
+						for(var k in d.checks) l += '<li class="'+(d.checks[k]?'ok':'bad')+'">'+k+(d.checks[k]?' enabled':' disabled')+'</li>';
 						if(!h){
 							h = document.createElement('div');
 							h.id='diag';
@@ -833,7 +847,6 @@ walli = (function(){
 			if(god)
 				ajax({
 					url: '?!=flush',
-					type: 'GET',
 					ok: function(d){
 						osd.loc('flushed',{nb:d.flushed});
 					},
@@ -847,8 +860,8 @@ walli = (function(){
 			if(zip && lst.length){
 				_('#bzip',loc.zip);
 				ajax({
-					url: '?!=zip',
 					type: 'POST',
+					url: '?!=zip',
 					data: {files:lst.join('*')},
 					ok: function(d){
 						document.location='?!=zip&zip='+d.zip;
