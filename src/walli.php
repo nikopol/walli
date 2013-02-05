@@ -1,7 +1,7 @@
 <?php
 /*
-WALLi v0.1 (c) NiKo 2012-2013
-quick image wall
+WALLi v0.2 (c) NiKo 2012-2013
+standalone image wall
 https://github.com/nikopol/walli
 
 just put this single file into an http served directory 
@@ -10,8 +10,7 @@ containing [sub-dir of] media files.
 
 /*PHP CONFIG*/
 
-//uncomment these settings if your experienced problem
-//when uploadin large files
+//uncomment these settings if your experienced problem when uploading large files
 //ini_set("upload_max_filesize", "64M");
 //ini_set("post_max_size", "64M");
 
@@ -52,14 +51,14 @@ $REFRESH_DELAY = 0;
 //require $SYS_DIR correctly set to work
 $WITH_COMMENTS = true;
 
-//set to false to disable download
+//set to true to enable zip download
 //require $SYS_DIR correctly set to work
 //require zip support ( see http://php.net/manual/en/zip.installation.php )
 $WITH_ZIPDL = false;
 
-//set to false tyo disable admin options
-$ADMIN_LOGIN = "root";
-$ADMIN_PWD   = "42";
+//set to false to disable admin options
+$ADMIN_LOGIN = false;
+$ADMIN_PWD   = false;
 
 //you can setup all previous parameters in an external file
 //ignored if the file is not found
@@ -125,6 +124,14 @@ function get_file_path($f){
 	return $ROOT_DIR.check_path($f);
 }
 
+function writable($path) {
+	if($path && !preg_match('/\/$/',$path)) $path.='/';
+	$f=get_file_path($path.'.walli.test');
+	$b=@file_put_contents($f,'42');
+	@unlink($f);
+	return $b==2;
+}
+
 function check_sys_dir(){
 	global $SYS_DIR;
 	if(!$SYS_DIR) return false;
@@ -170,19 +177,25 @@ function ls($path='',$pattern='',$recurse=0){
 		if($fn[0]!='.') {
 			if($file->isDir())
 				$subs[]=$path.$fn.'/';
-			else  if(!$pattern || preg_match('/'.$pattern.'/i',$fn))
+			else  if(!$pattern || preg_match('/'.$pattern.'/i',$fn)) {
 				$files[]=$path.$fn;
+				$size+=$file->getSize();
+			}
 		}
 	}
 	$dirs=array();
 	foreach($subs as $d){
 		$sub=ls($d,$pattern,1);
 		if(count($sub['files'])){
-			if($recurse) $files=array_merge($files,$sub['files']);
 			$dirs[]=$d;
+			if($recurse) {
+				$files=array_merge($files,$sub['files']);
+				$dirs=array_merge($dirs,$sub['dirs']);
+				$size+=$sub['size'];
+			}
 		};
 	}
-	return array('path'=>$path,'files'=>$files,'dirs'=>$dirs);
+	return array('path'=>$path,'files'=>$files,'dirs'=>$dirs,'size'=>$size);
 }
 
 function iconify($file,$size){
@@ -389,24 +402,40 @@ function GET_info(){
 }
 
 function GET_diag(){
-	global $withcom,$withadm,$withintro,$REFRESH_DELAY;
+	global $withcom,$withadm,$withintro,$withzip,$REFRESH_DELAY;
 	godcheck();
-	$ls=ls('',FILEMATCH,1);
-	$d=array(
-		'checks' => array(),
-		'stats' => array(
-		 	'images' => count($ls['files'])
+	$path=check_path($_GET['path']);
+	$ls=ls($path,FILEMATCH,1);
+	//calc max subdirs depth
+	function depth($p){
+		$d=preg_replace('/\/$/','',$p);
+		return count(split('/',$d));
+	}
+	$mindepth=depth($path);
+	$maxdepth=0;
+	foreach($ls['dirs'] as $s) {
+		$d = depth($s);
+		if($d>$maxdepth) $maxdepth=$d;
+	}
+	$maxdepth=$maxdepth > $mindepth ? $maxdepth-$mindepth : 0;
+	send_json(array(
+		'path'   => $path,
+		'stats'  => array(
+			'images'        => count($ls['files']),
+			'size'          => $ls['size'],
+			'subdirs'       => count($ls['dirs']),
+			'max subdirs depth' => $maxdepth,
+		),
+		'checks' => array(
+			'admin'         => $withadm,
+			'upload'        => writable($path),
+			'zip download'  => $withzip,
+			'comments'      => $withcom,
+			'cache'         => check_sys_dir(),
+			'intro'         => $withintro,
+			'auto refresh'  => $REFRESH_DELAY
 		)
-	);
-	$c=array(
-		'cache'        => check_sys_dir(),
-		'admin'        => $withadm,
-		'comments'     => $withcom,
-		'intro'        => $withintro,
-		'auto refresh' => $REFRESH_DELAY
-	);
-	foreach($c as $k=>$v) $d['checks'][$k.($v?' enabled':' disabled')] = $v;
-	send_json($d);
+	));
 }
 
 function POST_img() {
@@ -459,18 +488,12 @@ if(!empty($_REQUEST['!'])){
 
 //admin login
 if($_SERVER["QUERY_STRING"]=="login" && $ADMIN_LOGIN && $ADMIN_PWD){
-	if(!isset($_SERVER['PHP_AUTH_USER'])) {
-		if($ADMIN_LOGIN) header('WWW-Authenticate: Basic realm="'.$TITLE.'"');
+	if(!isset($_SERVER['PHP_AUTH_USER'])){
+		if($ADMIN_LOGIN) header('WWW-Authenticate: Basic realm="'.$TITLE.' admin"');
 		header('HTTP/1.0 401 Unauthorized');
-		echo 'same player shoot again';
-		exit;
-	} else if( $_SERVER['PHP_AUTH_USER']==$ADMIN_LOGIN && $_SERVER['PHP_AUTH_PW']==$ADMIN_PWD) {
-		$godmode = true;
-	} else {
-		header('HTTP/1.0 401 Unauthorized');
-		exit;
-	}
-} else if($_SERVER["QUERY_STRING"]=="logout") {
+	} else
+		$godmode = $_SERVER['PHP_AUTH_USER']==$ADMIN_LOGIN && $_SERVER['PHP_AUTH_PW']==$ADMIN_PWD;
+}else if($_SERVER["QUERY_STRING"]=="logout"){
 	$godmode = false;
 	setcookie(COOKIE_GOD,false);
 }
