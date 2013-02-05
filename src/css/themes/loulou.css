@@ -1,34 +1,14 @@
-/* WALLI Loulou CSS - niko 2012 */
+/* WALLi Loulou CSS - niko 2013 */
 
 /*MAIN*/
 
 @import url(http://fonts.googleapis.com/css?family=Satisfy);
-
-* {
-	margin: 0;
-	padding: 0;
-}
+@import url(base.css);
 
 body {
 	background: #fff url(../images/bg.jpg) repeat;
 	font: normal 16px "Satisfy";
-	overflow: hidden;
 	color: #aaa;
-}
-
-a,a:visited {
-	text-decoration: none;
-}
-
-input[type="text"],
-textarea,
-select {
-	font: normal 16px "Satisfy";
-	border: none;
-	background-color: transparent;
-	width: 380px;
-	color: #666;
-	padding: 0;
 }
 
 button {
@@ -38,163 +18,47 @@ button {
 	background-color: transparent;
 }
 
-ul {
-	list-style: none;
-}
-
-::-webkit-scrollbar {
-	background: transparent;
-	width: 6px;
-	height: 6px;
+input[type="text"],
+textarea,
+select {
+	font: normal 16px "Satisfy";
 	border: none;
-}
-
-::-webkit-scrollbar:vertical {
-	margin-left: 5px;
-}
-
-::-webkit-scrollbar-thumb {
-	background: #aaa;
-	border: none;
-	border-radius: 6px;
-
-}
-
-::-webkit-scrollbar-button {
-	display: none;
+	background-color: transparent;
+	color: #666;
+	padding: 0;
 }
 
 /*COPYRIGHT*/
 
 #copyright {
-	position: absolute;
-	font: normal 10px Arial,Helvetica;
-	z-index: 99;
-	color: #000;
 	bottom: 22px;
-	right: -11px;
-	-webkit-transform: rotate(-90deg); 
-	-moz-transform: rotate(-90deg);	
-}
-
-#copyright a,
-#copyright a:visited {
-	color: #aaa;
-}
-
-/*LOG*/
-
-#log {
-	position: absolute;
-	top: 0;
-	right: -501px;
-	bottom: 0;
-	width: 500px;
-	z-index: 32000;
-	font: normal 12px Monaco,"DejaVu Sans Mono","Lucida Console","Andale Mono",monospace;
-	background-color: #000;
-	padding-left: 2px;
-	color: #fff;
-	opacity: 0.8;
-	overflow: scroll;
-	-webkit-transition: right 0.5s ease;
-	-moz-transition: right 0.5s ease;
-	transition: right 0.5s ease;
-}
-
-#log.active {
-	right: 0;
-	-webkit-transition: right 0.5s ease;
-	-moz-transition: right 0.5s ease;
-	transition: right 0.5s ease;
-}
-
-
-#log .debug { color: #777; }
-#log .info  { color: #ddd; }
-#log .warn  { color: #fc0; }
-#log .error { color: #f88; }
-#log .timer {
-	color: #aaa;
-	border-right: 1px solid #aaa;
-	margin-right: 3px;
-	padding-right: 3px;
+	right: -2px;
+	-webkit-transform: rotate(-90deg) translateY(10px) translateX(6px);
+	-moz-transform: rotate(-90deg);
+	transform: rotate(-90deg);
 }
 
 /*OSD*/
 
 #osd {
-	display: hidden;
-	position: absolute;
-	top: 10px;
-	right: 5px;
-	height: 40px;
-	z-index: 0;
-	color: #fff;
 	font: bold 30px Satisfy;
 	text-shadow: 0 4px 3px rgba(0, 0, 0, 0.4), 0 8px 10px rgba(0, 0, 0, 0.1), 0 8px 9px rgba(0, 0, 0, 0.1);
-	opacity: 0;
-	text-align: right;
-	padding: 0 10px;
-	-webkit-transition: all 0.5s ease;
-	-moz-transition: all 0.5s ease;
-	transition: all 0.5s ease;
 }
 
-#osd.active {
-	display: block;
-	position: absolute;
-	z-index: 50;
-	opacity: 1;
-	-webkit-transition: opacity 0.2s ease-in-out;
-	-moz-transition: opacity 0.2s ease-in-out;
-	transition: opacity 0.2s ease-in-out;
-}
-
-/*THUMB*/
-
-#thumb {
-	position: absolute;
-	top: 0;
-	bottom: 0;
-	left: 0;
-	right: 0;
-	opacity: 0;
-	z-index: 0;
-	overflow: auto;
-	padding: 5px 10px 10px 10px;
-	-webkit-transition: all 0.5s linear;
-	-moz-transition: all 0.5s linear;
-	transition: all 0.5s linear;
-}
-
-#thumb.active {
-	opacity: 1;
-	z-index: 1;
-	-webkit-transition: all 0.5s linear;
-	-moz-transition: all 0.5s linear;
-	transition: all 0.5s linear;
-}
 
 /*THUMB BAR*/
 
 #thumbbar {
-	position: absolute;
-	left: 0;
-	right: 0;
-	top: 0;
-	height: 30px;
-	padding: 5px;
+	height: 34px;
 	box-shadow: 0px 5px 3px rgba(0, 0, 0, 0.2);
 	background: rgba(0,0,0,0.1);
-	z-index: 20;	
+	z-index: 20;
 }
 
 #thumbbar h1 {
 	font: bold 50px "Satisfy";
 	height: 20px;
 	color: #fff;
-	display: inline;
 	margin: 0 15px 0 5px;
 	line-height: 60px;
 	text-shadow: 0 1px 0 #ccc, 0 2px 0 #c9c9c9,
@@ -206,19 +70,16 @@ ul {
 }
 
 #thumbbar button {
-	position: relative;
-	display: inline;
-	height: 28px;
 	font: normal 18px Satisfy;
 	color: #888;
 	padding: 1px 10px 0 5px;
 	margin: 0 4px 2px 2px;
 	background: -webkit-gradient(linear, left top, left bottom, from(#fffc9f), to(#e0e080));
 	background: -moz-linear-gradient(top, #fffc9f, #e0e080);
+	background: linear-gradient(top, #fffc9f, #e0e080);
 	-moz-box-shadow: -1px 2px 1px rgba(0, 0, 0, 0.2), -2px 1px 1px rgba(0, 0, 0, 0.1);
 	-webkit-box-shadow: -1px 2px 1px rgba(0, 0, 0, 0.2), -2px 1px 1px rgba(0, 0, 0, 0.1);
 	box-shadow: -1px 2px 1px rgba(0, 0, 0, 0.2), -2px 1px 1px rgba(0, 0, 0, 0.1);
-	vertical-align: top;
 }
 
 #thumbbar button:after {
@@ -263,10 +124,6 @@ ul {
 
 /* RAILROAD PATH */
 
-#path {
-	display: inline;
-}
-
 #thumbbar #path button {
 	background: -webkit-gradient(linear, left top, left bottom, from(#d3f2d4), to(#b8c7b9));
 	background: -moz-linear-gradient(top,  #d3f2d4,  #b8c7b9);
@@ -279,100 +136,47 @@ ul {
 /*DIAPOS*/
 
 #diapos {
-	position: absolute;
-	top: 40px;
-	left: 0;
-	right: 0;
-	bottom: 0;
-	overflow: auto;
-	padding-top: 10px;
-}
-
-#diapos ul {
-	/*display: inline;*/
+	padding: 10px 5px 0 5px;
 }
 
 li.diapo {
-	position: relative;
-	display: inline;
-	float: left;
-	width: 150px;
 	height: 172px;
 	margin: 8px;
 	background-color: #fff;
-	overflow: hidden;
-	text-align: center;
-	vertical-align: bottom;
 	padding: 10px 10px 2px 10px;
 	-webkit-box-shadow: 5px 5px 5px 1px rgba(0,0,0,.5);
 	-moz-box-shadow: 5px 5px 5px 1px rgba(0,0,0,.5);
 	box-shadow: 5px 5px 5px 1px rgba(0,0,0,.5);
 }
 
-li.diapo img {
-	display: block;
-}
-
-li.diapo:after {
-	content: attr(title);
-}
-
-li.diapo.up {
-	/*background: transparent url(../icons/up.png) no-repeat center center;
-	height: auto;
-	padding-top: 150px;
-	-webkit-box-shadow: none;
-	-moz-box-shadow: none;
-	box-shadow: none;*/
-	display: none;
-}
-
 li.diapo.loaded {
 	color: #666;
-	-webkit-transition: all 0.4s linear;
-	-moz-transition: all 0.4s linear;
-	transition: all 0.4s linear;
 }
 
 li.diapo.loaded:nth-child(even) {
 	-webkit-transform: rotate(-2deg);
 	-moz-transform: rotate(-2deg);
+	transform: rotate(-2deg);
 }
 
 li.diapo.loaded:nth-child(5n) {
 	-webkit-transform: rotate(4deg);
 	-moz-transform: rotate(4deg);
+	transform: rotate(4deg);
 }
 
 li.diapo.loaded:nth-child(3n) {
 	-webkit-transform: rotate(1deg);
 	-moz-transform: rotate(1deg);
-}
-
-li.diapo.loaded.up {
-	-webkit-box-shadow: none;
-	-moz-box-shadow: none;
-	box-shadow: none;
-}
-
-li.diapo.loaded img {
-	-webkit-transition: all 0.4s linear;
-	-moz-transition: all 0.4s linear;
-	transition: all 0.4s linear;
+	transform: rotate(1deg);
 }
 
 li.diapo span.minicom {
-	position: absolute;
 	top: 16px;
 	right: 16px;
-	width: 24px;
-	height: 21px;
 	font-size: 10px;
 	line-height: 18px;
 	font-weight: bold;
-	text-align: center;
-	color: #fff;
-	background: transparent url(../icons/mini-comment.png) no-repeat center center;
 }
 
 li.diapo input[type="checkbox"] {
@@ -407,123 +211,20 @@ li.diapo.loaded:hover {
 	transition: all 0.2s linear;
 }
 
-li.diapo.loaded.up:hover {
-	-webkit-box-shadow: none;
-	-moz-box-shadow: none;
-	box-shadow: none;
-}
-
-/*VIEW*/
-
-#view {
-	position: absolute;
-	overflow: hidden;
-	top: 0;
-	bottom: 0;
-	left: 0;
-	right: 0;
-	opacity: 0;
-	z-index: 0;
-	-webkit-transition: all 0.5s linear;
-	-moz-transition: all 0.5s linear;
-	transition: all 0.5s linear;
-}
-
-#view.active {
-	opacity: 1;
-	z-index: 1;
-	-webkit-transition: all 0.5s linear;
-	-moz-transition: all 0.5s linear;
-	transition: all 0.5s linear;
-}
-
-#view img {
-	position: absolute;
-	display: block;
-	opacity: 0;
-	left: 0;
-	top: 0;
-	width: 1px;
-	height: 1px;
-	z-index: 0;
-}
-
-#view img.animated {
-	opacity: 1;
-	-webkit-transition: all 1s ease;
-	-moz-transition: all 1s ease;
-	transition: all 1s ease;
-}
-
-/*VIEW SLIDER*/
-
-#view #slide {
-	position: absolute;	
-	left: 60px;
-	right: 0;
-	top: 0;
-	bottom: 0;
-	overflow: hidden;
-	-webkit-transition: all 0.5s ease;
-	-moz-transition: all 0.5s ease;
-	transition: all 0.5s ease;
-}
-
-#view.com #slide {
-	left: 360px;
-	-webkit-transition: all 0.5s ease;
-	-moz-transition: all 0.5s ease;
-	transition: all 0.5s ease;
-}
-
-#view.comfix #slide {
-	left: 360px;
-}
-
-/*VIEW COMMENTS*/
+/*COMMENTS*/
 
 #view #comments {
-	position: absolute;
-	top: 0;
-	left: -300px;
-	bottom: 0;
-	width: 300px;
-	z-index: 7;
 	color: #666;
-	overflow: hidden;
-	-webkit-transition: all 0.5s ease;
-	-moz-transition: all 0.5s ease;
-	transition: all 0.5s ease;
 	background: #fff url(../images/bg.jpg) repeat;
-}
-
-#view.com #comments {
-	left: 60px;
-	-webkit-transition: all 0.5s ease;
-	-moz-transition: all 0.5s ease;
-	transition: all 0.5s ease;
-}
-
-#view.comfix #comments {
-	left: 60px;
 }
 
 #coms {
-	overflow: auto;
-	position: absolute;
-	top: 3px;
-	bottom: 160px;
-	width: 285px;	
 	background: #fff url(../images/bg.jpg) repeat;
-
 }
 
 #coms li {
-	position: relative;
 	color: #aaa74a;
 	background-color: #fffc9f;
-	padding: 3px;
-	margin: 5px 5px 10px 5px;
 	-webkit-box-shadow: 1px 1px 2px 1px #666;
 	-moz-box-shadow: 1px 1px 2px 1px #666;
 	box-shadow: 1px 1px 2px 1px #666;
@@ -534,10 +235,8 @@ li.diapo.loaded.up:hover {
 }
 
 #coms li button.del {
-	position: absolute;
 	right: 4px;
 	top: 3px;
-	font-size: 12px;
 	color: #aaa;
 }
 
@@ -561,19 +260,10 @@ li.diapo.loaded.up:hover {
 }
 
 #newcom {
-	position: absolute;
-	bottom: 5px;
-	width: 280px;
-	height: 140px;
 	background-color: #fffc9f;
-	padding: 3px;
 	-webkit-box-shadow: 2px 2px 2px 1px #666;
 	-moz-box-shadow: 2px 2px 2px 1px #666;
 	box-shadow: 3px 3px 2px 1px #666;
-}
-
-#who, #what {
-	width: 280px;
 }
 
 #who:focus, #what:focus {
@@ -582,11 +272,6 @@ li.diapo.loaded.up:hover {
 
 #newcom .unused {
 	color: #999639;
-}
-
-#what {
-	height: 88px;
-	resize: none;
 }
 
 #bsend {
@@ -608,102 +293,20 @@ li.diapo.loaded.up:hover {
 /*VIEW BAR*/
 
 #viewbar {
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 60px;
-	bottom: 0;
-	z-index: 8;
 	background: #fff url(../images/bg.jpg) repeat;
 }
 
 #viewbar button {
-	position: absolute;
-	border: none;
 	color: #444;
-	background-color: transparent;
-	opacity: 0.5;
-	border-radius: 3px;
-	-webkit-transition: all 0.3s linear;
-	-moz-transition: all 0.3s linear;
-	transition: all 0.3s linear;
-}
-
-#viewbar button:hover {
-	opacity: 1;
-	-webkit-transition: all 0.3s linear;
-	-moz-transition: all 0.3s linear;
-	transition: all 0.3s linear;
-}
-
-#viewbar button.active {
-	opacity: 1;
-}
-
-#bprev {
-	left: 6px;
-	top: 2px;
-	width: 24px;
-	height: 48px;
-	background: url(../icons/prev.png) no-repeat center center;
-}
-
-#bnext {
-	left: 32px;
-	top: 2px;
-	width: 24px;
-	height: 48px;
-	background: url(../icons/next.png) no-repeat center center;
-}
-
-#bcom {
-	left: 6px;
-	top: 50px;
-	width: 48px;
-	height: 48px;
-	background: url(../icons/comment.png) no-repeat center center;
 }
 
 #bcom span {
 	font: bold 24px Satisfy;
 }
 
-#bplay {
-	left: 6px;
-	top: 98px;
-	width: 48px;
-	height: 42px;
-	background: url(../icons/play.png) no-repeat center center;
-}
-
-#bthumb {
-	left: 6px;
-	top: 148px;
-	width: 48px;
-	height: 48px;
-	background: url(../icons/thumbs.png) no-repeat center center;
-}
-
 /* LOADING */
 
-#mask {
-	display: none;
-	z-index: 50;
-	position: absolute;
-	top: 0;
-	bottom: 0;
-	left: 0;
-	right: 0;
-}
-
-#mask.active {
-	display: block;
-}
-
-#loading {
-	position: absolute;
-	bottom: 2px;
-	right: 5px;
+#mask #loading {
 	color: #fff;
 	font: bold 30px Satisfy;
 	text-shadow: 0 4px 3px rgba(0, 0, 0, 0.4), 0 8px 10px rgba(0, 0, 0, 0.1), 0 8px 9px rgba(0, 0, 0, 0.1);
@@ -712,18 +315,10 @@ li.diapo.loaded.up:hover {
 /* INTRO */
 
 #intro {
-	z-index: 90;
-	position: absolute;
-	top: 0;
-	bottom: 0;
-	left: 0;
-	right: 0;
 	background-color: rgba(200,150,200,0.4);
 }
 
 #intro.hide {
-	z-index: 0;
-	opacity: 0;
 	-webkit-transition: all 1.4s linear;
 	-moz-transition: all 1.4s linear;
 	transition: all 1.4s linear;
@@ -734,14 +329,11 @@ li.diapo.loaded.up:hover {
 	width: 300px;
 	height: 300px;
 	vertical-align: middle;
-/*	color: #b88;
-	background-color: #fcc;
-*/	text-align: center;
+	text-align: center;
 	-moz-border-radius: 150px;
 	-webkit-border-radius: 150px;
 	border-radius: 150px;
-/*	text-shadow: 0 0 5px #fff;
-*/	border: 3px solid #777;
+	border: 3px solid #777;
 	color: #fff;
 	background-color: #c9c;
 	font: normal 16px Satisfy;
@@ -749,11 +341,11 @@ li.diapo.loaded.up:hover {
 }
 
 #intro h1 {
-	font-size: 60px;
 	color: #fff;
 }
 
-#intro h2 {
-	font-size: 30px;
-	margin-bottom: 10px;
+/* ADMIN BAR */
+
+#godbar {
+	top: 10px;
 }

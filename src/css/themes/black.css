@@ -1,37 +1,14 @@
-/* WALLI Black CSS - niko 2012 */
+/* WALLi Black CSS - niko 2013 */
 
 /*MAIN*/
 
 @import url(http://fonts.googleapis.com/css?family=Baumans);
-
-* {
-	margin: 0;
-	padding: 0;
-}
+@import url(base.css);
 
 body {
 	background: #000;
-	overflow: hidden;
 	font: normal 16px "Baumans";
 	color: #ccc;
-}
-
-a,a:visited {
-	text-decoration: none;
-}
-
-input[type="text"],
-textarea,
-select {
-	font: normal 16px "Baumans";
-	border: none;
-	background-color: #222;
-	width: 380px;
-	color: #fff;
-	padding: 0;
-	-webkit-border-radius: 3px;
-	-moz-border-radius: 3px;
-	border-radius: 3px;
 }
 
 button {
@@ -41,176 +18,50 @@ button {
 	background-color: transparent;
 }
 
-ul {
-	list-style: none;
-}
-
-::-webkit-scrollbar {
-	background: transparent;
-	width: 6px;
-	height: 6px;
+input[type="text"],
+textarea,
+select {
+	font: normal 16px "Baumans";
 	border: none;
+	background-color: #222;
+	color: #fff;
+	padding: 0;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
 }
 
 ::-webkit-scrollbar:hover {
 	background: #222;
 }
 
-::-webkit-scrollbar:vertical {
-	margin-left: 5px;
-}
-
 ::-webkit-scrollbar-thumb {
 	background: #999;
-	border: none;
-}
-
-::-webkit-scrollbar-button {
-	display: none;
 }
 
 /*COPYRIGHT*/
 
 #copyright {
-	position: absolute;
-	font: normal 10px Arial,Helvetica;
-	z-index: 99;
-	color: #000;
 	bottom: 22px;
-	right: -11px;
-	-webkit-transform: rotate(-90deg); 
-	-moz-transform: rotate(-90deg);	
-}
-
-#copyright a,
-#copyright a:visited {
-	color: #aaa;
+	right: -2px;
+	-webkit-transform: rotate(-90deg) translateY(10px) translateX(6px);
+	-moz-transform: rotate(-90deg);
+	transform: rotate(-90deg);
 }
 
 /*OSD*/
 
 #osd {
-	display: hidden;
-	position: absolute;
-	top: 10px;
-	left: 60px;
-	right: 20px;
-	height: 40px;
-	z-index: 0;
-	color: #fff;
 	font: bold 30px Baumans;
 	text-shadow: 0 4px 3px rgba(0, 0, 0, 0.4), 0 8px 10px rgba(0, 0, 0, 0.1), 0 8px 9px rgba(0, 0, 0, 0.1);
-	opacity: 0;
-	text-align: right;
-	padding: 0 10px;
-	-webkit-transition: all 0.5s ease;
-	-moz-transition: all 0.5s ease;
-	transition: all 0.5s ease;
-}
-
-#osd.active {
-	display: block;
-	position: absolute;
-	z-index: 5;
-	opacity: 1;
-	-webkit-transition: opacity 0.2s ease-in-out;
-	-moz-transition: opacity 0.2s ease-in-out;
-	transition: opacity 0.2s ease-in-out;
-}
-
-#osd.error {
-	color: #f77;	
-}
-
-#progress {
-	display: none;
-}
-
-#progress.active {
-	display: block;
-}
-
-#progresstext,
-#progressbar {
-	position: absolute;
-	left: 10px;
-	bottom: 10px;
-	height: 18px;
-	font: normal 16px "Baumans";
-	text-align: center;
-	color: #eee;
-}
-
-#progressbar {
-	background: #666;
-/*	background: -webkit-repeating-linear-gradient( 45deg, #000 0, #000 5px, #666 5px, #666 20px ), #666;
-	background: -moz-repeating-linear-gradient( 45deg, rgba(255,255,255,.2) 0, rgba(255,255,255,.2) 10px, rgba(255,255,255,0) 10px, rgba(255,255,255,0) 20px ), -moz-linear-gradient( rgba(255,255,255,.1) 50%, rgba(255,255,255,0) 60% ), #666;
-	background: repeating-linear-gradient( 45deg, rgba(255,255,255,.2) 0, rgba(255,255,255,.2) 10px, rgba(255,255,255,0) 10px, rgba(255,255,255,0) 20px ), linear-gradient( rgba(255,255,255,.1) 50%, rgba(255,255,255,0) 60% ), #666;
-	background-size: 300px 20px, auto, auto;
-	background-position: -300px 0, top, top;
-	background-position: top right, top, top;*/
-	z-index: 50;
-}
-
-#progresstext {
-	right: 10px;
-	z-index: 51;
-}
-
-/*THUMB*/
-
-#thumb {
-	position: absolute;
-	top: 0;
-	bottom: 0;
-	left: 0;
-	right: 0;
-	opacity: 0;
-	z-index: 0;
-	overflow: auto;
-	padding: 5px 10px 10px 10px;
-	-webkit-transition: all 0.5s linear;
-	-moz-transition: all 0.5s linear;
-	transition: all 0.5s linear;
-}
-
-#thumb.active {
-	opacity: 1;
-	z-index: 1;
-	-webkit-transition: all 0.5s linear;
-	-moz-transition: all 0.5s linear;
-	transition: all 0.5s linear;
 }
 
 /*THUMB BAR*/
 
-#thumbbar {
-	position: absolute;
-	left: 0;
-	right: 0;
-	top: 0;
-	padding: 5px 5px 0 20px;
-	/*background: rgba(0,0,0,0.1);*/
-	/*z-index: 20;*/
-	font-size: 0;
-	clear-after: both;
-}
-
-/*#thumbar:after {
-	content: "";
-	display: block;
-	height: 0;
-	clear: both;
-}
-*/
 #thumbbar h1 {
 	font: bold 24px "Baumans";
-	color: #EEE;
-	display: inline;
-	margin: 0 4px 0 -14px;
+	color: #eee;
 	background: #333;
-	padding: 0 12px;
-	cursor: default;
 }
 
 #thumbbar h1:hover {
@@ -219,15 +70,11 @@ ul {
 }
 
 #thumbbar button {
-	position: relative;
-	display: inline;
-	height: 28px;
 	font: normal 18px Baumans;
 	color: #ccc;
+	background: #444;
 	padding: 0 30px 0 14px;
 	margin: 0 -9px 4px 0;
-	background: #444;
-	vertical-align: top;
 }
 
 #thumbbar button:before {
@@ -270,15 +117,8 @@ ul {
 	border-color: #000 #000 #000 #666;
 }
 
-#thumbbar button:active {
-}
-
 #thumbbar button#bzip {
 	background: #666;
-}
-
-#thumbbar button#bzip.empty {
-	display: none;
 }
 
 #thumbbar button#bzip:hover {
@@ -302,14 +142,6 @@ ul {
 	border-color: #000 #000 #000 #888;
 }
 
-#thumbbar button#bzip.hide {
-	display: none;
-}
-
-#thumbbar button#bzip.all {
-	display: none;
-}
-
 #thumbbar button:first-child {
 	padding-left: 10px;
 }
@@ -318,161 +150,14 @@ ul {
 	border-width: 0;
 }
 
-/*#thumbbar button:last-child {
-	padding-right: 10px;
-}
-
-#thumbbar button:last-child:after {
-	border-width: 0;
-}*/
-
-
-/* RAILROAD PATH */
-
-#path {
-	display: inline;
-}
-
-#thumbbar #path button {
-}
-
-#thumbbar #path button:after {
-}
-
-/* ADMIN BAR */
-
-#godbar {
-	position: absolute;
-	right: 10px;
-	top: 5px;
-	width: 16px;
-	z-index: 30;
-}
-
-#godbar button {
-	height: 16px;
-	width: 16px;
-	margin: 0 0 3px 0;
-	opacity: 0.3;
-}
-
-#godbar button:hover {
-	opacity: 1;
-	-webkit-transition: all 0.3s linear;
-	-moz-transition: all 0.3s linear;
-	transition: all 0.3s linear;
-}
-
-#godbar button.hide {
-	display: none;
-}
-
-#blogin  { background: url(../icons/black/login.png) repeat center center; }
-#blogout { background: url(../icons/black/logout.png) repeat center center; }
-#bupload { background: url(../icons/black/upload.png) repeat center center; }
-#bflush  { background: url(../icons/black/reset.png) repeat center center; }
-#bdel    { background: url(../icons/black/del.png) repeat center center; }
-#bdiag   { background: url(../icons/black/diag.png) repeat center center; }
-
-#iupload {
-	position: absolute;
-	top: -1000px;
-}
-
-#diag {
-	position: absolute;
-	top: 40px;
-	bottom: 40px;
-	left: 40px;
-	right: 40px;
-	overflow: auto;
-	border-radius: 10px;
-	background-color: rgba(0,0,0,0.9);
-	z-index: 90;
-	padding: 5px;
-	-webkit-box-shadow: 0 0 15px #fff;
-	-moz-box-shadow: 0 0 15px #fff;
-	box-shadow: 0 0 15px #fff;
-
-}
-
-#diag li {
-	list-style-type: none;
-	background-repeat: no-repeat;
-	background-position: 0 center;
-	padding-left: 20px;
-}
-
-#diag li.ok {
-	background-image: url(../icons/ok.png);
-}
-
-#diag li.bad {
-	background-image: url(../icons/bad.png);
-}
-
 /* DIAPOS */
 
-#diapos {
-	position: absolute;
-	top: 37px;
-	padding: 5px 5px 0 5px;
-	left: 0;
-	right: 0;
-	bottom: 0;
-	overflow: auto;
-}
-
 li.diapo {
-	position: relative;
-	display: inline;
-	float: left;
-	width: 150px;
-	height: 168px;
-	overflow: hidden;
-	text-align: center;
-	vertical-align: bottom;
-	margin: 5px;
-	padding: 0;
 	background-color: #000;
-}
-
-li.diapo img {
-	display: block;
-}
-
-li.diapo:after {
-	content: attr(title);
-}
-
-li.diapo.up {
-	display: none;
 }
 
 li.diapo.loaded {
 	color: #999;
-	-webkit-transition: all 0.4s linear;
-	-moz-transition: all 0.4s linear;
-	transition: all 0.4s linear;
-}
-
-li.diapo.loaded img {
-	-webkit-transition: all 0.4s linear;
-	-moz-transition: all 0.4s linear;
-	transition: all 0.4s linear;
-}
-
-li.diapo.loaded span.minicom {
-	position: absolute;
-	top: 5px;
-	right: 5px;
-	width: 24px;
-	height: 21px;
-	font-size: 10px;
-	line-height: 17px;
-	text-align: center;
-	color: #fff;
-	background: transparent url(../icons/mini-comment.png) no-repeat center center;
 }
 
 li.diapo.loaded:hover {
@@ -489,137 +174,22 @@ li.diapo.loaded:hover {
 	text-shadow: 0 0 10px #fff;
 }
 
-li.diapo.loaded.up:hover {
-	-webkit-box-shadow: none;
-	-moz-box-shadow: none;
-	box-shadow: none;
-}
-
-li.diapo input[type="checkbox"] {
-	position: absolute;
-	top: 5px;
-	left: 5px;
-}
-
 /*SLIDES*/
 
 #view {
-	position: absolute;
-	overflow: hidden;
-	top: 0;
-	bottom: 0;
-	left: 0;
-	right: 0;
-	opacity: 0;
-	z-index: 0;
 	background: #000;
-	-webkit-transition: all 0.5s linear;
-	-moz-transition: all 0.5s linear;
-	transition: all 0.5s linear;
-}
-
-#view.active {
-	opacity: 1;
-	z-index: 1;
-	-webkit-transition: all 0.5s linear;
-	-moz-transition: all 0.5s linear;
-	transition: all 0.5s linear;
-}
-
-#view img {
-	position: absolute;
-	display: block;
-	opacity: 0;
-	left: 0;
-	top: 0;
-	width: 1px;
-	height: 1px;
-	z-index: 0;
-}
-
-#view img.touch {
-	opacity: 1;
-	z-index: 4;
-}
-
-#view img.animated {
-	opacity: 1;
-	z-index: 4;
-	-webkit-transition: all 1s ease-out;
-	-moz-transition: all 1s ease-out;
-	transition: all 1s ease-out;
-}
-
-/*SLIDER*/
-
-#view #slide {
-	position: absolute;	
-	left: 60px;
-	right: 0;
-	top: 0;
-	bottom: 0;
-	overflow: hidden;
-	-webkit-transition: all 0.5s ease;
-	-moz-transition: all 0.5s ease;
-	transition: all 0.5s ease;
-}
-
-#view.com #slide {
-	left: 360px;
-	-webkit-transition: all 0.5s ease;
-	-moz-transition: all 0.5s ease;
-	transition: all 0.5s ease;
-}
-
-#view.comfix #slide {
-	left: 360px;
 }
 
 /*COMMENTS*/
 
 #view #comments {
-	position: absolute;
-	top: 0;
-	left: -300px;
-	bottom: 0;
-	width: 300px;
-	z-index: 7;
-	overflow: hidden;
-	background-color: #000;
 	color: #fff;
-	-webkit-transition: all 0.5s ease;
-	-moz-transition: all 0.5s ease;
-	transition: all 0.5s ease;
-}
-
-#view.com #comments {
-	left: 60px;
-	-webkit-transition: all 0.5s ease;
-	-moz-transition: all 0.5s ease;
-	transition: all 0.5s ease;
-}
-
-#view.comfix #comments {
-	left: 60px;
-}
-
-#coms {
-	overflow: auto;
-	position: absolute;
-	top: 3px;
-	bottom: 160px;
-	width: 285px;
+	background-color: #000;
 }
 
 #coms li {
-	position: relative;
-	padding: 3px;
-	margin: 5px 5px 10px 5px;
 	background: #222;
 	border-radius: 2px;
-}
-
-#coms li content {
 }
 
 #coms li header {
@@ -628,22 +198,7 @@ li.diapo input[type="checkbox"] {
 }
 
 #coms li button.del {
-	position: absolute;
-	top: 1px;
-	right: 2px;
-	font-size: 12px;
-}
-
-#newcom {
-	position: absolute;
-	bottom: 5px;
-	width: 280px;
-	height: 140px;
-	padding: 3px;
-}
-
-#who, #what {
-	width: 280px;
+	color: #eee;
 }
 
 #newcom .unused {
@@ -652,8 +207,6 @@ li.diapo input[type="checkbox"] {
 
 #what {
 	margin-top: 5px;
-	height: 88px;
-	resize: none;
 }
 
 #bsend {
@@ -665,7 +218,6 @@ li.diapo input[type="checkbox"] {
 	-webkit-border-radius: 3px;
 	-moz-border-radius: 3px;
 	border-radius: 3px;
-
 }
 
 #bsend:hover {
@@ -676,126 +228,34 @@ li.diapo input[type="checkbox"] {
 	margin: 1px 0 0 1px;
 }
 
-button.del {
-	color: #eee;
-}
-
 /*VIEW BAR*/
 
 #viewbar {
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 60px;
-	bottom: 0;
-	z-index: 8;
 	background-color: #000;
 }
 
 #viewbar button {
-	position: absolute;
-	border: none;
-	background-color: transparent;
-	opacity: 0.5;
 	color: #eee;
-	-webkit-transition: all 0.3s linear;
-	-moz-transition: all 0.3s linear;
-	transition: all 0.3s linear;
-}
-
-#viewbar button:hover {
-	opacity: 1;
-	-webkit-transition: all 0.3s linear;
-	-moz-transition: all 0.3s linear;
-	transition: all 0.3s linear;
-}
-
-#viewbar button.active {
-	opacity: 1;
-}
-
-#bprev {
-	left: 4px;
-	top: 2px;
-	width: 24px;
-	height: 48px;
-	background: url(../icons/prev.png) no-repeat center center;
-}
-
-#bnext {
-	left: 32px;
-	top: 2px;
-	width: 24px;
-	height: 48px;
-	background: url(../icons/next.png) no-repeat center center;
-}
-
-#bcom {
-	left: 6px;
-	top: 148px;
-	width: 48px;
-	height: 48px;
-	background: url(../icons/comment.png) no-repeat center center;
 }
 
 #bcom span {
-	position: absolute;
-	left: 0;
-	top: 4px;
-	width: 48px;
-	text-align: center;
 	font: bold 24px Baumans;
 }
+
 #bcom:hover span {
 	text-shadow: 0 0 5px #fff;
 }
 
-#bplay {
-	left: 6px;
-	top: 102px;
-	width: 48px;
-	height: 42px;
-	background: url(../icons/play.png) no-repeat center center;
-}
-
-#bthumb {
-	left: 6px;
-	top: 50px;
-	width: 48px;
-	height: 48px;
-	background: url(../icons/thumbs.png) no-repeat center center;
-}
-
 /* LOADING */
 
-#mask {
-	display: none;
-	z-index: 50;
-	position: absolute;
-	top: 0;
-	bottom: 0;
-	left: 0;
-	right: 0;
-}
-
-#mask.active {
-	display: block;
-}
-
 #mask #loading {
-	position: absolute;
-	bottom: 28px;
-	left: 0;
-	right: 0;
-	text-align: center;
-	font: normal 32px Baumans;
 	color: #fff;
+	font: normal 32px Baumans;
 	text-shadow: 0 0 10px #fff;
 }
 
 #mask.active #loading {
 	-webkit-animation: roty 4s linear 0s infinite;
-	-moz-animation: roty 4s linear 0s infinite;
 	animation: roty 4s linear 0s infinite;
 }
 
@@ -805,41 +265,40 @@ button.del {
 	100% { -webkit-transform: perspective(0px) rotateY(360deg); }
 }
 
-@-moz-keyframes roty {
-	0% { -moz-transform: perspective(0px) rotateY(0deg); }
-	50% { -moz-transform: perspective(0px) rotateY(180deg); }
-	100% { -moz-transform: perspective(0px) rotateY(360deg); }
-}
-
 @keyframes roty {
-	0% { transform: perspective(0px) rotateY(0deg); }
-	50% { transform: perspective(0px) rotateY(180deg); }
-	100% { transform: perspective(0px) rotateY(360deg); }
+	0% { transform: rotateY(0deg); }
+	50% { transform: rotateY(180deg); }
+	100% { transform: rotateY(360deg); }
 }
 
 /* INTRO */
 
 #intro {
-	z-index: 90;
-	position: absolute;
-	top: 0;
-	bottom: 0;
-	left: 0;
-	right: 0;
 	background-color: rgba(50,50,50,0.6);
 }
 
-#intro.hide {
-	z-index: 0;
-	opacity: 0;
-}
-
 #intro h1 {
-	font-size: 60px;
 	color: #fff;
 }
 
-#intro h2 {
-	font-size: 30px;
-	margin-bottom: 10px;
+
+/* ADMIN BAR */
+
+#godbar {
+	width: 16px;
 }
+
+#godbar button {
+	height: 16px;
+	width: 16px;
+	margin: 0 0 3px 0;
+	opacity: 0.3;
+	border: none;
+}
+
+#blogin  { background: url(../icons/black/login.png) repeat center center; }
+#blogout { background: url(../icons/black/logout.png) repeat center center; }
+#bupload { background: url(../icons/black/upload.png) repeat center center; }
+#bflush  { background: url(../icons/black/reset.png) repeat center center; }
+#bdel    { background: url(../icons/black/del.png) repeat center center; }
+#bdiag   { background: url(../icons/black/diag.png) repeat center center; }

@@ -1,0 +1,647 @@
+/* WALLi Base CSS - niko 2013 */
+
+/*MAIN*/
+
+* {
+	margin: 0;
+	padding: 0;
+}
+
+body {
+	overflow: hidden;
+}
+
+a,a:visited {
+	text-decoration: none;
+}
+
+input[type="text"],
+textarea,
+select {
+	width: 380px;
+}
+
+ul {
+	list-style: none;
+}
+
+::-webkit-scrollbar {
+	background: transparent;
+	width: 6px;
+	height: 6px;
+	border: none;
+}
+
+::-webkit-scrollbar:hover {
+	background: #666;
+}
+
+::-webkit-scrollbar:vertical {
+	margin-left: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+	background: #aaa;
+	border: none;
+	border-radius: 6px;
+
+}
+
+::-webkit-scrollbar-button {
+	display: none;
+}
+
+/*COPYRIGHT*/
+
+#copyright {
+	color: #000;
+	position: absolute;
+	font: normal 10px Arial,Helvetica;
+	z-index: 99;
+	bottom: 2px;
+	right: 20px;
+}
+
+#copyright a,
+#copyright a:visited {
+	color: #aaa;
+}
+
+/*LOG*/
+
+#log {
+	position: absolute;
+	top: 0;
+	right: -501px;
+	bottom: 0;
+	width: 500px;
+	z-index: 32000;
+	font: normal 12px Monaco,"DejaVu Sans Mono","Lucida Console","Andale Mono",monospace;
+	background-color: #000;
+	padding-left: 2px;
+	color: #fff;
+	opacity: 0.8;
+	overflow: scroll;
+	-webkit-transition: right 0.5s ease;
+	-moz-transition: right 0.5s ease;
+	transition: right 0.5s ease;
+}
+
+#log.active {
+	right: 0;
+	-webkit-transition: right 0.5s ease;
+	-moz-transition: right 0.5s ease;
+	transition: right 0.5s ease;
+}
+
+
+#log .debug { color: #777; }
+#log .info  { color: #ddd; }
+#log .warn  { color: #fc0; }
+#log .error { color: #f88; }
+#log .timer {
+	color: #aaa;
+	border-right: 1px solid #aaa;
+	margin-right: 3px;
+	padding-right: 3px;
+}
+
+/*OSD*/
+
+#osd {
+	display: hidden;
+	position: absolute;
+	top: 10px;
+	left: 60px;
+	right: 20px;
+	height: 40px;
+	z-index: 0;
+	color: #fff;
+	font: bold 30px Arial;
+	opacity: 0;
+	text-align: right;
+	padding: 0 10px;
+	-webkit-transition: all 0.5s ease;
+	-moz-transition: all 0.5s ease;
+	transition: all 0.5s ease;
+}
+
+#osd.active {
+	display: block;
+	position: absolute;
+	z-index: 5;
+	opacity: 1;
+	-webkit-transition: opacity 0.2s ease-in-out;
+	-moz-transition: opacity 0.2s ease-in-out;
+	transition: opacity 0.2s ease-in-out;
+}
+
+#osd.error {
+	color: #f77;	
+}
+
+#progress {
+	display: none;
+	position: absolute;
+	left: 0;
+	bottom: 0;
+	height: 25px;
+	right: 0;
+}
+
+#progress.active {
+	display: block;
+	z-index: 50;
+	background: rgba(50,50,50,.6);
+}
+
+#progressbar {
+	position: absolute;
+	height: 25px;
+	background: #666;
+	z-index: 51;
+}
+
+#progresstext {
+	position: absolute;
+	width: 100%;
+	font-size: 22px;
+	text-align: center;
+	color: #eee;
+	z-index: 52;
+}
+
+/*THUMB*/
+
+#thumb {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	opacity: 0;
+	z-index: 0;
+	overflow: auto;
+	padding: 5px 10px 10px 10px;
+	-webkit-transition: all 0.5s linear;
+	-moz-transition: all 0.5s linear;
+	transition: all 0.5s linear;
+}
+
+#thumb.active {
+	opacity: 1;
+	z-index: 1;
+	-webkit-transition: all 0.5s linear;
+	-moz-transition: all 0.5s linear;
+	transition: all 0.5s linear;
+}
+
+/*THUMB BAR*/
+
+#thumbbar {
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 0;
+	padding: 5px 5px 0 20px;
+	font-size: 0;
+	clear-after: both;
+}
+
+#thumbbar h1 {
+	font: bold 24px Arial;
+	display: inline;
+	margin: 0 4px 0 -14px;
+	padding: 0 12px;
+	cursor: default;
+}
+
+#thumbbar button {
+	position: relative;
+	display: inline;
+	height: 28px;
+	font: normal 18px Arial;
+	vertical-align: top;
+	padding: 0 5px;
+}
+
+#bzip.empty,
+#bzip.hide,
+#bzip.all {
+	display: none;
+}
+
+/* RAILROAD PATH */
+
+#path {
+	display: inline;
+}
+
+/* DIAPOS */
+
+#diapos {
+	position: absolute;
+	top: 40px;
+	padding: 5px 5px 0 5px;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	overflow: auto;
+}
+
+li.diapo {
+	position: relative;
+	display: inline;
+	float: left;
+	width: 150px;
+	height: 168px;
+	overflow: hidden;
+	text-align: center;
+	vertical-align: bottom;
+	margin: 5px;
+	padding: 0;
+}
+
+li.diapo img {
+	display: block;
+}
+
+li.diapo:after {
+	content: attr(title);
+}
+
+li.diapo.up {
+	display: none;
+}
+
+li.diapo.loaded {
+	-webkit-transition: all 0.4s linear;
+	-moz-transition: all 0.4s linear;
+	transition: all 0.4s linear;
+}
+
+li.diapo.loaded span.minicom {
+	position: absolute;
+	top: 5px;
+	right: 5px;
+	width: 24px;
+	height: 21px;
+	font-size: 10px;
+	line-height: 17px;
+	text-align: center;
+	color: #fff;
+	background: transparent url(../icons/mini-comment.png) no-repeat center center;
+}
+
+li.diapo.loaded.up:hover {
+	-webkit-box-shadow: none;
+	-moz-box-shadow: none;
+	box-shadow: none;
+}
+
+li.diapo input[type="checkbox"] {
+	position: absolute;
+	top: 5px;
+	left: 5px;
+}
+
+/*SLIDES*/
+
+#view {
+	position: absolute;
+	overflow: hidden;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	opacity: 0;
+	z-index: 0;
+	-webkit-transition: all 0.5s linear;
+	-moz-transition: all 0.5s linear;
+	transition: all 0.5s linear;
+}
+
+#view.active {
+	opacity: 1;
+	z-index: 1;
+	-webkit-transition: all 0.5s linear;
+	-moz-transition: all 0.5s linear;
+	transition: all 0.5s linear;
+}
+
+#view img {
+	position: absolute;
+	display: block;
+	opacity: 0;
+	left: 0;
+	top: 0;
+	width: 1px;
+	height: 1px;
+	z-index: 0;
+}
+
+#view img.touch {
+	opacity: 1;
+	z-index: 4;
+}
+
+#view img.animated {
+	opacity: 1;
+	z-index: 4;
+	-webkit-transition: all 1s ease-out;
+	-moz-transition: all 1s ease-out;
+	transition: all 1s ease-out;
+}
+
+/*SLIDER*/
+
+#view #slide {
+	position: absolute;	
+	left: 60px;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	overflow: hidden;
+	-webkit-transition: all 0.5s ease;
+	-moz-transition: all 0.5s ease;
+	transition: all 0.5s ease;
+}
+
+#view.com #slide {
+	left: 360px;
+	-webkit-transition: all 0.5s ease;
+	-moz-transition: all 0.5s ease;
+	transition: all 0.5s ease;
+}
+
+#view.comfix #slide {
+	left: 360px;
+}
+
+/*COMMENTS*/
+
+#view #comments {
+	position: absolute;
+	top: 0;
+	left: -300px;
+	bottom: 0;
+	width: 300px;
+	z-index: 7;
+	overflow: hidden;
+	-webkit-transition: all 0.5s ease;
+	-moz-transition: all 0.5s ease;
+	transition: all 0.5s ease;
+}
+
+#view.com #comments {
+	left: 60px;
+	-webkit-transition: all 0.5s ease;
+	-moz-transition: all 0.5s ease;
+	transition: all 0.5s ease;
+}
+
+#view.comfix #comments {
+	left: 60px;
+}
+
+#coms {
+	overflow: auto;
+	position: absolute;
+	top: 3px;
+	bottom: 160px;
+	width: 285px;
+}
+
+#coms li {
+	position: relative;
+	padding: 3px;
+	margin: 5px 5px 10px 5px;
+}
+
+#coms li button.del {
+	position: absolute;
+	top: 1px;
+	right: 2px;
+	font-size: 12px;
+}
+
+#newcom {
+	position: absolute;
+	bottom: 5px;
+	width: 280px;
+	height: 140px;
+	padding: 3px;
+}
+
+#who, #what {
+	width: 280px;
+}
+
+#what {
+	height: 88px;
+	resize: none;
+}
+
+/*VIEW BAR*/
+
+#viewbar {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 60px;
+	bottom: 0;
+	z-index: 8;
+}
+
+#viewbar button {
+	position: absolute;
+	border: none;
+	background-color: transparent;
+	opacity: 0.5;
+	-webkit-transition: all 0.3s linear;
+	-moz-transition: all 0.3s linear;
+	transition: all 0.3s linear;
+}
+
+#viewbar button:hover {
+	opacity: 1;
+	-webkit-transition: all 0.3s linear;
+	-moz-transition: all 0.3s linear;
+	transition: all 0.3s linear;
+}
+
+#viewbar button.active {
+	opacity: 1;
+}
+
+#bprev {
+	left: 4px;
+	top: 2px;
+	width: 24px;
+	height: 48px;
+	background: url(../icons/prev.png) no-repeat center center;
+}
+
+#bnext {
+	left: 32px;
+	top: 2px;
+	width: 24px;
+	height: 48px;
+	background: url(../icons/next.png) no-repeat center center;
+}
+
+#bcom {
+	left: 6px;
+	top: 148px;
+	width: 48px;
+	height: 48px;
+	background: url(../icons/comment.png) no-repeat center center;
+}
+
+#bcom span {
+	position: absolute;
+	left: 0;
+	top: 4px;
+	width: 48px;
+	text-align: center;
+	font: bold 24px Arial;
+}
+
+#bplay {
+	left: 6px;
+	top: 102px;
+	width: 48px;
+	height: 42px;
+	background: url(../icons/play.png) no-repeat center center;
+}
+
+#bthumb {
+	left: 6px;
+	top: 50px;
+	width: 48px;
+	height: 48px;
+	background: url(../icons/thumbs.png) no-repeat center center;
+}
+
+/* LOADING */
+
+#mask {
+	display: none;
+	z-index: 50;
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+}
+
+#mask.active {
+	display: block;
+}
+
+#mask #loading {
+	position: absolute;
+	bottom: 28px;
+	left: 0;
+	right: 0;
+	text-align: center;
+	font: normal 32px Arial;
+}
+
+/* INTRO */
+
+#intro {
+	z-index: 90;
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+}
+
+#intro.hide {
+	z-index: 0;
+	opacity: 0;
+}
+
+#intro h1 {
+	font-size: 60px;
+}
+
+#intro h2 {
+	font-size: 30px;
+	margin-bottom: 10px;
+}
+
+/* ADMIN BAR */
+
+#godbar {
+	position: absolute;
+	right: 20px;
+	top: 5px;
+	z-index: 30;
+}
+
+#godbar button {
+	float: right;
+	height: 16px;
+	width: 16px;
+	margin: 0 0 3px 0;
+	opacity: 0.3;
+	border: none;
+	margin-left: 5px;
+}
+
+#godbar button:hover {
+	opacity: 1;
+	-webkit-transition: all 0.3s linear;
+	-moz-transition: all 0.3s linear;
+	transition: all 0.3s linear;
+}
+
+#godbar button.hide {
+	display: none;
+}
+
+#blogin  { background: url(../icons/login.png) repeat center center; }
+#blogout { background: url(../icons/logout.png) repeat center center; }
+#bupload { background: url(../icons/upload.png) repeat center center; }
+#bflush  { background: url(../icons/reset.png) repeat center center; }
+#bdel    { background: url(../icons/del.png) repeat center center; }
+#bdiag   { background: url(../icons/diag.png) repeat center center; }
+
+#iupload {
+	position: absolute;
+	top: -1000px;
+}
+
+#diag {
+	position: absolute;
+	color: #fff;
+	top: 40px;
+	right: 40px;
+	overflow: auto;
+	border-radius: 4px;
+	background-color: #333;
+	z-index: 90;
+	padding: 6px;
+	-webkit-box-shadow: 3px 3px 5px #000;
+	-moz-box-shadow: 3px 3px 5px #000;
+	box-shadow: 3px 3px 5px #000;
+
+}
+
+#diag li {
+	list-style-type: none;
+	background-repeat: no-repeat;
+	background-position: 0 center;
+	padding-left: 20px;
+}
+
+#diag li.ok {
+	background-image: url(../icons/ok.png);
+}
+
+#diag li.bad {
+	background-image: url(../icons/bad.png);
+}
