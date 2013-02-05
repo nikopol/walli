@@ -1,4 +1,4 @@
-WALLi v0.1 (c) niko 2012-2013
+WALLi v0.2 (c) niko 2012-2013
 -----------------------------
 Quick/Stand-Alone/Customizable Images Wall
 
@@ -19,6 +19,7 @@ device.
   - download a zip of selected images
   - permalink supported
   - google analytics supported
+  - mini admin included (upload/delete images,stats,cache control)
 
 **LOULOU THEME SCREENSHOTS**
 
@@ -97,7 +98,6 @@ if you do, don't hesitate to pull request =)
 **TODO**
 
   - more themes
-  - mini admin mode (delete/upload/blacklist?)
   - improve layout for phone
   - support for audio files
   - star/notation system?
