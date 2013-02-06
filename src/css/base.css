@@ -474,55 +474,6 @@ li.diapo input[type="checkbox"] {
 	opacity: 1;
 }
 
-#bprev {
-	left: 4px;
-	top: 2px;
-	width: 24px;
-	height: 48px;
-	background: url(../icons/prev.png) no-repeat center center;
-}
-
-#bnext {
-	left: 32px;
-	top: 2px;
-	width: 24px;
-	height: 48px;
-	background: url(../icons/next.png) no-repeat center center;
-}
-
-#bcom {
-	left: 6px;
-	top: 148px;
-	width: 48px;
-	height: 48px;
-	background: url(../icons/comment.png) no-repeat center center;
-}
-
-#bcom span {
-	position: absolute;
-	left: 0;
-	top: 4px;
-	width: 48px;
-	text-align: center;
-	font: bold 24px Arial;
-}
-
-#bplay {
-	left: 6px;
-	top: 102px;
-	width: 48px;
-	height: 42px;
-	background: url(../icons/play.png) no-repeat center center;
-}
-
-#bthumb {
-	left: 6px;
-	top: 50px;
-	width: 48px;
-	height: 48px;
-	background: url(../icons/thumbs.png) no-repeat center center;
-}
-
 /* LOADING */
 
 #mask {
@@ -602,13 +553,6 @@ li.diapo input[type="checkbox"] {
 #godbar button.hide {
 	display: none;
 }
-
-#blogin  { background: url(../icons/login.png) repeat center center; }
-#blogout { background: url(../icons/logout.png) repeat center center; }
-#bupload { background: url(../icons/upload.png) repeat center center; }
-#bflush  { background: url(../icons/reset.png) repeat center center; }
-#bdel    { background: url(../icons/del.png) repeat center center; }
-#bdiag   { background: url(../icons/diag.png) repeat center center; }
 
 #iupload {
 	position: absolute;

@@ -9,7 +9,8 @@ use JSON;
 use LWP::UserAgent;
 use MIME::Base64;
 
-die "usage: $0 < wally.php > wally-allinone-minified.php\n" if @ARGV;
+die "usage: $0 [-wc] < wally.php > wally-allinone-minified.php\n" if grep { /--?(h|help)/ } @ARGV;
+my $woclosure = grep { /--?(wc|woclosure|withoutclosure)/ } @ARGV;
 
 my $read = 0;
 my $mini = '';
@@ -95,43 +96,92 @@ sub css_minify {
 	split /\n+/,$mini;
 }
 
+sub css_merge {
+	my @css = @_;
+	my @ok;
+	my %at;
+	
+	# sub proprietary { 
+	# 	shift =~ /-(webkit|o|moz)-/
+	# }
+	# sub vsplit {
+	# 	my $v = shift;
+	# 	$v =~ s/url\(([^;\)]+);/url($1|/gi; #hack for ; in url(data:...;...)
+	# 	my %h;
+	# 	for(split /;/,$v) {
+	# 		$h{$1} = $2 if /^\s*([^\:\s]+)\s*\:\s*(.+)/;
+	# 	}
+	# 	\%h;
+	# }
+	# sub vmerge {
+	# 	my( $s, $d ) = @_;
+	# 	for my $k ( keys %$d ) {
+	# 	}
+	# 	$s;
+	# }
+
+	for my $l ( @css ) {
+		next unless $l;
+		if( $l =~ /^\s*([^:\@%]+?)\s*{\s*(.+)\s*}\s*$/ ) {
+			my $a = $1;
+			my $v = $2;
+			$a =~ s/(^\s|\s$)//g;
+			$v =~ s/(^\s|\s$)//g;
+			next if $v eq "";
+			if( exists $at{$a} ) {
+				$v = $at{$a}{v}.';'.$v;
+				$ok[$at{$a}{n}] = $a.'{'.$v.'}';
+				#warn "merging $a\n";
+			} else {
+				$at{$a} = { n=>scalar @ok, v=>$v };
+				push @ok, $a.'{'.$v.'}';
+				#warn "adding $a ",scalar keys %at,"\n";
+			}
+		} else {
+			push @ok, $l;
+		}
+	}
+	@ok;
+}
+
 sub js_minify {
 	my $file = shift;
 	my $js = load $file;
-	return split(/\r?\n+/,$js) if $file =~ /min\.js$/i;
-	my $len = length $js;
-	my $ua = LWP::UserAgent->new;
-	my $res = $ua->post(
-		'http://closure-compiler.appspot.com/compile', [
-			'output_info'   => 'compiled_code',
-			'output_info'   => 'errors',
-			output_format   => 'json',
-			warning_level   => 'quiet',
-			#compilation_level => 'advanced_optimizations',
-			js_code         => $js,
-		]
-	);
-	if( $res->is_success ) {
-		my $c = from_json($res->decoded_content);
-		if(exists $c->{serverErrors}){
-			warn 'ERROR #',$_->{'code'},': ',$_->{error},"\n"
-				foreach @{$c->{serverErrors}};
-		}
-		if($c->{errors} && @{$c->{errors}}){
-			warn $_->{error},' line ',$_->{lineno},' near ',$_->{line},"\n"
-				foreach @{$c->{errors}};
-			die "break on error\n";
-		}
-		if($c->{compiledCode}) {
-			$js = $c->{compiledCode};
-			$js =~ s/[\r\n]+//;
-			my $zip = length $js;
-			warn "  | $file closured from $len to $zip (",int(100*($len-$zip)/$len),"%)\n";
+	unless( $woclosure || $file =~ /min\.js$/i ) {
+		my $len = length $js;
+		my $ua = LWP::UserAgent->new;
+		my $res = $ua->post(
+			'http://closure-compiler.appspot.com/compile', [
+				'output_info'   => 'compiled_code',
+				'output_info'   => 'errors',
+				output_format   => 'json',
+				warning_level   => 'quiet',
+				#compilation_level => 'advanced_optimizations',
+				js_code         => $js,
+			]
+		);
+		if( $res->is_success ) {
+			my $c = from_json($res->decoded_content);
+			if(exists $c->{serverErrors}){
+				warn 'ERROR #',$_->{'code'},': ',$_->{error},"\n"
+					foreach @{$c->{serverErrors}};
+			}
+			if($c->{errors} && @{$c->{errors}}){
+				warn $_->{error},' line ',$_->{lineno},' near ',$_->{line},"\n"
+					foreach @{$c->{errors}};
+				die "break on error\n";
+			}
+			if($c->{compiledCode}) {
+				$js = $c->{compiledCode};
+				$js =~ s/[\r\n]+//;
+				my $zip = length $js;
+				warn "  | $file closured from $len to $zip (",int(100*($len-$zip)/$len),"%)\n";
+			} else {
+				warn "  | $file not closured\n";
+			}
 		} else {
-			warn "  | $file not closured\n";
+			warn "  | $res->status_line \n";
 		}
-	} else {
-		warn "  | $res->status_line \n";
 	}
 	split /\r?\n+/,$js
 }
@@ -152,7 +202,7 @@ for my $l ( <STDIN> ) {
 		$mini .= $src =~ /^http/i
 			? $l
 			: "$pfx<style>\n".
-			  "$pfx\t".join("\n$pfx\t",css_minify($src))."\n".
+			  "$pfx\t".join("\n$pfx\t",css_merge(css_minify($src)))."\n".
 			  "$pfx</style>\n";
 	} elsif( $l =~ /=['"]([^'"]+\.(jpg|png|gif))[\'\"]/i ) {
 		my $file = $1;
