@@ -351,11 +351,11 @@ walli = (function(){
 	function loadpath(p,cb){
 		unsetcheck();
 		log.debug('loading path '+(p || '/'));
-		var diapos = _('#diapos',''), rail = _('#path','');
 		setbzip('hide',loc.dlall);
 		if(god) _('#bdel').className='hide';
 		chkfiles=[];
 		ajax('?!=ls&path='+p, function(ls){
+			var diapos = _('#diapos','');
 			path = ls.path;
 			log.info((path || '/')+'loaded with '+ls.dirs.length+' subdirs and '+ls.files.length+' files found');
 			if(path.length){
@@ -365,13 +365,14 @@ walli = (function(){
 				d.setAttribute('title',loc.updir);
 				d.onclick = function(){loadpath(sub)};
 				diapos.appendChild(d);
-				var rp = '';
+				var rp = '', r='';
 				path.split('/').forEach(function(n){
 					if(n){
 						rp += n+'/';
-						append(rail,'<button onclick="walli.cd(\''+rp+'\')">'+n+'</button>');
+						r += '<button onclick="walli.cd(\''+rp+'\')">'+n+'</button>';
 					}
 				});
+				_('#path',r);
 				layout();
 			}
 			var add = function(url,click,cls,id){
