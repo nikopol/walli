@@ -67,7 +67,7 @@ hash=(function(){
 	};
 	unserialize();
 	return {
-		del: function(key){ return key in h ? false : serialize(delete h[key]) },
+		del: function(key){ if(key in h){ delete h[key]; return serialize(h) } return false },
 		set: function(key,val){ return serialize(typeof(key)=='object' ? h = key : h[key] = val) },
 		get: function(key){ return key==undefined ? h : decode(h[key]||'') },
 		onchange: function(cb){
