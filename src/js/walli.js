@@ -374,7 +374,8 @@ walli = (function(){
 				});
 				_('#path',r);
 				layout();
-			}
+			} else
+				_('#path','');
 			var add = function(url,click,cls,id){
 				var image = (function(){
 					var
