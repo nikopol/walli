@@ -436,6 +436,13 @@ walli = (function(){
 		//log.debug("calcpos("+n+","+p+")="+img[n].style.left);
 	}
 
+	function fullscreen(){
+		var e = document.documentElement;
+		if(e.requestFullscreen)            e.requestFullscreen();
+		else if(e.mozRequestFullScreen)    e.mozRequestFullScreen();
+		else if(e.webkitRequestFullScreen) e.webkitRequestFullScreen();
+	}
+
 	function setplaytimer(){
 		if(playing) {
 			if(slideid) clearTimeout(slideid);
@@ -448,6 +455,7 @@ walli = (function(){
 		playing = b;
 		if(b){
 			setplaytimer();
+			fullscreen();
 			css('#bplay','active');
 			osd.loc('play');
 		} else {
@@ -598,13 +606,6 @@ walli = (function(){
 			return true;
 		}
 		return false;
-	}
-
-	function fullscreen(){
-		var e = document.documentElement;
-		if(e.requestFullscreen)            e.requestFullscreen();
-		else if(e.mozRequestFullScreen)    e.mozRequestFullScreen();
-		else if(e.webkitRequestFullScreen) e.webkitRequestFullScreen();
 	}
 
 	return {
