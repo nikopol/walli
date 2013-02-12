@@ -904,21 +904,22 @@ walli = (function(){
 			loadimg(idx,function(ni,i){
 				//log.debug("load "+ni+" ok p="+p);
 				css('#mask','-active');
-				if(showing) {
-					nimg = 1-nimg;
-				} else {
-					p=0;
-				}
+				if(showing) nimg = 1-nimg; //switch image element idx
+				else p=0;                  //zoom from thumbnail
+
 				att[nimg] = { w:i.width, h:i.height };
 				slide.removeChild(img[nimg]); /*remove&append to force redraw*/
 				img[nimg].src = i.src;
 				if(p) {
 					//slide
-					css(img[nimg],'');
-					calcpos(nimg,p);
+					css(img[nimg],p<0?'left':'right');
+					calcpos(nimg,p);					
 					slide.appendChild(img[nimg]);
-					css(img[nimg],'animated');
+
 					calcpos(nimg,0);
+					css(img[nimg],'animated center');
+					
+					css(img[1-nimg],'animated '+(p>0?'left':'right'));
 					calcpos(1-nimg,-p);
 				}else{
 					//zoom from diapo
