@@ -88,7 +88,7 @@ css = function(s,c){
 	if(!o) return;
 	if(c==undefined) return o instanceof Array ? o : o.className;
 	if(typeof c=='object')
-		for(z in c) s.style[z] = c[z];
+		__(o).forEach(function(e){ for(z in c) e.style[z] = c[z] });
 	else if(/^([\+\-\*])(.+)$/.test(c)) {
 		z = RegExp.$1;
 		c = RegExp.$2;
