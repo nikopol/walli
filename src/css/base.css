@@ -348,9 +348,9 @@ li.diapo input[type="checkbox"] {
 #view img.animated {
 	opacity: 1;
 	z-index: 4;
-	-webkit-transition: all 1s ease-out;
-	-moz-transition: all 1s ease-out;
-	transition: all 1s ease-out;
+	-webkit-transition: all 0.7s ease-out;
+	-moz-transition: all 0.7s ease-out;
+	transition: all 0.7s ease-out;
 }
 
 /*SLIDER*/
