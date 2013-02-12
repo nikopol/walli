@@ -171,7 +171,7 @@ li.diapo.loaded:nth-child(3n) {
 	transform: rotate(1deg);
 }
 
-li.diapo span.minicom {
+li.diapo.loaded span.minicom {
 	top: 16px;
 	right: 16px;
 	font-size: 10px;
