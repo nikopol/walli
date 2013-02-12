@@ -180,6 +180,26 @@ li.diapo.loaded:hover {
 	background: #000;
 }
 
+#view #slide {
+	-webkit-perspective: 1200px;
+	/*perspective: 800px;*/
+}
+
+#view img.left {
+	-webkit-transform: scale(0.1) rotateY(-90deg);
+	/*transform: scale(0.1) rotateY(-90deg);*/
+}
+
+#view img.right {
+	-webkit-transform: scale(0.1) rotateY(90deg);
+	/*transform: scale(0.1) rotateY(90deg);*/
+}
+
+#view img.center {
+	-webkit-transform: scale(1) rotateY(0deg);
+	/*transform: scale(1) rotateY(0deg);*/
+}
+
 /*COMMENTS*/
 
 #view #comments {
