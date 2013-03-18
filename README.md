@@ -1,6 +1,6 @@
-WALLi v0.2 (c) niko 2012-2013
+WALLi v0.3 (c) niko 2012-2013
 -----------------------------
-Quick/Stand-Alone/Customizable Images Wall
+"all-in-one" Images Wall
 
 the purpose of this project is to provide a *all-in-one* php file, without any 
 configuration required (they are optionals), into a directory containing 
@@ -105,5 +105,5 @@ if you do, don't hesitate to pull request =)
 
 **CREDITS**
 
-  * some icons from http://gemicon.net
+  * admin icons from http://gemicon.net
   * favicon from http://tango.freedesktop.org
