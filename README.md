@@ -2,7 +2,7 @@ WALLi v0.3 (c) niko 2012-2013
 -----------------------------
 "all-in-one" Images Wall
 
-the purpose of this project is to provide a *all-in-one* php file, without any 
+the purpose of this project is to provide an *all-in-one* php file, without any 
 configuration required (they are optionals), into a directory containing 
 sub-dirs and/or images to "browse" them with a modern browser or mobile 
 device.
@@ -19,7 +19,7 @@ device.
   - download a zip of selected images
   - permalink supported
   - google analytics supported
-  - mini admin included (upload/delete images,stats,cache control)
+  - mini admin included (upload/delete images,stats,mkdir,cache control)
 
 **LOULOU THEME SCREENSHOTS**
 
