@@ -363,6 +363,7 @@ li.diapo.loaded:hover {
 
 #blogin  { background: url(../icons/black/login.png) repeat center center; }
 #blogout { background: url(../icons/black/logout.png) repeat center center; }
+#bmkdir  { background: url(../icons/black/mkdir.png) repeat center center; }
 #bupload { background: url(../icons/black/upload.png) repeat center center; }
 #bflush  { background: url(../icons/black/reset.png) repeat center center; }
 #bdel    { background: url(../icons/black/del.png) repeat center center; }
