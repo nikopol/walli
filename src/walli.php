@@ -358,6 +358,8 @@ function POST_uncomment(){
 }
 
 function POST_zip(){
+	global $withzip;
+	if(!$withzip) error(401,'zip not enabled');
 	$lst=explode('*',$_POST['files']);
 	$fn ='pack-'.time().'.zip';
 	$fz = get_sys_file($fn);
@@ -513,9 +515,12 @@ if($_SERVER["QUERY_STRING"]=="login" && $ADMIN_LOGIN && $ADMIN_PWD){
 	if($godmode){
 		setcookie(COOKIE_GOD,$godsha);
 		redirect();
+	} else {
+		header('WWW-Authenticate: Basic realm="'.$TITLE.' admin"');
+		header('HTTP/1.0 401 Unauthorized');
+		echo '<script>document.location="?"</script>';
+		exit;
 	}
-	header('WWW-Authenticate: Basic realm="'.$TITLE.' admin"');
-	header('HTTP/1.0 401 Unauthorized');
 }else if($_SERVER["QUERY_STRING"]=="logout"){
 	setcookie(COOKIE_GOD,false);
 	redirect();	
