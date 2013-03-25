@@ -15,6 +15,7 @@ var
 				bplay: 'slideshow',
 				bupload: 'upload images',
 				bflush: 'reset cache',
+				bmkdir: 'new folder',
 				bdiag: 'diagnostic',
 				bdel: 'delete selected images'
 			},
@@ -49,7 +50,8 @@ var
 			uploadfiles: 'upload %nb image%s (%z bytes) ?',
 			flushed: '%nb file%s flushed',
 			uploaded: '%nb file%s uploaded',
-			deleted: '%nb file%s deleted'
+			deleted: '%nb file%s deleted',
+			mkdir: 'folder name ?'
 		},
 		fr: {
 			title: {
@@ -60,6 +62,7 @@ var
 				bplay: 'diaporama',
 				bupload: 'ajoute des images',
 				bflush: 'vide le cache',
+				bmkdir: 'nouveau dossier',
 				bdiag: 'diagnostique',
 				bdel: "efface les images sélectionnées"
 			},
@@ -93,7 +96,8 @@ var
 			uploadfiles: 'poster %nb image%s (%z octets) ?',
 			flushed: '%nb fichier%s supprimé%s',
 			uploaded: '%nb image%s ajoutée%s',
-			deleted: '%nb image%s effacée%s'
+			deleted: '%nb image%s effacée%s',
+			mkdir: 'nom du dossier ?'
 		}
 	},
 	loc,
@@ -776,6 +780,8 @@ walli = (function(){
 				_('#bdiag').onclick=walli.switchdiag;
 				//reset
 				_('#bflush').onclick=walli.flush;
+				//mkdir
+				_('#bmkdir').onclick=walli.mkdir;
 			} else if(o.admin)
 				_('#blogin').onclick=walli.login;
 			
@@ -852,6 +858,19 @@ walli = (function(){
 					url: '?!=flush',
 					ok: function(d){
 						osd.loc('flushed',{nb:d.flushed});
+					},
+					error: osd.error
+				});
+		},
+		mkdir: function(){
+			var d;
+			if(god && (d=prompt(loc.mkdir)))
+				ajax({
+					type: 'POST',
+					url: '?!=mkdir',
+					data: {dir:d,path:path},
+					ok: function(){
+						loadpath(path);
 					},
 					error: osd.error
 				});

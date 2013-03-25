@@ -1,6 +1,6 @@
 <?php
 /*
-WALLi v0.2 (c) NiKo 2012-2013
+WALLi (c) NiKo 2012-2013
 standalone image wall
 https://github.com/nikopol/walli
 
@@ -66,10 +66,10 @@ $ADMIN_PWD   = false;
 
 /*CONSTANTS*/
 
+define('VERSION','0.3');
 define('MINI_SIZE',150);
 define('COOKIE_UID','wallid');
 define('COOKIE_GOD','wallia');
-define('VERSION','0.2');
 define('FILEMATCH','\.(png|jpe?g|gif)$');
 
 /* GLOBALS */
@@ -91,7 +91,12 @@ $withzip   = $WITH_ZIPDL && class_exists('ZipArchive');
 
 /*TOOLS*/
 
-function cache($nbd){
+function redirect($uri='?'){
+	header("Location: $uri");
+	exit;
+}
+
+function cache($nbd=60){
 	header('Cache-Control: public');
 	header('Expires: '.gmdate('D, d M Y H:i:s', time()+(60*60*24*$nbd)).' GMT');
 }
@@ -168,9 +173,10 @@ function send_json($o){
 }
 
 function ls($path='',$pattern='',$recurse=0){
-	global $ROOT_DIR;
+	global $ROOT_DIR, $godmode;
 	$files=array();
 	$subs=array();
+	$size=0;
 	if($path && !preg_match('/\/$/',$path)) $path.='/';
 	foreach (new DirectoryIterator($ROOT_DIR.$path) as $file) {
 		$fn=$file->getFilename();
@@ -186,7 +192,7 @@ function ls($path='',$pattern='',$recurse=0){
 	$dirs=array();
 	foreach($subs as $d){
 		$sub=ls($d,$pattern,1);
-		if(count($sub['files'])){
+		if(count($sub['files']) || $godmode){
 			$dirs[]=$d;
 			if($recurse) {
 				$files=array_merge($files,$sub['files']);
@@ -262,7 +268,7 @@ function GET_img(){
 	if(!file_exists($file)) notfound($file);
 	header('Content-Type: image/'.pathinfo($file,PATHINFO_EXTENSION));
 	header('Content-Length: '.filesize($file));
-	cache(60);
+	cache();
 	@readfile($file);
 }
 
@@ -271,7 +277,7 @@ function GET_mini(){
 	if(!file_exists($file)) notfound($file);
 	$cachefile=get_sys_file($_GET['file'].'.mini.png',0);
 	header('Content-Type: image/png');
-	cache(60);
+	cache();
 	if($cachefile && file_exists($cachefile)){
 		@readfile($cachefile);
 		exit;
@@ -396,6 +402,16 @@ function GET_flush(){
 	send_json($s);
 }
 
+function POST_mkdir(){
+	global $SYS_DIR;
+	godcheck();
+	$dir=preg_replace('/[\?\*\/\\\!\>\<]/','_',$_POST['dir']);
+	$path=check_path($_POST['path']).'/'.$dir;
+	@mkdir($path);
+	nocache();
+	send_json(array('ok'=>file_exists($path),path=>$path));
+}
+
 function GET_info(){
 	godcheck();
 	phpinfo();
@@ -481,28 +497,29 @@ function POST_del(){
 
 if(!empty($_REQUEST['!'])){
 	$do = $_SERVER['REQUEST_METHOD'].'_'.$_REQUEST['!'];
-	if(!function_exists($do)) die("$do is not a function");
+	if(!function_exists($do)) notfound($do);
 	call_user_func($do);
 	exit;
 }
 
+if(empty($_COOKIE[COOKIE_UID])) setcookie(COOKIE_UID,$uid);
+
 //admin login
 if($_SERVER["QUERY_STRING"]=="login" && $ADMIN_LOGIN && $ADMIN_PWD){
-	if(!isset($_SERVER['PHP_AUTH_USER'])){
-		if($ADMIN_LOGIN) header('WWW-Authenticate: Basic realm="'.$TITLE.' admin"');
-		header('HTTP/1.0 401 Unauthorized');
-	} else
-		$godmode = $_SERVER['PHP_AUTH_USER']==$ADMIN_LOGIN && $_SERVER['PHP_AUTH_PW']==$ADMIN_PWD;
+	$godmode = isset($_SERVER['PHP_AUTH_USER'])
+		&& isset($_SERVER['PHP_AUTH_PW'])
+		&& $_SERVER['PHP_AUTH_USER']==$ADMIN_LOGIN
+		&& $_SERVER['PHP_AUTH_PW']==$ADMIN_PWD;
+	if($godmode){
+		setcookie(COOKIE_GOD,$godsha);
+		redirect();
+	}
+	header('WWW-Authenticate: Basic realm="'.$TITLE.' admin"');
+	header('HTTP/1.0 401 Unauthorized');
 }else if($_SERVER["QUERY_STRING"]=="logout"){
-	$godmode = false;
 	setcookie(COOKIE_GOD,false);
+	redirect();	
 }
-
-/*COOKIES*/
-
-if(empty($_COOKIE[COOKIE_UID]))             setcookie(COOKIE_UID,$uid);
-if($godmode && empty($_COOKIE[COOKIE_GOD])) setcookie(COOKIE_GOD,$godsha);
-if(!$godmode && $_COOKIE[COOKIE_GOD])       setcookie(COOKIE_GOD,false);
 
 $intro = $withintro
 	? @file_get_contents($ROOT_DIR.$INTRO_FILE)
@@ -543,6 +560,7 @@ https://github.com/nikopol/walli
 	<div id="godbar">
 	<?php if($godmode){ ?>
 		<button id="blogout"></button>
+		<button id="bmkdir"></button>
 		<button id="bupload"></button>
 		<button id="bflush"></button>
 		<button id="bdiag"></button>
