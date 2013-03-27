@@ -273,9 +273,10 @@ function GET_img(){
 }
 
 function GET_mini(){
-	$file=get_file_path($_GET['file']);
+	$fn=$_GET['file'];
+	$file=get_file_path($fn);
 	if(!file_exists($file)) notfound($file);
-	$cachefile=get_sys_file($_GET['file'].'.mini.png',0);
+	$cachefile=get_sys_file($fn.'.mini.png',0);
 	header('Content-Type: image/png');
 	cache();
 	if($cachefile && file_exists($cachefile)){
@@ -283,10 +284,22 @@ function GET_mini(){
 		exit;
 	}
 	if(is_dir($file)){
+		$list=ls($fn,FILEMATCH,1);
+		$nb=count($list['files']);
+		if($nb<9){
+			$cachefile=get_sys_file($fn.'-'.$nb.'.mini.png',0);
+			if($cachefile && file_exists($cachefile)){
+				@readfile($cachefile);
+				exit;
+			}
+		}
+		for($n=0; $n<$nb; $n++){
+			$sf=get_sys_file($fn.'-'.$n.'.mini.png',0);
+			if(file_exists($sf)) @unlink($sf);
+		}
 		$mini=imagecreatetruecolor(MINI_SIZE,MINI_SIZE);
 		$bgc=imagecolorallocate($mini,255,255,255);
 		imagefill($mini,0,0,$bgc);
-		$list=ls($_GET['file'],FILEMATCH,1);
 		$size=floor((MINI_SIZE-2)/3);
 		$n=0;
 		shuffle($list['files']);
@@ -358,6 +371,8 @@ function POST_uncomment(){
 }
 
 function POST_zip(){
+	global $withzip;
+	if(!$withzip) error(401,'zip not enabled');
 	$lst=explode('*',$_POST['files']);
 	$fn ='pack-'.time().'.zip';
 	$fz = get_sys_file($fn);
@@ -381,7 +396,7 @@ function POST_zip(){
 }
 
 function GET_zip(){
-	$f = $_GET['zip'];
+	$f=$_GET['zip'];
 	send_file(get_sys_file($f));
 	unlink($f);
 }
@@ -578,7 +593,7 @@ https://github.com/nikopol/walli
 		#thumbbar button{position:relative;display:inline;height:28px;font:normal 18px Arial;vertical-align:top;padding:0 5px;font:normal 18px Baumans;color:#ccc;background:#444;padding:0 30px 0 14px;margin:0 -9px 4px 0}
 		#bzip.empty,#bzip.hide,#bzip.all{display:none}
 		#path{display:inline}
-		#diapos{position:absolute;top:40px;padding:5px 5px 0 5px;left:0;right:0;bottom:0;overflow:auto}
+		#diapos{position:absolute;top:40px;padding:11px 11px 0 11px;left:0;right:0;bottom:0;overflow:auto}
 		li.diapo{position:relative;display:inline;float:left;width:150px;height:168px;overflow:hidden;text-align:center;vertical-align:bottom;margin:5px;padding:0;background-color:#000}
 		li.diapo img{display:block}
 		li.diapo:after{content:attr(title)}
