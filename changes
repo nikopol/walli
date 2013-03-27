@@ -1,0 +1,16 @@
+WALLi - ChangeLog
+https://github.com/nikopol/walli
+
+2013-27-18 / 0.3
+  - fullscreen api used on slideshow mode
+  - fix path buttons flick on click
+  - css factorisation/optimisations with base.css
+  - .left and .right class managed on images slide to improve css transform possibilities
+  - "make dir" ability added to admin tools 
+  - directories mini auto-regenerated when needed
+
+2013-02-05 / 0.2 *admin tools*
+  - admin tools added (upload files, delete files, clear cache, stats)
+  - css refactoring with @import base.css
+
+2013-01-15 / 0.1 *initial release*
