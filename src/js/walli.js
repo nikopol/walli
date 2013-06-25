@@ -213,13 +213,13 @@ osd = (function(){
 		},
 		error: function(msg){
 			log.error(msg);
-			osd.info(msg,'error',3000);
+			osd.info(msg,'error',5000);
 		},
 		info: function(msg,cls,duration){
 			_(o,msg).className = cls || '';
 			osd.show();
 			if(timerid) clearTimeout(timerid);
-			timerid = setTimeout(osd.hide,duration || 1500);
+			timerid = setTimeout(osd.hide,duration || 3000);
 		},
 		loc: function(m,v){
 			osd.info(loc.tpl(m,v));
@@ -787,6 +787,10 @@ walli = (function(){
 			
 			log.info("show on!");
 
+
+			// window.onwebkitvisibilitychange=function(e){
+			// 	if ( document.webkitHidden ) {
+
 			//manage intro
 			var i = _('#intro');
 			if(i) {
@@ -940,7 +944,7 @@ walli = (function(){
 					
 					css(img[1-nimg],'animated '+(p>0?'left':'right'));
 					calcpos(1-nimg,-p);
-				}else{
+				} else {
 					//zoom from diapo
 					css(img[nimg],'');
 					var z = position('#diapo'+idx);
@@ -957,7 +961,7 @@ walli = (function(){
 				setplaytimer();
 				sethash();
 				setTimeout(function(){
-					osd.info(cleantitle(files[idx])+' ('+(idx+1)+'/'+files.length+')');
+					osd.info(cleantitle(files[idx])+' <sup>'+(idx+1)+'/'+files.length+'</sup>');
 				}, 1000);
 				if(files.length>1) loadimg((idx+1)%files.length,function(){});
 			});
