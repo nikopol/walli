@@ -160,7 +160,8 @@ li.diapo.loaded {
 	color: #999;
 }
 
-li.diapo.loaded:hover {
+li.diapo.loaded:hover,
+li.diapo.loaded.cursor {
 	z-index: 2;
 	color: #eee;
 	-webkit-transform: scale(1.2);

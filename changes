@@ -1,7 +1,11 @@
 WALLi - ChangeLog
 https://github.com/nikopol/walli
 
-2013-27-18 / 0.3
+2013-06-27 / 0.4
+  - css updated
+  - keyboard navigation added
+
+2013-02-27 / 0.3
   - fullscreen api used on slideshow mode
   - fix path buttons flick on click
   - css factorisation/optimisations with base.css

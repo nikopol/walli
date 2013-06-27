@@ -66,7 +66,7 @@ $ADMIN_PWD   = false;
 
 /*CONSTANTS*/
 
-define('VERSION','0.3');
+define('VERSION','0.4');
 define('MINI_SIZE',150);
 define('COOKIE_UID','wallid');
 define('COOKIE_GOD','wallia');

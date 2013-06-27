@@ -285,7 +285,8 @@ walli = (function(){
 		cul,               //comments ul container
 		comok,             //comments flag
 		god = false,       //godmode flag
-		zip = true;        //zip download flag
+		zip = true,        //zip download flag
+		cur = false;       //cursor pos
 
 	function layout(){
 		//auto resize diapos
@@ -357,7 +358,8 @@ walli = (function(){
 		log.debug('loading path '+(p || '/'));
 		setbzip('hide',loc.dlall);
 		if(god) _('#bdel').className='hide';
-		chkfiles=[];
+		chkfiles = [];
+		cur = false;
 		ajax('?!=ls&path='+p, function(ls){
 			var diapos = _('#diapos','');
 			path = ls.path;
@@ -391,10 +393,10 @@ walli = (function(){
 						log.debug(u+' loaded');
 						css(this.parentNode,'+loaded');
 					};
-					o.onclick = click;
 					return o;
 				})();
 				var d = document.createElement('li');
+				d.onclick = click;
 				css(d,'diapo '+cls);
 				
 				d.appendChild(image);
@@ -613,6 +615,64 @@ walli = (function(){
 		return false;
 	}
 
+	function cursor(x,y,abs) {
+		if( !showing ) {
+			if(!cur) cur={x:0,y:0};
+			else if(cur.o) css(cur.o,'-cursor');
+			cur = abs ? {x:x,y:y} : {x:x+cur.x,y:y+cur.y};
+			var	
+				dia = _('#diapos li'), 
+				d = _('#diapos'), 
+				dr = d.getBoundingClientRect(),
+				tab = [],
+				top = false,
+				n = -1,
+				p, t;
+			if( dia.length ) {
+				//calc diapos table
+				while(++n < dia.length) {
+					p = dia[n].getBoundingClientRect();
+					p = {
+						t: p.top-dr.top+d.scrollTop,
+						w: p.width,
+						h: p.height
+					};
+					if( p.w ) {
+						t = Math.round(p.t+p.h/2);
+						if( top===false || t > top ) {
+							top = t;
+							tab.push([]);
+							y = tab.length-1;
+						}
+						tab[y].push({
+							t: p.t,
+							b: p.t+p.h,
+							n: n
+						});
+					}
+				}
+				//bound cursor
+				if( cur.y > y )                  cur.y = 0;
+				else if( cur.y < 0 )             cur.y = y;
+				if( cur.x >= tab[cur.y].length ) cur.x = 0;
+				else if( cur.x < 0 )             cur.x = tab[cur.y].length-1;
+				t = tab[cur.y][cur.x];
+				cur.o = dia[t.n];
+				//autoscroll
+				p = {
+					t: d.scrollTop,
+					b: d.scrollTop+dr.height,
+					h: dr.height
+				};
+				y = p.t;
+				if( t.b > p.b )      y = t.b-p.h+30;
+				else if( t.t < p.t ) y = t.t-30;
+				d.scrollTop = y;
+				css(cur.o,'+cursor');
+			}
+		}
+	}
+
 	return {
 		setup: function(o) {
 			comok = o.comments;
@@ -709,13 +769,15 @@ walli = (function(){
 
 			hotkeys
 				.add('CTRL+D',function(){ css('#log','*active') },true)
-				.add('SPACE',walli.toggleplay)
+				.add(['SPACE','ENTER'],walli.toggleplay)
 				.add('C',walli.togglecom)
 				.add('HOME',walli.first)
 				.add('LEFT',walli.prev)
 				.add('RIGHT',walli.next)
+				.add('UP',walli.up)
+				.add('DOWN',walli.down)
 				.add('END',walli.last)
-				.add(['ESC','UP'],walli.back)
+				.add(['ESC','BACKSPACE'],walli.back)
 				.add('DOWN',function(){if(!showing && files.length)walli.show(0)})
 				//.add('+',walli.speedinc)
 				//.add('-',walli.speeddec)
@@ -970,18 +1032,32 @@ walli = (function(){
 		next: function(e){
 			stopev(e);
 			if(showing) walli.show(++idx,1);
+			else        cursor(1,0);
 		},
 		prev: function(e){ 
 			stopev(e);
 			if(showing) walli.show(--idx,-1);
+			else        cursor(-1,0);
+		},
+		down: function(e){
+			stopev(e);
+			if(showing) walli.show(++idx,1);
+			else        cursor(0,1);
+		},
+		up: function(e){ 
+			stopev(e);
+			if(showing) walli.show(--idx,-1);
+			else        cursor(0,-1);
 		},
 		first: function(e){
 			stopev(e);
 			if(showing) walli.show(0,-1);
+			else        cursor(0,0,true);
 		},
 		last: function(e){
 			stopev(e);
 			if(showing) walli.show(-1,1);
+			else        cursor(-1,-1,true);
 		},
 		play: function(e){
 			stopev(e);
@@ -996,7 +1072,11 @@ walli = (function(){
 		},
 		toggleplay: function(e){
 			stopev(e);
-			setplay(!playing);
+			if(showing) setplay(!playing);
+			else {
+				if(!cur) cursor(0,0,true);
+				if(cur.o) cur.o.click(e);
+			}
 		},
 		togglecom: function(e){
 			if(e) e.stopPropagation();

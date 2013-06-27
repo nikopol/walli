@@ -137,6 +137,7 @@ ul {
 	color: #ccc;
 	font: bold 20px Arial;
 	text-align: right;
+	margin-right: 5px;
 }
 
 #osd.active {
