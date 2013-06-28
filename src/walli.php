@@ -16,6 +16,9 @@ containing [sub-dir of] media files.
 
 /*PARAMETERS*/
 
+//all these parameters can be set in a config.inc.php 
+//in the same dir as your main php file
+
 //walli cache dir
 //(used to store generated icon files and comments)
 //set to false to disable cache & comments
