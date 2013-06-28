@@ -205,6 +205,7 @@ osd = (function(){
 	return {
 		/*TEXT*/
 		hide: function(){
+			if(timerid) clearTimeout(timerid);
 			timerid = false;
 			css(o,'-active');
 		},
@@ -217,8 +218,8 @@ osd = (function(){
 		},
 		info: function(msg,cls,duration){
 			_(o,msg).className = cls || '';
-			osd.show();
 			if(timerid) clearTimeout(timerid);
+			osd.show();
 			timerid = setTimeout(osd.hide,duration || 3000);
 		},
 		loc: function(m,v){
@@ -392,12 +393,11 @@ walli = (function(){
 						log.debug(u+' loaded');
 						css(this.parentNode,'+loaded');
 					};
+					o.onclick = click;
 					return o;
 				})();
 				var d = document.createElement('li');
-				d.onclick = click;
 				css(d,'diapo '+cls);
-				
 				d.appendChild(image);
 				d.setAttribute('title',cleantitle(url));
 				if(id != undefined){
@@ -482,11 +482,12 @@ walli = (function(){
 			unsetcheck();
 			css(view,'+active');
 			css('#thumb','-active');
-		}else if(mode=="zik"){
-		}else if(mode=="movie"){
+		//}else if(mode=="zik"){
+		//}else if(mode=="movie"){
 		}else{ //thumb
 			showing = false;
 			setplay(false);
+			osd.hide();
 			css(img[0],'');
 			css(img[1],'');
 			css(view,'-active');
@@ -997,7 +998,6 @@ walli = (function(){
 				css('#mask','-active');
 				if(showing) nimg = 1-nimg; //switch image element idx
 				else p=0;                  //zoom from thumbnail
-
 				att[nimg] = { w:i.width, h:i.height };
 				slide.removeChild(img[nimg]); /*remove&append to force redraw*/
 				img[nimg].src = i.src;
@@ -1028,9 +1028,7 @@ walli = (function(){
 				}
 				setplaytimer();
 				sethash();
-				setTimeout(function(){
-					osd.info(cleantitle(files[idx])+' <sup>'+(idx+1)+'/'+files.length+'</sup>');
-				}, 1000);
+				osd.info(cleantitle(files[idx])+' <sup>'+(idx+1)+'/'+files.length+'</sup>');
 				if(files.length>1) loadimg((idx+1)%files.length,function(){});
 			});
 			loadcoms(files[idx]);
