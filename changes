@@ -2,8 +2,10 @@ WALLi - ChangeLog
 https://github.com/nikopol/walli
 
 2013-06-27 / 0.4
-  - css updated
+  - css base updated
+  - theme black updated
   - keyboard navigation added
+  - better support for large directory
 
 2013-02-27 / 0.3
   - fullscreen api used on slideshow mode
