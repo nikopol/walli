@@ -286,7 +286,7 @@ walli = (function(){
 		comok,             //comments flag
 		god = false,       //godmode flag
 		zip = true,        //zip download flag
-		cur = false;       //cursor pos
+		cur = {};          //cursor pos
 
 	function layout(){
 		//auto resize diapos
@@ -359,7 +359,6 @@ walli = (function(){
 		setbzip('hide',loc.dlall);
 		if(god) _('#bdel').className='hide';
 		chkfiles = [];
-		cur = false;
 		ajax('?!=ls&path='+p, function(ls){
 			var diapos = _('#diapos','');
 			path = ls.path;
@@ -421,6 +420,7 @@ walli = (function(){
 			sethash();
 			setupcheck();
 			if(god && _('#diag')) walli.diag();
+			if(cur[path]) cursor(0,0);
 		});
 	}
 
@@ -615,11 +615,14 @@ walli = (function(){
 		return false;
 	}
 
-	function cursor(x,y,abs) {
+	function cursor(dx,dy,abs) {
 		if( !showing ) {
-			if(!cur) cur={x:0,y:0};
-			else if(cur.o) css(cur.o,'-cursor');
-			cur = abs ? {x:x,y:y} : {x:x+cur.x,y:y+cur.y};
+			var c = cur[path] ? cur[path] : {x:0,y:0,n:0};
+			if(abs) { 
+				c.x = dx;
+				c.y = dy;
+			}
+			if(c.o) css(c.o,'-cursor');
 			var	
 				dia = _('#diapos li'), 
 				d = _('#diapos'), 
@@ -627,7 +630,7 @@ walli = (function(){
 				tab = [],
 				top = false,
 				n = -1,
-				p, t;
+				p, t, y;
 			if( dia.length ) {
 				//calc diapos table
 				while(++n < dia.length) {
@@ -649,15 +652,17 @@ walli = (function(){
 							b: p.t+p.h,
 							n: n
 						});
+						if(!abs && c.n==n) c={x:dx+tab[y].length-1,y:dy+y,n:n};
 					}
 				}
 				//bound cursor
-				if( cur.y > y )                  cur.y = 0;
-				else if( cur.y < 0 )             cur.y = y;
-				if( cur.x >= tab[cur.y].length ) cur.x = 0;
-				else if( cur.x < 0 )             cur.x = tab[cur.y].length-1;
-				t = tab[cur.y][cur.x];
-				cur.o = dia[t.n];
+				if( c.y > y )                c.y = 0;
+				else if( c.y < 0 )           c.y = y;
+				if( c.x >= tab[c.y].length ) c.x = 0;
+				else if( c.x < 0 )           c.x = tab[c.y].length-1;
+				t = tab[c.y][c.x];
+				c.o = dia[t.n];
+				c.n = t.n;
 				//autoscroll
 				p = {
 					t: d.scrollTop,
@@ -668,8 +673,9 @@ walli = (function(){
 				if( t.b > p.b )      y = t.b-p.h+30;
 				else if( t.t < p.t ) y = t.t-30;
 				d.scrollTop = y;
-				css(cur.o,'+cursor');
+				css(c.o,'+cursor');
 			}
+			cur[path] = c;
 		}
 	}
 
@@ -1074,8 +1080,8 @@ walli = (function(){
 			stopev(e);
 			if(showing) setplay(!playing);
 			else {
-				if(!cur) cursor(0,0,true);
-				if(cur.o) cur.o.click(e);
+				if(!cur[path]) cursor(0,0,true);
+				if(cur[path].o) cur[path].o.click(e);
 			}
 		},
 		togglecom: function(e){
