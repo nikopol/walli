@@ -1090,7 +1090,7 @@ walli = (function(){
 			if(showing) setplay(!playing);
 			else {
 				if(!cur[path]) cursor(0,0,true);
-				if(cur[path].o) cur[path].o.click(e);
+				if(cur[path].o) cur[path].o.children[0].click(e);
 			}
 		},
 		togglecom: function(e){
