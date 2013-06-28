@@ -199,8 +199,8 @@ osd = (function(){
 	"use strict";
 	var o, p, lab, max, val, cb, timerid = false;
 	ready(function(){ 
-		o=_('#osd');
-		p=_('#progress');
+		o = _('#osd');
+		p = _('#progress');
 	});
 	return {
 		/*TEXT*/
@@ -415,7 +415,8 @@ walli = (function(){
 			if(cb) cb();
 			osd.start(files.length+dirs.length);
 			ls.dirs.forEach(function(d){ add(d,function(){loadpath(d)},'dir') });
-			ls.files.forEach(function(d,i){ add(d,function(){walli.show(i,0)},'',i) });
+			//delayed loading for big folder
+			ls.files.forEach(function(d,i){ setTimeout(function(){add(d,function(){walli.show(i,0)},'',i)},i) });
 			if(ls.files.length && zip) setbzip('all');
 			sethash();
 			setupcheck();
@@ -783,6 +784,8 @@ walli = (function(){
 				.add('RIGHT',walli.next)
 				.add('UP',walli.up)
 				.add('DOWN',walli.down)
+				.add('PAGEUP',walli.pgup)
+				.add('PAGEDOWN',walli.pgdown)
 				.add('END',walli.last)
 				.add(['ESC','BACKSPACE'],walli.back)
 				.add('DOWN',function(){if(!showing && files.length)walli.show(0)})
@@ -1006,10 +1009,8 @@ walli = (function(){
 					css(img[nimg],p<0?'left':'right');
 					calcpos(nimg,p);					
 					slide.appendChild(img[nimg]);
-
 					calcpos(nimg,0);
-					css(img[nimg],'animated center');
-					
+					css(img[nimg],'animated center');				
 					css(img[1-nimg],'animated '+(p>0?'left':'right'));
 					calcpos(1-nimg,-p);
 				} else {
@@ -1035,23 +1036,33 @@ walli = (function(){
 		},
 		next: function(e){
 			stopev(e);
-			if(showing) walli.show(++idx,1);
+			if(showing) walli.show(idx+1,1);
 			else        cursor(1,0);
 		},
 		prev: function(e){ 
 			stopev(e);
-			if(showing) walli.show(--idx,-1);
+			if(showing) walli.show(idx-1,-1);
 			else        cursor(-1,0);
 		},
 		down: function(e){
 			stopev(e);
-			if(showing) walli.show(++idx,1);
+			if(showing) walli.show(idx+1,1);
 			else        cursor(0,1);
 		},
 		up: function(e){ 
 			stopev(e);
-			if(showing) walli.show(--idx,-1);
+			if(showing) walli.show(idx-1,-1);
 			else        cursor(0,-1);
+		},
+		pgdown: function(e){
+			stopev(e);
+			if(showing) walli.show(idx+5,1);
+			else        cursor(0,5);
+		},
+		pgup: function(e){ 
+			stopev(e);
+			if(showing) walli.show(idx-5,-1);
+			else        cursor(0,-5);
 		},
 		first: function(e){
 			stopev(e);
