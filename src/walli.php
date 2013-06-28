@@ -623,8 +623,8 @@ https://github.com/nikopol/walli
 			<img id="img0"/>
 			<img id="img1"/>
 		</div>
+		<div id="osd"></div>
 	</div>
-	<div id="osd"></div>
 	<div id="progress">
 		<div id="progressbar"></div>
 		<div id="progresstext"></div>
