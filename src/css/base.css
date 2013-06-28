@@ -27,8 +27,8 @@ ul {
 
 ::-webkit-scrollbar {
 	background: transparent;
-	width: 6px;
-	height: 6px;
+	width: 10px;
+	height: 10px;
 	border: none;
 }
 
@@ -370,7 +370,7 @@ li.diapo input[type="checkbox"] {
 
 #view #slide {
 	position: absolute;	
-	left: 60px;
+	left: 0;
 	right: 0;
 	top: 0;
 	bottom: 0;
@@ -395,7 +395,7 @@ li.diapo input[type="checkbox"] {
 
 #view #comments {
 	position: absolute;
-	top: 0;
+	top: 40px;
 	left: -300px;
 	bottom: 0;
 	width: 300px;
@@ -421,7 +421,7 @@ li.diapo input[type="checkbox"] {
 	overflow: auto;
 	position: absolute;
 	top: 3px;
-	bottom: 160px;
+	bottom: 180px;
 	width: 285px;
 }
 
@@ -440,7 +440,7 @@ li.diapo input[type="checkbox"] {
 
 #newcom {
 	position: absolute;
-	bottom: 5px;
+	bottom: 25px;
 	width: 280px;
 	height: 140px;
 	padding: 3px;
@@ -542,18 +542,18 @@ li.diapo input[type="checkbox"] {
 #godbar {
 	position: absolute;
 	right: 20px;
-	top: 5px;
+	top: 15px;
+	width: 16px;
 	z-index: 30;
 }
 
 #godbar button {
-	float: right;
+	float: left;
 	height: 16px;
 	width: 16px;
-	margin: 0 0 3px 0;
+	margin: 3px;
 	opacity: 0.3;
 	border: none;
-	margin-left: 5px;
 }
 
 #godbar button:hover {
@@ -585,7 +585,6 @@ li.diapo input[type="checkbox"] {
 	-webkit-box-shadow: 3px 3px 5px #000;
 	-moz-box-shadow: 3px 3px 5px #000;
 	box-shadow: 3px 3px 5px #000;
-
 }
 
 #diag li {

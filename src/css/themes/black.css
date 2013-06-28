@@ -54,11 +54,18 @@ select {
 #osd {
 	font: normal 30px Baumans;
 	/*text-shadow: 0 4px 3px rgba(0, 0, 0, 0.4), 0 8px 10px rgba(0, 0, 0, 0.1), 0 8px 9px rgba(0, 0, 0, 0.1);*/
-	background-color: rgba(255,255,255,0.2);
+	background-color: rgba(0,0,0,0.4);
+	top: 5px;
+	left: 70px;
+	right: 70px;
+	-moz-border-radius: 20px;
+	-webkit-border-radius: 20px;
+	border-radius: 20px;
 }
 
 #osd sup {
 	font: normal 20px Arial;
+	margin-top: 7px;
 }
 
 /*THUMB BAR*/
@@ -171,7 +178,7 @@ li.diapo.loaded.cursor {
 	color: #eee;
 	-webkit-transform: scale(1.2);
 	-moz-transform: scale(1.2);
-	-webkit-box-shadow: 0 0 20px #fff;
+	-webkit-box-shadow: 0 0 20px rgba(0,0,0,.9);
 	-moz-box-shadow: 0 0 20px rgba(0,0,0,.9);
 	box-shadow: 0 0 20px rgba(0,0,0,.9);
 	-webkit-transition: all 0.2s linear;
@@ -256,39 +263,53 @@ li.diapo.loaded.cursor {
 
 /*VIEW BAR*/
 
-#viewbar {
-	background-color: #000;
-}
-
 #viewbar button {
 	color: #eee;
 }
 
-#bprev {
-	left: 4px;
-	top: 2px;
-	width: 24px;
-	height: 48px;
-	background: url(../icons/prev.png) no-repeat center center;
+#viewbar button#bprev {
+	position: fixed;
+	left: -100px;
+	top: 200px;
+	width: 160px;
+	bottom: 200px;
+	opacity: 0;
+	background: url(../icons/prev.png) no-repeat 115px center rgba(0,0,0,0.4);
+	-webkit-border-radius: 0 190px 190px 0;
+	-moz-border-radius: 0 190px 190px 0;
+	border-radius: 0 190px 190px 0;
 }
 
-#bnext {
-	left: 32px;
-	top: 2px;
-	width: 24px;
-	height: 48px;
-	background: url(../icons/next.png) no-repeat center center;
+#viewbar button#bprev:hover {
+	opacity: 1;
 }
 
-#bcom {
+#viewbar button#bnext {
+	position: fixed;
+	right: -100px;
+	top: 200px;
+	width: 160px;
+	bottom: 200px;
+	opacity: 0;
+	background: url(../icons/next.png) no-repeat 15px center rgba(0,0,0,0.4);
+	-webkit-border-radius: 190px 0 0 190px;
+	-moz-border-radius: 190px 0 0 190px;
+	border-radius: 190px 0 0 190px;
+}
+
+#viewbar button#bnext:hover {
+	opacity: 1;
+}
+
+#viewbar button#bcom {
 	left: 6px;
-	top: 148px;
+	top: 104px;
 	width: 48px;
 	height: 48px;
 	background: url(../icons/comment.png) no-repeat center center;
 }
 
-#bcom span {
+#viewbar button#bcom span {
 	position: absolute;
 	left: 0;
 	top: 4px;
@@ -297,21 +318,21 @@ li.diapo.loaded.cursor {
 	font: bold 24px Baumans;
 }
 
-#bcom:hover span {
+#viewbar button#bcom:hover span {
 	text-shadow: 0 0 5px #fff;
 }
 
-#bplay {
+#viewbar button#bplay {
 	left: 6px;
-	top: 102px;
+	top: 60px;
 	width: 48px;
 	height: 42px;
 	background: url(../icons/play.png) no-repeat center center;
 }
 
-#bthumb {
+#viewbar button#bthumb {
 	left: 6px;
-	top: 50px;
+	top: 6px;
 	width: 48px;
 	height: 48px;
 	background: url(../icons/thumbs.png) no-repeat center center;
@@ -355,22 +376,10 @@ li.diapo.loaded.cursor {
 
 /* ADMIN BAR */
 
-#godbar {
-	width: 16px;
-}
-
-#godbar button {
-	height: 16px;
-	width: 16px;
-	margin: 0 0 3px 0;
-	opacity: 0.3;
-	border: none;
-}
-
-#blogin  { background: url(../icons/black/login.png) repeat center center; }
-#blogout { background: url(../icons/black/logout.png) repeat center center; }
-#bmkdir  { background: url(../icons/black/mkdir.png) repeat center center; }
-#bupload { background: url(../icons/black/upload.png) repeat center center; }
-#bflush  { background: url(../icons/black/reset.png) repeat center center; }
-#bdel    { background: url(../icons/black/del.png) repeat center center; }
-#bdiag   { background: url(../icons/black/diag.png) repeat center center; }
+#blogin  { background: url(../icons/black/login.png) no-repeat center center; }
+#blogout { background: url(../icons/black/logout.png) no-repeat center center; }
+#bmkdir  { background: url(../icons/black/mkdir.png) no-repeat center center; }
+#bupload { background: url(../icons/black/upload.png) no-repeat center center; }
+#bflush  { background: url(../icons/black/reset.png) no-repeat center center; }
+#bdel    { background: url(../icons/black/del.png) no-repeat center center; }
+#bdiag   { background: url(../icons/black/diag.png) no-repeat center center; }
