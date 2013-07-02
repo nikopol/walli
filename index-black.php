@@ -549,7 +549,7 @@ $intro = $withintro
 ?>
 <!doctype html>
 <!--
-WALLi v0.1 (c) NiKo 2012-2013
+WALLi v<?php print(VERSION) ?> (c) NiKo 2012-2013
 Stand-Alone Image Wall
 https://github.com/nikopol/walli
 -->
