@@ -7,11 +7,11 @@ then
 	echo "install imagemagick"
 	exit 1
 fi
-PATH='.'
-[ "$1" ] && PATH=$1
+CONVPATH='.'
+[ "$1" ] && CONVPATH=$1
 
-for f in "`find $PATH | grep 'png|jpe?g'`"
+for f in `find $CONVPATH | grep -Ei 'png|jpe?g'`
 do
 	echo $f
-	convert $f -auto-orient -resize 1280x1280\> norm_$f
+	convert $f -auto-orient -resize 1280x1280\> $f
 done
