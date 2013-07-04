@@ -1,12 +1,16 @@
 WALLi - ChangeLog
 https://github.com/nikopol/walli
 
+2013-07-06 / 0.5
+  - animated slideshow mode
+  - slideshow timer keyboard shortcut added (+/-)
+  - keyboard shortcuts help added (hit ? or h)
+
 2013-06-27 / 0.4
   - css base updated
   - theme black updated
   - keyboard navigation added
   - better support for large directory
-  - animated slideshow mode
 
 2013-02-27 / 0.3
   - fullscreen api used on slideshow mode

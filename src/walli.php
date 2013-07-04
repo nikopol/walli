@@ -69,7 +69,7 @@ $ADMIN_PWD   = false;
 
 /*CONSTANTS*/
 
-define('VERSION','0.4');
+define('VERSION','0.5');
 define('MINI_SIZE',150);
 define('COOKIE_UID','wallid');
 define('COOKIE_GOD','wallia');
@@ -633,6 +633,7 @@ https://github.com/nikopol/walli
 	<div id="intro"><div><?php print($intro);?></div></div>
 <?php } ?>
 	<div id="copyright"><a href="https://github.com/nikopol/walli">WALLi <?php print(VERSION); ?></a></div>
+	<div id="help"></div>
 
 	<!--[if IE]>
 	<script src="js/ie.js"></script>

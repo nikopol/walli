@@ -36,6 +36,19 @@ var
 				week: '%d week%s ago',
 				month: '%d month%s ago'
 			},
+			help: {
+				th: ['keys',         'thumbnail mode',              'show mode'],
+				tr: [
+					['? | H',        'toggle this panel',           'toggle this panel'],
+					['SPACE | ENTER','show the current selection',  'toggle slideshow on/off'],
+					['HOME',         'select the first image',      'show the first image'],
+					['END',          'select the last image',       'show the last image'],
+					['ARROWS',       'change the selected image',   'show the previous/next image'],
+					['ESC',          'go to the previous directory','back to the thumbnail mode'],
+					['C',            '',                            'toggle comments panel'],
+					['+ | -',        '',                            'change the slideshow timer']
+				]
+			},
 			bdel: '&#10006;',
 			nocom: 'be the first to comment',
 			emptywho: "what's your name ?",
@@ -51,7 +64,8 @@ var
 			flushed: '%nb file%s flushed',
 			uploaded: '%nb file%s uploaded',
 			deleted: '%nb file%s deleted',
-			mkdir: 'folder name ?'
+			mkdir: 'folder name ?',
+			delay: "slideshow set to %ss"
 		},
 		fr: {
 			title: {
@@ -82,6 +96,19 @@ var
 				week: 'il y a %d semaine%s',
 				month: 'il y a %d mois'
 			},
+			help: {
+				th: ['touches', 'mode miniatures', 'mode image'],
+				tr: [
+					['? | H', 'affiche/cache cette aide', 'affiche/cache cette aide'],
+					['ESPACE | ENTRÉE', 'affiche la sélection', 'des/active le diaporama'],
+					['DÉBUT','sélectionne la première image', 'affiche la première image'],
+					['FIN', 'sélectionne la derniere image', 'affiche la derniere image'],
+					['FLÈCHES', 'change la sélection', "affiche l'image suivante/précèdente"],
+					['ÉCHAP', 'retourne au répertoire précèdent','retourne au mode miniatures'],
+					['C','','affiche/cache les commentaires'],
+					['+ | -','','change le délai du diaporama']
+				]
+			},
 			bdel: '&#10006;',
 			nocom: 'soyez le premier à laisser un commentaire',
 			emptywho: 'de la part de ?',
@@ -97,7 +124,8 @@ var
 			flushed: '%nb fichier%s supprimé%s',
 			uploaded: '%nb image%s ajoutée%s',
 			deleted: '%nb image%s effacée%s',
-			mkdir: 'nom du dossier ?'
+			mkdir: 'nom du dossier ?',
+			delay: "le diaporama passe à %ss"
 		}
 	},
 	loc,
@@ -145,8 +173,11 @@ var
 		if(loc.title)  for(k in loc.title)  if(o=_('#'+k)) o.setAttribute('title',loc.title[k]);
 		if(loc.holder) for(k in loc.holder) if(o=_('#'+k)) o.setAttribute('placeholder',loc.holder[k]);
 		if(loc.text)   for(k in loc.text)   _('#'+k,loc.text[k]);
+		t = "<table><tr><th>"+loc.help.th.join('</th><th>')+"</th></tr>";
+		for(k in loc.help.tr) t += "<tr><td>"+loc.help.tr[k].join('</td><td>')+"</td></tr>";
+		_('#help',t);
 	};
-ready(function(){ setlocale(navigator.language) });
+ready(function(){ setlocale(hash.get('lang')||navigator.language) });
 
 /*LOG*/
 
@@ -456,6 +487,12 @@ walli = (function(){
 			if(slideid) clearTimeout(slideid);
 			slideid = setTimeout(walli.next,DELAY*1000);
 		}
+	}
+
+	function setdelay(d) {
+		DELAY += d;
+		if(DELAY<0) DELAY = 0;
+		osd.loc('delay',{s:DELAY});
 	}
 
 	function setplay(b){
@@ -791,8 +828,9 @@ walli = (function(){
 				.add('END',walli.last)
 				.add(['ESC','BACKSPACE'],walli.back)
 				.add('DOWN',function(){if(!showing && files.length)walli.show(0)})
-				//.add('+',walli.speedinc)
-				//.add('-',walli.speeddec)
+				.add(['?','H'],function(){ css('#help','*active') })
+				.add('PLUS',function(){ setdelay(1) })
+				.add('MINUS',function(){ setdelay(-1) })
 			;
 
 			_('#bprev').onclick    = walli.prev;

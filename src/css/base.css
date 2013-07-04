@@ -113,7 +113,7 @@ button::-moz-focus-inner {
 /*OSD*/
 
 #osd {
-	display: hidden;
+	display: none;
 	position: absolute;
 	top: 0;
 	left: 0;
@@ -619,4 +619,39 @@ li.diapo input[type="checkbox"] {
 
 #diag li.bad {
 	background-image: url(../icons/bad.png);
+}
+
+/* HELP */
+
+#help {
+	display: none;
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	width: 720px;
+	margin-left: -360px;
+	margin-top: -200px;
+	z-index: 99;
+	background-color: rgba(0,0,0,0.8);
+	padding: 20px;
+	border-radius: 30px;
+	font-size: 18px;
+}
+
+#help.active {
+	display: block;
+}
+
+#help table {
+	width: 100%;
+}
+
+#help td {
+	padding: 0 10px;
+}
+
+#help th {
+	text-transform: uppercase;
+	border-bottom: 1px #fff dotted;
+	color: #fff;
 }
