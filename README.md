@@ -1,4 +1,4 @@
-WALLi v0.4 (c) niko 2012-2013
+WALLi v0.5 (c) niko 2012-2013
 -----------------------------
 "all-in-one" Images Wall
 
@@ -20,7 +20,7 @@ device.
   - permalink supported
   - google analytics supported
   - mini admin included (upload/delete images,stats,mkdir,cache control)
-  - keyboard navigation support
+  - keyboard shortcuts (h or ? for help)
 
 **LOULOU THEME SCREENSHOTS**
 
