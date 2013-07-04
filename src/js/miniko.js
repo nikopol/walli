@@ -106,11 +106,10 @@ css = function(s,c){
 ajax = function(o,fn){
 	if(typeof(o)=='string') o = { url:o, ok:fn };
 	var
-		app  = 'application/',
-		type = o.type || 'GET',
+		type = o.type || 'GET',
 		url  = o.url || '',
-		ctyp = o.contenttype || app+'x-www-form-urlencoded',
-		dtyp = o.datatype || app+'json',
+		ctyp = o.contenttype || 'application/x-www-form-urlencoded',
+		dtyp = o.datatype || 'application/json',
 		xhr  = new window.XMLHttpRequest(),
 		timer,d,n;
 	if(o.data){
