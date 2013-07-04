@@ -68,7 +68,7 @@ _ = function(s,h){
 			for(o=[],n=0; n<l.length; ++n) o.push(l[n]);
 		}
 	}
-	if(o && h!=undefined) __(o).forEach(function(e){ e.innerHTML = h });
+	if(o && h!=undefined) __(o).forEach(function(e){ e.innerHTML = h });
 	return o;
 },
 

@@ -438,7 +438,7 @@ walli = (function(){
 		css(img[n],{
 			width: w+'px',
 			height: h+'px',
-			left: Math.floor((ww-w)/2+(ww*p))+'px',
+			left: Math.floor((ww-w)/2+(ww*p*2))+'px',
 			top: Math.floor((wh-h)/2)+'px'
 		});
 		//log.debug("calcpos("+n+","+p+")="+img[n].style.left);
@@ -464,12 +464,14 @@ walli = (function(){
 		if(b){
 			setplaytimer();
 			fullscreen();
-			css('#bplay','active');
+			css('#bplay','+active');
+			css('#view','+play');
 			osd.loc('play');
 		} else {
 			if(slideid) clearTimeout(slideid);
 			slideid = false;
-			css('#bplay','');
+			css('#bplay','-active');
+			css('#view','-play');
 			osd.loc('stop');
 		}
 	}

@@ -25,6 +25,10 @@ ul {
 	list-style: none;
 }
 
+button::-moz-focus-inner {
+  border: 0;
+}
+
 ::-webkit-scrollbar {
 	background: transparent;
 	width: 10px;
@@ -364,6 +368,21 @@ li.diapo input[type="checkbox"] {
 	-webkit-transition: all 0.7s ease-out;
 	-moz-transition: all 0.7s ease-out;
 	transition: all 0.7s ease-out;
+}
+
+#view.play img {
+	-webkit-animation: imgplay 8s linear 0s infinite alternate;
+	animation: imgplay 8s linear 0s infinite alternate;
+}
+
+@-webkit-keyframes imgplay {
+	0% { -webkit-transform: scale(1); }
+	100% { -webkit-transform: scale(1.2); }
+}
+
+@keyframes imgplay {
+	0% { transform: scale(1); }
+	100% { transform: scale(1.2); }
 }
 
 /*SLIDER*/

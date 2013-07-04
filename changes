@@ -6,6 +6,7 @@ https://github.com/nikopol/walli
   - theme black updated
   - keyboard navigation added
   - better support for large directory
+  - animated slideshow mode
 
 2013-02-27 / 0.3
   - fullscreen api used on slideshow mode
