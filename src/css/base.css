@@ -11,6 +11,10 @@ body {
 	overflow: hidden;
 }
 
+body.sleep {
+	cursor: none;
+}
+
 a,a:visited {
 	text-decoration: none;
 }
@@ -506,6 +510,10 @@ li.diapo input[type="checkbox"] {
 	opacity: 1;
 }
 
+body.sleep #viewbar {
+	display: none;
+}
+
 /* LOADING */
 
 #mask {
@@ -619,6 +627,10 @@ li.diapo input[type="checkbox"] {
 
 #diag li.bad {
 	background-image: url(../icons/bad.png);
+}
+
+body.sleep #godbar {
+	display: none;
 }
 
 /* HELP */

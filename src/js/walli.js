@@ -46,6 +46,7 @@ var
 					['ARROWS',       'change the selected image',   'show the previous/next image'],
 					['ESC',          'go to the previous directory','back to the thumbnail mode'],
 					['C',            '',                            'toggle comments panel'],
+					['T',            '',                            'show image filename'],
 					['+ | -',        '',                            'change the slideshow timer']
 				]
 			},
@@ -106,6 +107,7 @@ var
 					['FLÈCHES', 'change la sélection', "affiche l'image suivante/précèdente"],
 					['ÉCHAP', 'retourne au répertoire précèdent','retourne au mode miniatures'],
 					['C','','affiche/cache les commentaires'],
+					['T','',"affiche le nom de l'image"],
 					['+ | -','','change le délai du diaporama']
 				]
 			},
@@ -236,8 +238,7 @@ osd = (function(){
 	return {
 		/*TEXT*/
 		hide: function(){
-			if(timerid) clearTimeout(timerid);
-			timerid = false;
+			if(timerid) timerid = clearTimeout(timerid);
 			css(o,'-active');
 		},
 		show: function(){
@@ -290,10 +291,12 @@ walli = (function(){
 	"use strict";
 	var
 		DELAY = 5,         //delay for slideshow
-		TOUCHDELTA=80,     //touch move delta
-		TOUCHTTL=1000,     //max time for touch
+		SLEEPDELAY = 3,    //delay for slideshow
+		TOUCHDELTA = 80,   //touch move delta
+		TOUCHTTL = 1000,   //max time for touch
 		slideid = false,   //timer for slideshow
 		checkid = false,   //timer for refresh
+		sleepid = false,   //timer for sleep mode
 		refresh,           //delay in s between checks
 		path,              //current path
 		files = [],        //files for current directory
@@ -318,6 +321,8 @@ walli = (function(){
 		comok,             //comments flag
 		god = false,       //godmode flag
 		zip = true,        //zip download flag
+		smx = 0,           //sleep mouse pos
+		smy = 0,           //sleep mouse pos
 		cur = {};          //cursor pos
 
 	function layout(){
@@ -495,6 +500,32 @@ walli = (function(){
 		osd.loc('delay',{s:DELAY});
 	}
 
+	function checksleep() {
+		css(document.body,'-sleep');
+		document.body.onmousemove = 
+		document.body.ontouchstart = function(e){
+			if(e.x!=smx || e.y!=smy) {
+				smx = e.x;
+				smy = e.y;
+				checksleep();
+			}
+		}
+		if(sleepid) clearTimeout(sleepid);
+		sleepid = setTimeout(setsleep,SLEEPDELAY*1000);
+	}
+
+	function unchecksleep() {
+		if(sleepid) sleepid = clearTimeout(sleepid);
+		document.body.onmousemove =
+		document.body.ontouchstart = false;
+		css(document.body,'-sleep');
+	}
+
+	function setsleep() {
+		if(sleepid) sleepid = clearTimeout(sleepid);
+		css(document.body,'+sleep');
+	}
+
 	function setplay(b){
 		if(playing === b) return;
 		playing = b;
@@ -504,9 +535,10 @@ walli = (function(){
 			css('#bplay','+active');
 			css('#view','+play');
 			osd.loc('play');
+			checksleep();
 		} else {
-			if(slideid) clearTimeout(slideid);
-			slideid = false;
+			if(slideid) slideid = clearTimeout(slideid);
+			unchecksleep();
 			css('#bplay','-active');
 			css('#view','-play');
 			osd.loc('stop');
@@ -720,6 +752,10 @@ walli = (function(){
 		}
 	}
 
+	function showtitle() {
+		osd.info(cleantitle(files[idx])+' <sup>'+(idx+1)+'/'+files.length+'</sup>');
+	}
+
 	return {
 		setup: function(o) {
 			comok = o.comments;
@@ -829,8 +865,9 @@ walli = (function(){
 				.add(['ESC','BACKSPACE'],walli.back)
 				.add('DOWN',function(){if(!showing && files.length)walli.show(0)})
 				.add(['?','H'],function(){ css('#help','*active') })
-				.add('PLUS',function(){ setdelay(1) })
-				.add('MINUS',function(){ setdelay(-1) })
+				.add(['T'],showtitle)
+				.add(['PLUS','+'],function(){ setdelay(1) })
+				.add(['MINUS','-'],function(){ setdelay(-1) })
 			;
 
 			_('#bprev').onclick    = walli.prev;
@@ -1069,7 +1106,7 @@ walli = (function(){
 				}
 				setplaytimer();
 				sethash();
-				osd.info(cleantitle(files[idx])+' <sup>'+(idx+1)+'/'+files.length+'</sup>');
+				showtitle();
 				if(files.length>1) loadimg((idx+1)%files.length,function(){});
 			});
 			loadcoms(files[idx]);
