@@ -473,6 +473,7 @@ function GET_diag(){
 }
 
 function POST_img() {
+	global $ROOT_DIR;
 	godcheck();
 	$path=check_path($_GET['path']).'/';
 	if(!is_dir($path)) error(404,'path '.$path.' not found');
