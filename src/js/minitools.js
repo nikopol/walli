@@ -1,5 +1,5 @@
-// minitools.js 0.1
-// ~L~ nikomomo@gmail.com 2012
+// minitools.js 0.2
+// ~L~ nikomomo@gmail.com 2012-2013
 // https://github.com/nikopol/minitools.js
 
 /*
@@ -40,10 +40,9 @@ an object with client info
 
 */
 
-"use strict";
-
 var
 hash=(function(){
+	"use strict";
 	var h, p,
 	encode=function(s){ return s.replace(/ /g,'%20').replace(/#/,'%23') },
 	decode=function(s){ return s.replace(/%20/g,' ').replace(/%23/,'#') },
@@ -83,13 +82,15 @@ hash=(function(){
 })(),
 
 hotkeys=(function(){
+	"use strict";
 	var 
 	on=false,
 	KEYS={
 		ESC:27, TAB:9, SPACE:32, RETURN:13, ENTER:13, BACKSPACE:8, BS:8, SCROLL:145, CAPSLOCK:20, NUMLOCK:144,
 		PAUSE:19, INSERT:45, DEL:46, HOME:36, END:35, PAGEUP:33, PAGEDOWN:34, LEFT:37, UP:38, RIGHT:39, DOWN:40,
 		F1:112, F2:113, F3:114, F4:115, F5:116, F6:117, F7:118, F8:119, F9:120, F10:121, F11:122, F12:123,
-		MINUS:109, PLUS: 107
+		'*':106, '+':107, '-':109, '.':110, '/':111, ';':186, '=':187, ',':188, //'-':189,'.':190, '/':191,
+		'`':192, '[':219, '\\':220, ']':221, '\'':222
 	},
 	MASKEYS={ ALT:1,CONTROL:2,CTRL:2,SHIFT:4 },
 	list=[],
@@ -148,6 +149,7 @@ hotkeys=(function(){
 })(),
 
 browser=function(){
+	"use strict";
 	var b={}, z=navigator.userAgent;
 	if(/MSIE\s([\d\.]+)/.test(z)) b.IE=parseFloat(RegExp.$1);
 	z.replace(/\s\(.+\)/g,'').split(' ').forEach(function(n){ if(/^(.+)\/(.+)$/.test(n)) b[RegExp.$1]=parseFloat(RegExp.$2) });
