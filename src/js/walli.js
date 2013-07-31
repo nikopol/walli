@@ -866,8 +866,8 @@ walli = (function(){
 				.add('DOWN',function(){if(!showing && files.length)walli.show(0)})
 				.add(['?','H'],function(){ css('#help','*active') })
 				.add(['T'],showtitle)
-				.add(['PLUS','+'],function(){ setdelay(1) })
-				.add(['MINUS','-'],function(){ setdelay(-1) })
+				.add(['+'],function(){ setdelay(1) })
+				.add(['-'],function(){ setdelay(-1) })
 			;
 
 			_('#bprev').onclick    = walli.prev;
@@ -902,7 +902,7 @@ walli = (function(){
 						}
 						if(confirm(loc.tpl('uploadfiles',{z:loc.size(size),nb:files.length}))) {
 							var xhr = new XMLHttpRequest();
-							xhr.open('POST', 'walli.php?!=img&&path='+path);
+							xhr.open('POST', '?!=img&path='+path);
 							xhr.onload = function(){
 								if(xhr.status == 200) {
 									var d = JSON.parse(xhr.responseText);
