@@ -667,3 +667,59 @@ body.sleep #godbar {
 	border-bottom: 1px #fff dotted;
 	color: #fff;
 }
+
+/* EXIF */
+
+#exif {
+	display: none;
+	position: absolute;
+	right: 40px;
+	top: 50px;
+	bottom: 50px;
+	font: normal 10px Arial,Helvetica;
+	color: #fff;
+	z-index: 9;
+	overflow: auto;
+	padding-right: 5px;
+}
+
+#exif::-webkit-scrollbar {
+	width: 7px;
+}
+
+#exif::-webkit-scrollbar-thumb {
+	border-radius: 0;
+}
+
+#exif.active {
+	display: block;
+}
+
+#exif div {
+	background-color: rgba(0,0,0,0.6);
+	margin-bottom: 5px;
+	padding: 3px;
+}
+
+#exif h3 {
+	font: bold 14px Arial,Helvetica;
+}
+
+#exif table {
+	margin-left: 10px;
+}
+
+#exif table:after {
+	content: "";
+	display: block; 
+	clear: both;
+}
+
+#exif th {
+	padding-right: 5px;
+	color: #999;
+	text-align: right;
+	width: 130px;
+	vertical-align: top;
+}
+

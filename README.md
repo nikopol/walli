@@ -1,4 +1,4 @@
-WALLi v0.5 (c) niko 2012-2013
+WALLi v0.6 (c) niko 2012-2013
 -----------------------------
 "all-in-one" Images Wall
 
@@ -52,6 +52,8 @@ a http server supporting php with modules gd, zip and json.
 	#on ubuntu
 	sudo aptitude install php5 libphp-pclzip php5-gd php5-json
 
+	#you can also enable exif support in your php.ini
+
 
 if you want customize, you'll need some perl modules (used to minify & concat
 files) :
@@ -94,7 +96,7 @@ steps:
 	#or
 	bin/minify-all
 
-if you do, don't hesitate to pull request =)
+if you do, don't hesitate to pull request your themes/improvments =)
 
 **TODO**
 

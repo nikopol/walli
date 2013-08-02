@@ -47,6 +47,7 @@ var
 					['ESC',          'go to the previous directory','back to the thumbnail mode'],
 					['C',            '',                            'toggle comments panel'],
 					['T',            '',                            'show image filename'],
+					['I',            '',                            'show image informations'],
 					['+ | -',        '',                            'change the slideshow timer']
 				]
 			},
@@ -59,6 +60,7 @@ var
 			dlall: 'download all',
 			dlsel: 'download selected',
 			zip: 'compressing…',
+			load: 'loading…',
 			nozip: 'nothing to download',
 			updir: '',
 			uploadfiles: 'upload %nb image%s (%z bytes) ?',
@@ -66,7 +68,8 @@ var
 			uploaded: '%nb file%s uploaded',
 			deleted: '%nb file%s deleted',
 			mkdir: 'folder name ?',
-			delay: "slideshow set to %ss"
+			delay: "slideshow set to %ss",
+			exifnotfound: "no information available",
 		},
 		fr: {
 			title: {
@@ -98,16 +101,17 @@ var
 				month: 'il y a %d mois'
 			},
 			help: {
-				th: ['touches', 'mode miniatures', 'mode image'],
+				th: ['touches','mode miniatures','mode image'],
 				tr: [
-					['? | H', 'affiche/cache cette aide', 'affiche/cache cette aide'],
-					['ESPACE | ENTRÉE', 'affiche la sélection', 'des/active le diaporama'],
-					['DÉBUT','sélectionne la première image', 'affiche la première image'],
-					['FIN', 'sélectionne la derniere image', 'affiche la derniere image'],
-					['FLÈCHES', 'change la sélection', "affiche l'image suivante/précèdente"],
-					['ÉCHAP', 'retourne au répertoire précèdent','retourne au mode miniatures'],
+					['? | H','affiche/cache cette aide','affiche/cache cette aide'],
+					['ESPACE | ENTRÉE','affiche la sélection','des/active le diaporama'],
+					['DÉBUT','sélectionne la première image','affiche la première image'],
+					['FIN','sélectionne la derniere image','affiche la derniere image'],
+					['FLÈCHES','change la sélection',"affiche l'image suivante/précèdente"],
+					['ÉCHAP','retourne au répertoire précèdent','retourne au mode miniatures'],
 					['C','','affiche/cache les commentaires'],
 					['T','',"affiche le nom de l'image"],
+					['I','',"affiche des informations sur l'image"],
 					['+ | -','','change le délai du diaporama']
 				]
 			},
@@ -120,6 +124,7 @@ var
 			dlall: 'tout télécharger',
 			dlsel: 'télécharger la sélection',
 			zip: 'compression…',
+			load: 'chargement…',
 			nozip: 'rien à télécharger',
 			updir: '',
 			uploadfiles: 'poster %nb image%s (%z octets) ?',
@@ -127,7 +132,8 @@ var
 			uploaded: '%nb image%s ajoutée%s',
 			deleted: '%nb image%s effacée%s',
 			mkdir: 'nom du dossier ?',
-			delay: "le diaporama passe à %ss"
+			delay: "le diaporama passe à %ss",
+			exifnotfound: "aucune information disponible",
 		}
 	},
 	loc,
@@ -355,7 +361,6 @@ walli = (function(){
 			cb(n,null);
 			loading--;
 		};
-		//i.src = '?!=img&file='+encodeURIComponent(f);
 		i.src = encodeURIComponent(f);
 	}
 
@@ -563,6 +568,7 @@ walli = (function(){
 			css(img[0],'');
 			css(img[1],'');
 			css(view,'-active');
+			css('#exif','-active');
 			css('#thumb','+active');
 			setupcheck();
 		}
@@ -753,7 +759,7 @@ walli = (function(){
 	}
 
 	function showtitle() {
-		osd.info(cleantitle(files[idx])+' <sup>'+(idx+1)+'/'+files.length+'</sup>');
+		if(showing) osd.info(cleantitle(files[idx])+' <sup>'+(idx+1)+'/'+files.length+'</sup>');
 	}
 
 	return {
@@ -866,6 +872,7 @@ walli = (function(){
 				.add('DOWN',function(){if(!showing && files.length)walli.show(0)})
 				.add(['?','H'],function(){ css('#help','*active') })
 				.add(['T'],showtitle)
+				.add(['I'],walli.togglexif)
 				.add(['+'],function(){ setdelay(1) })
 				.add(['-'],function(){ setdelay(-1) })
 			;
@@ -926,7 +933,7 @@ walli = (function(){
 				//del
 				_('#bdel').onclick=walli.del;
 				//diag
-				_('#bdiag').onclick=walli.switchdiag;
+				_('#bdiag').onclick=walli.togglediag;
 				//reset
 				_('#bflush').onclick=walli.flush;
 				//mkdir
@@ -981,7 +988,35 @@ walli = (function(){
 					osd.error(loc.noselection);
 			}
 		},
-		switchdiag: function(){
+		togglexif: function(){
+			css('#exif','*active');
+			walli.exif();
+		},
+		exif: function(){
+			var b = _('#exif.active');
+			if(b.length) {
+				_(b,loc.load);
+				ajax({
+					url: '?!=exif&file='+files[idx],
+					ok: function(d){
+						var h,k,j;
+						if(d && d.exif) {
+							h = '';
+							for(k in d.exif) {
+								h += '<div><h3>'+k+'</h3><table>';
+								for(j in d.exif[k])
+									if(d.exif[k][j]!=null && d.exif[k][j]!="") h += '<tr><th>'+j+'</th><td>'+d.exif[k][j]+'</td></tr>';
+								h += '</table></div>';
+							}
+						} else
+							h = loc.exifnotfound;
+						_(b,h);
+					},
+					error: osd.error
+				});
+			}
+		},
+		togglediag: function(){
 			var b = _('#diag');
 			if(b) document.body.removeChild(b); else walli.diag();
 		},
@@ -1107,6 +1142,7 @@ walli = (function(){
 				setplaytimer();
 				sethash();
 				showtitle();
+				walli.exif();
 				if(files.length>1) loadimg((idx+1)%files.length,function(){});
 			});
 			loadcoms(files[idx]);

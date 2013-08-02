@@ -69,7 +69,7 @@ $ADMIN_PWD   = false;
 
 /*CONSTANTS*/
 
-define('VERSION','0.5');
+define('VERSION','0.6');
 define('MINI_SIZE',150);
 define('COOKIE_UID','wallid');
 define('COOKIE_GOD','wallia');
@@ -266,13 +266,14 @@ function GET_count(){
 	send_json(array('files'=>count($data['files']),'dirs'=>count($data['dirs'])));
 }
 
-function GET_img(){
-	$path=check_path($_GET['path']);
+function GET_exif(){
+	$fn=$_GET['file'];
+	$file=get_file_path($fn);
 	if(!file_exists($file)) notfound($file);
-	header('Content-Type: image/'.pathinfo($file,PATHINFO_EXTENSION));
-	header('Content-Length: '.filesize($file));
-	cache();
-	@readfile($file);
+	$exif=function_exists('exif_read_data')
+		? @exif_read_data($file,null,true)
+		: false;
+	send_json(array('exif'=>$exif,'file'=>$file));
 }
 
 function GET_mini(){
@@ -467,7 +468,8 @@ function GET_diag(){
 			'comments'      => $withcom,
 			'cache'         => check_sys_dir(),
 			'intro'         => $withintro,
-			'auto refresh'  => $REFRESH_DELAY
+			'auto refresh'  => $REFRESH_DELAY,
+			'exif support'  => function_exists('exif_read_data')
 		)
 	));
 }
@@ -633,6 +635,7 @@ https://github.com/nikopol/walli
 <?php if($intro){ ?>
 	<div id="intro"><div><?php print($intro);?></div></div>
 <?php } ?>
+	<div id="exif"></div>
 	<div id="copyright"><a href="https://github.com/nikopol/walli">WALLi <?php print(VERSION); ?></a></div>
 	<div id="help"></div>
 
