@@ -69,7 +69,7 @@ var
 			deleted: '%nb file%s deleted',
 			mkdir: 'folder name ?',
 			delay: "slideshow set to %ss",
-			exifnotfound: "no information available",
+			exifnotfound: "no information available"
 		},
 		fr: {
 			title: {
@@ -133,7 +133,7 @@ var
 			deleted: '%nb image%s effacée%s',
 			mkdir: 'nom du dossier ?',
 			delay: "le diaporama passe à %ss",
-			exifnotfound: "aucune information disponible",
+			exifnotfound: "aucune information disponible"
 		}
 	},
 	loc,
