@@ -270,10 +270,8 @@ function GET_exif(){
 	$fn=$_GET['file'];
 	$file=get_file_path($fn);
 	if(!file_exists($file)) notfound($file);
-	$exif=function_exists('exif_read_data')
-		? @exif_read_data($file,null,true)
-		: false;
-	send_json(array('exif'=>$exif,'file'=>$file));
+	if(!function_exists('exif_read_data')) error(409,'EXIF not supported');
+	send_json(array('exif'=>@exif_read_data($file,null,true)));
 }
 
 function GET_mini(){

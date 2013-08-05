@@ -997,7 +997,8 @@ walli = (function(){
 			if(b.length) {
 				_(b,loc.load);
 				ajax({
-					url: '?!=exif&file='+files[idx],
+					url: '?!=exif',
+					data: {file:files[idx]},
 					ok: function(d){
 						var h,k,j;
 						if(d && d.exif) {
@@ -1012,7 +1013,7 @@ walli = (function(){
 							h = loc.exifnotfound;
 						_(b,h);
 					},
-					error: osd.error
+					error: function(e){ _(b,e) }
 				});
 			}
 		},
