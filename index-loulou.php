@@ -670,7 +670,7 @@ https://github.com/nikopol/walli
 		#exif h3{font:bold 14px Arial,Helvetica}
 		#exif table{margin-left:10px}
 		#exif table:after{content:"";display:block;clear:both}
-		#exif th{padding-right:5px;color:#999;text-align:right;width:130px;vertical-align:top}
+		#exif th{padding-right:5px;color:#fd4;text-align:right;width:130px;vertical-align:top}
 		button{margin:0;padding:0;border:none;background-color:transparent}
 		#thumbbar button:after{content:"";position:absolute;right:0;top:0;border-color:#fff #d5d4c6 #d0d080 #fff;border-style:solid;border-width:0 8px 8px 0;height:0;width:0;display:block;-moz-box-shadow:-1px 2px 1px rgba(0, 0, 0, 0.2), -2px 1px 1px rgba(0, 0, 0, 0.1);-webkit-box-shadow:-1px 2px 1px rgba(0, 0, 0, 0.2), -2px 1px 1px rgba(0, 0, 0, 0.1);box-shadow:-1px 2px 1px rgba(0, 0, 0, 0.2), -2px 1px 1px rgba(0, 0, 0, 0.1)}
 		#thumbbar button:hover:after{border-width:0 16px 16px 0;-webkit-transition:border-width 1s ease-out}
