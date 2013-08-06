@@ -181,17 +181,18 @@ function ls($path='',$pattern='',$recurse=0){
 	$subs=array();
 	$size=0;
 	if($path && !preg_match('/\/$/',$path)) $path.='/';
-	foreach (new DirectoryIterator($ROOT_DIR.$path) as $file) {
-		$fn=$file->getFilename();
-		if($fn[0]!='.') {
-			if($file->isDir())
-				$subs[]=$path.$fn.'/';
-			else  if(!$pattern || preg_match('/'.$pattern.'/i',$fn)) {
-				$files[]=$path.$fn;
-				$size+=$file->getSize();
+	if(is_readable($ROOT_DIR.$path))
+		foreach (new DirectoryIterator($ROOT_DIR.$path) as $file) {
+			$fn=$file->getFilename();
+			if($fn[0]!='.') {
+				if($file->isDir())
+					$subs[]=$path.$fn.'/';
+				else  if(!$pattern || preg_match('/'.$pattern.'/i',$fn)) {
+					$files[]=$path.$fn;
+					$size+=$file->getSize();
+				}
 			}
 		}
-	}
 	$dirs=array();
 	foreach($subs as $d){
 		$sub=ls($d,$pattern,1);
