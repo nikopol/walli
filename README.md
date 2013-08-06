@@ -21,6 +21,7 @@ device.
   - google analytics supported
   - mini admin included (upload/delete images,stats,mkdir,cache control)
   - keyboard shortcuts (h or ? for help)
+  - exif infos
 
 **LOULOU THEME SCREENSHOTS**
 
