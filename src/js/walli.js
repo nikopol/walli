@@ -401,6 +401,7 @@ walli = (function(){
 		setbzip('hide',loc.dlall);
 		if(god) _('#bdel').className='hide';
 		chkfiles = [];
+		osd.hide();
 		ajax('?!=ls&path='+p, function(ls){
 			var diapos = _('#diapos','');
 			path = ls.path;
