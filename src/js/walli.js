@@ -307,7 +307,7 @@ walli = (function(){
 		path,              //current path
 		files = [],        //files for current directory
 		dirs = [],         //sub dirs for current directory
-		chkfiles = [],        //selected files
+		chkfiles = [],     //selected files
 		idx = false,       //current file
 		nimg = 0,          //current img element
 		img = [],          //img elements
