@@ -210,7 +210,14 @@ function ls($path='',$pattern='',$recurse=0){
 
 function iconify($file,$size){
 	list($srcw,$srch)=getimagesize($file);
-	$srcx=$srcy=0;
+	$rot=$srcx=$srcy=0;
+	if(function_exists('exif_read_data')){
+		$e=@exif_read_data($file,null,true);
+		$o=$e && isset($e['IFD0']['Orientation']) ? $e['IFD0']['Orientation'] : 0;
+		if($o==6)      $rot=270;
+		else if($o==3) $rot=180;
+		else if($o==8) $rot=90;
+	}
 	if($srcw>$srch){
 		$srcx=floor(($srcw-$srch)/2);
 		$srcs=$srch;
@@ -221,18 +228,19 @@ function iconify($file,$size){
 	if(preg_match('/\.png$/i',$file))      $src=@imagecreatefrompng($file);
 	else if(preg_match('/\.gif$/i',$file)) $src=@imagecreatefromgif($file);
 	else                                   $src=@imagecreatefromjpeg($file);
-	$dst = imagecreatetruecolor($size,$size);
+	$dst=imagecreatetruecolor($size,$size);
 	if($src) {
 		imagecopyresampled($dst, $src, 0, 0, $srcx, $srcy, $size, $size, $srcs, $srcs);
 		imagedestroy($src);
+		if($rot) $dst=imagerotate($dst,$rot,0);
 	} //todo else
 	return $dst;
 }
 
 function load_coms($path,$file=false){
 	global $uid;
-	$comfile = get_sys_file($path.'.comments.json',0);
-	$coms = $comfile && file_exists($comfile)
+	$comfile=get_sys_file($path.'.comments.json',0);
+	$coms=$comfile && file_exists($comfile)
 		? json_decode(file_get_contents($comfile),true)
 		: array();
 	foreach($coms as $k=>&$l)
@@ -377,14 +385,14 @@ function POST_zip(){
 	global $withzip;
 	if(!$withzip) error(401,'zip not enabled');
 	$lst=explode('*',$_POST['files']);
-	$fn ='pack-'.time().'.zip';
-	$fz = get_sys_file($fn);
+	$fn='pack-'.time().'.zip';
+	$fz=get_sys_file($fn);
 	$zip=new ZipArchive;
 	$r=$zip->open($fz,ZIPARCHIVE::CREATE);
 	if($r!==true) error(400,"error#$r opening zip");
 	$nb=0;
 	foreach($lst as $f){
-		$f = get_file_path($f);
+		$f=get_file_path($f);
 		if(file_exists($f)){
 			$zip->addFile($f,basename($f));
 			$nb++;
@@ -453,22 +461,22 @@ function GET_diag(){
 	}
 	$maxdepth=$maxdepth > $mindepth ? $maxdepth-$mindepth : 0;
 	send_json(array(
-		'path'   => $path,
-		'stats'  => array(
-			'images'        => count($ls['files']),
-			'size'          => $ls['size'],
-			'subdirs'       => count($ls['dirs']),
+		'path'  => $path,
+		'stats' => array(
+			'images'  => count($ls['files']),
+			'size'    => $ls['size'],
+			'subdirs' => count($ls['dirs']),
 			'max subdirs depth' => $maxdepth,
 		),
 		'checks' => array(
-			'admin'         => $withadm,
-			'upload'        => writable($path),
-			'zip download'  => $withzip,
-			'comments'      => $withcom,
-			'cache'         => check_sys_dir(),
-			'intro'         => $withintro,
-			'auto refresh'  => $REFRESH_DELAY,
-			'exif support'  => function_exists('exif_read_data')
+			'admin'        => $withadm,
+			'upload'       => writable($path),
+			'zip download' => $withzip,
+			'comments'     => $withcom,
+			'cache'        => check_sys_dir(),
+			'intro'        => $withintro,
+			'auto refresh' => $REFRESH_DELAY,
+			'exif support' => function_exists('exif_read_data')
 		)
 	));
 }
@@ -516,7 +524,7 @@ function POST_del(){
 /*MAIN*/
 
 if(!empty($_REQUEST['!'])){
-	$do = $_SERVER['REQUEST_METHOD'].'_'.$_REQUEST['!'];
+	$do=$_SERVER['REQUEST_METHOD'].'_'.$_REQUEST['!'];
 	if(!function_exists($do)) notfound($do);
 	call_user_func($do);
 	exit;
@@ -526,7 +534,7 @@ if(empty($_COOKIE[COOKIE_UID])) setcookie(COOKIE_UID,$uid);
 
 //admin login
 if($_SERVER["QUERY_STRING"]=="login" && $ADMIN_LOGIN && $ADMIN_PWD){
-	$godmode = isset($_SERVER['PHP_AUTH_USER'])
+	$godmode=isset($_SERVER['PHP_AUTH_USER'])
 		&& isset($_SERVER['PHP_AUTH_PW'])
 		&& $_SERVER['PHP_AUTH_USER']==$ADMIN_LOGIN
 		&& $_SERVER['PHP_AUTH_PW']==$ADMIN_PWD;
@@ -544,7 +552,7 @@ if($_SERVER["QUERY_STRING"]=="login" && $ADMIN_LOGIN && $ADMIN_PWD){
 	redirect();	
 }
 
-$intro = $withintro
+$intro=$withintro
 	? @file_get_contents($ROOT_DIR.$INTRO_FILE)
 	: false;
 
@@ -625,8 +633,8 @@ https://github.com/nikopol/walli
 			<img id="img0"/>
 			<img id="img1"/>
 		</div>
-		<div id="osd"></div>
 	</div>
+	<div id="osd"></div>
 	<div id="progress">
 		<div id="progressbar"></div>
 		<div id="progresstext"></div>
