@@ -1,8 +1,10 @@
 WALLi - ChangeLog
 https://github.com/nikopol/walli
 
-2013-08-02 / 0.6
+2013-08-07 / 0.6
   - exif information panel 
+  - auto rotate images based on exif
+  - shell postprocess on uploaded files
 
 2013-07-06 / 0.5
   - animated slideshow mode

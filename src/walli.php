@@ -11,8 +11,8 @@ containing [sub-dir of] media files.
 /*PHP CONFIG*/
 
 //uncomment these settings if your experienced problem when uploading large files
-//ini_set("upload_max_filesize", "64M");
-//ini_set("post_max_size", "64M");
+//ini_set("upload_max_filesize", "32M");
+//ini_set("post_max_size", "32M");
 
 /*PARAMETERS*/
 
@@ -22,7 +22,8 @@ containing [sub-dir of] media files.
 //walli cache dir
 //(used to store generated icon files and comments)
 //set to false to disable cache & comments
-//otherwise set it writable for your http user (usually www-data or http)
+//otherwise mkdir it and set it writable for
+//your http user (usually www-data or http)
 $SYS_DIR = '.walli/';
 
 //page title
@@ -46,13 +47,14 @@ $GA_KEY = '';
 //default = where this file is located
 $ROOT_DIR = dirname($_SERVER['SCRIPT_FILENAME']).'/';
 
-//delay in seconds for the client auto refresh
+//delay in seconds for the client thumbnail auto refresh
 //0=disabled
 $REFRESH_DELAY = 0;
 
 //set to false to disable comments
 //require $SYS_DIR correctly set to work
-$WITH_COMMENTS = true;
+//require also json support (php>=5.2)
+$WITH_COMMENTS = function_exists('json_encode');
 
 //set to true to enable zip download
 //require $SYS_DIR correctly set to work
@@ -62,6 +64,12 @@ $WITH_ZIPDL = false;
 //set to false to disable admin options
 $ADMIN_LOGIN = false;
 $ADMIN_PWD   = false;
+
+//optionnal shell post process on uploaded files
+//use %f for the file, set to false to disable
+$UPLOAD_POSTPROCESS = false;
+//sample with imagemagick, auto-rotate and resize to 1600 max
+//$UPLOAD_POSTPROCESS = '/usr/bin/convert %f -auto-orient -resize 1600x1600\> %f';
 
 //you can setup all previous parameters in an external file
 //ignored if the file is not found
@@ -482,20 +490,31 @@ function GET_diag(){
 }
 
 function POST_img() {
-	global $ROOT_DIR;
+	global $ROOT_DIR, $UPLOAD_POSTPROCESS;
 	godcheck();
 	$path=check_path($_GET['path']).'/';
 	if(!is_dir($path)) error(404,'path '.$path.' not found');
-	$nb=$sz=0;
-	foreach($_FILES as $k => $f)
-		if(@move_uploaded_file($f['tmp_name'], $ROOT_DIR.$path.$f['name'])) {
+	$nb=$sz=$rs=0;
+	$pp='?';
+	foreach($_FILES as $k => $f) {
+		$fn=$ROOT_DIR.$path.$f['name'];
+		if(@move_uploaded_file($f['tmp_name'], $fn)) {
 			$nb++;
 			$sz+=$f['size'];
+			if($UPLOAD_POSTPROCESS) {
+				$ff="'".str_replace("'","\\'",$fn)."'";
+				$pp=str_replace('%f',$ff,$UPLOAD_POSTPROCESS);
+				@shell_exec($pp);
+				$rs+=filesize($fn);
+			}
 		}
+	}
 	send_json(array(
-		'added'=>$nb,
-		'size' =>$sz,
-		'path' =>$path
+		'pp'    =>$pp,
+		'added' =>$nb,
+		'size'  =>$sz,
+		'path'  =>$path,
+		'resize'=>$rs
 	));
 }
 
@@ -509,8 +528,9 @@ function POST_del(){
 			$del++;
 			$comfile=get_sys_file(dirname($file).'.comments.json',0);
 			$coms=$comfile && file_exists($comfile)?json_decode(file_get_contents($comfile),true):array();
-			if(empty($coms) || array_key_exists($file,$coms)) {
+			if(array_key_exists($file,$coms)) {
 				$com+=count($coms[$file]);
+				unset($com[$file]);
 				@file_put_contents($comfile,json_encode($coms));
 			}
 		}
@@ -560,8 +580,7 @@ $intro=$withintro
 <!doctype html>
 <!--
 WALLi v<?php print(VERSION) ?> (c) NiKo 2012-2013
-Stand-Alone Image Wall
-https://github.com/nikopol/walli
+stand-alone image wall - https://github.com/nikopol/walli
 -->
 <html>
 <head>
@@ -587,7 +606,7 @@ https://github.com/nikopol/walli
 	<noscript><p><strong>Warning:</strong>You must enable Javascript to visit this site.</p></noscript>
 	<div id="mask"><div id="loading"></div></div>
 <?php if($withadm){ ?>
-	<input type="file" id="iupload"  accept="image/*" multiple/>
+	<input type="file" id="iupload" accept="image/*" multiple/>
 	<div id="godbar">
 	<?php if($godmode){ ?>
 		<button id="blogout"></button>

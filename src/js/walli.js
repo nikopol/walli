@@ -914,8 +914,8 @@ walli = (function(){
 							xhr.onload = function(){
 								if(xhr.status == 200) {
 									var d = JSON.parse(xhr.responseText);
-									osd.loc('uploaded',{nb:d.added});
 									if(d.added) loadpath(path);
+									osd.loc('uploaded',{nb:d.added});
 								} else 
 									osd.error("error "+xhr.status);
 							};
