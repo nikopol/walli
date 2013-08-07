@@ -980,8 +980,8 @@ walli = (function(){
 						url: '?!=del',
 						data: {files:lst.join('*')},
 						ok: function(d){
-							osd.loc('deleted',{nb:d.deleted});
 							if(d.deleted) loadpath(path);
+							osd.loc('deleted',{nb:d.deleted});
 						},
 						error: osd.error
 					});
