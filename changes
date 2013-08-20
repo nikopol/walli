@@ -3,9 +3,8 @@ https://github.com/nikopol/walli
 
 2013-08-07 / 0.6
   - exif information panel 
-  - auto rotate images based on exif
-  - shell postprocess on uploaded files
-  - minor fixes
+  - auto rotate thumbnail images based on exif
+  - shell postprocess option on uploaded files
 
 2013-07-06 / 0.5
   - animated slideshow mode

@@ -48,7 +48,9 @@ comments.
 
 **REQUIRED**
 
-a http server supporting php with modules gd, zip and json.  
+a http server supporting php with gd enabled.
+if you want enable photos download in a zip, you must have the zip support.
+if you want enable comments, you must have the json support.
 
 	#on ubuntu
 	sudo aptitude install php5 libphp-pclzip php5-gd php5-json
