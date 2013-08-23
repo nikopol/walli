@@ -128,7 +128,8 @@ hotkeys=(function(){
 			if(typeof keys=="string") keys=[keys];
 			keys.forEach(function(key){
 				if(typeof key=="string") {
-					key.toUpperCase().split(' ').forEach(function(n){
+					var keys = key == '+' ? ['+'] : key.toUpperCase().split('+');
+					keys.forEach(function(n){
 						if(MASKEYS[n]) mask|=MASKEYS[n];
 						else if(KEYS[n]) skey=KEYS[n];
 						else skey=n[0];
