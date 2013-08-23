@@ -417,7 +417,7 @@ walli = (function(){
 				path.split('/').forEach(function(n){
 					if(n){
 						rp += n+'/';
-						r += '<button onclick="walli.cd(\''+rp+'\')">'+n+'</button>';
+						r += '<button onclick="walli.cd(\''+rp+'\')">'+encodeURIComponent(n)+'</button>';
 					}
 				});
 				_('#path',r);
