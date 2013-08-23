@@ -342,9 +342,9 @@ function POST_comment(){
 	global $uid, $TIMEZONE;
 	$file=$_POST['file'];
 	$comfile=get_sys_file(dirname($file).'.comments.json');
-	$what=$_POST['what'];
+	$what=htmlspecialchars($_POST['what'], ENT_QUOTES);
 	if(empty($what)) error(400,'empty comment');
-	$who=$_POST['who'];
+	$whohtmlspecialchars($_POST['who'], ENT_QUOTES);
 	if(empty($who)) $who='anonymous';
 	$coms=file_exists($comfile)?json_decode(file_get_contents($comfile),true):array();
 	if(empty($coms[$file])) $coms[$file]=array();
