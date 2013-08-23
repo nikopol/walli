@@ -155,4 +155,12 @@ browser=function(){
 	if(/MSIE\s([\d\.]+)/.test(z)) b.IE=parseFloat(RegExp.$1);
 	z.replace(/\s\(.+\)/g,'').split(' ').forEach(function(n){ if(/^(.+)\/(.+)$/.test(n)) b[RegExp.$1]=parseFloat(RegExp.$2) });
 	return b;
-}();
+}(),
+
+htmlencode=function(s) {
+    return s
+    	.replace(/&/g, '&amp;')
+    	.replace(/</g, '&lt;')
+    	.replace(/>/g, '&gt;')
+    	.replace(/"/g, '&quot;');
+};
