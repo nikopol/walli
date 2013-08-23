@@ -483,7 +483,6 @@ walli = (function(){
 			left: Math.floor((ww-w)/2+(ww*p*2))+'px',
 			top: Math.floor((wh-h)/2)+'px'
 		});
-		//log.debug("calcpos("+n+","+p+")="+img[n].style.left);
 	}
 
 	function fullscreen(){

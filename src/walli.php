@@ -130,8 +130,8 @@ function notfound($w){
 
 function check_path($f){
 	$f=preg_replace('/\/$/','',$f);
-	$f=preg_replace('/^\/+/','',$f);    //avoid root dir
-	$f=preg_replace('/\.\.+\//','',$f); //avoid parent dirs
+	$f=preg_replace('/^\/+/','',$f);  //avoid root dir
+	$f=preg_replace('/\.\.+/','',$f); //avoid parent dirs
 	return $f;
 }
 
@@ -344,7 +344,7 @@ function POST_comment(){
 	$comfile=get_sys_file(dirname($file).'.comments.json');
 	$what=htmlspecialchars($_POST['what'], ENT_QUOTES);
 	if(empty($what)) error(400,'empty comment');
-	$whohtmlspecialchars($_POST['who'], ENT_QUOTES);
+	$who=htmlspecialchars($_POST['who'], ENT_QUOTES);
 	if(empty($who)) $who='anonymous';
 	$coms=file_exists($comfile)?json_decode(file_get_contents($comfile),true):array();
 	if(empty($coms[$file])) $coms[$file]=array();
