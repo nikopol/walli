@@ -668,6 +668,20 @@ body.sleep #godbar {
 	color: #fff;
 }
 
+.warning {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	font-size: 24px;
+	color: #f66;
+	z-index: 9999;
+	background: rgba(0,0,0,0.5);
+	text-align: center;
+	padding-top: 40%;
+}
+
 /* EXIF */
 
 #exif {
