@@ -110,6 +110,7 @@ function redirect($uri='?'){
 function cache($nbd=60){
 	header('Cache-Control: public');
 	header('Expires: '.gmdate('D, d M Y H:i:s', time()+(60*60*24*$nbd)).' GMT');
+	header('ETag: '.(100*VERSION));
 }
 
 function nocache(){
@@ -576,6 +577,8 @@ $intro=$withintro
 	? @file_get_contents($ROOT_DIR.$INTRO_FILE)
 	: false;
 
+header('Content-Type: text/html; charset=utf-8');
+
 ?>
 <!doctype html>
 <!--
@@ -584,9 +587,9 @@ stand-alone image wall - https://github.com/nikopol/walli
 -->
 <html>
 <head>
-	<meta charset="utf-8"/>
 	<meta http-equiv="X-UA-Compatible" content="IE=Edge"/>
-	<!--<meta id="viewport" name="viewport" content="height=device-height,width=device-width,initial-scale=1.0,maximum-scale=1.0"/>-->
+	<meta name="description" content="<?php print($TITLE);?> - Image Wall"/>
+	<meta name="keywords" content="walli,picture,image,wall,thumbnail"/>
 	<meta name="apple-mobile-web-app-capable" content="yes"/>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="shorcut icon" type="image/png" href="data:image/png;base64,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" />
@@ -688,6 +691,7 @@ stand-alone image wall - https://github.com/nikopol/walli
 		#help table{width:100%}
 		#help td{padding:0 10px}
 		#help th{text-transform:uppercase;border-bottom:1px #fff dotted;color:#fff}
+		.warning{position:absolute;top:0;bottom:0;left:0;right:0;font-size:24px;color:#f66;z-index:9999;background:rgba(0,0,0,0.5);text-align:center;padding-top:40%}
 		#exif{display:none;position:absolute;right:40px;top:50px;bottom:50px;font:normal 10px Arial,Helvetica;color:#fff;z-index:9;overflow:auto;padding-right:5px}
 		#exif::-webkit-scrollbar{width:7px}
 		#exif::-webkit-scrollbar-thumb{border-radius:0}
@@ -760,11 +764,13 @@ stand-alone image wall - https://github.com/nikopol/walli
 <body>
 <!--[if lte IE 8]>
 <div class="warning">
-	<p><strong>Warning:</strong>This site is not compatible with your old browser.</p>
+	<p>Warning! This site is not compatible with your old browser.</p>
 	<p>try it with chrome or firefox for a shiny experience</p>
 </div>
 <![endif]-->
-	<noscript><p><strong>Warning:</strong>You must enable Javascript to visit this site.</p></noscript>
+	<noscript class="warning">
+		Warning! You must enable Javascript to visit this site.
+	</noscript>
 	<div id="mask"><div id="loading"></div></div>
 <?php if($withadm){ ?>
 	<input type="file" id="iupload" accept="image/*" multiple/>
@@ -861,8 +867,8 @@ stand-alone image wall - https://github.com/nikopol/walli
 		a.replace(/^.*\//g,"");return a.replace(/\.[^\.]*$/,"").replace(/[\._\|]/g," ")}function v(){T&&!E&&(E=setInterval(function(){log.debug("refresh required");ajax("?!=count&path="+r,function(a){U.length==a.dirs&&m.length==a.files||l(r)})},1E3*T))}function l(a,q){E&&(clearInterval(E),E=!1);log.debug("loading path "+(a||"/"));b("hide",loc.dlall);x&&(_("#bdel").className="hide");y=[];osd.hide();ajax("?!=ls&path="+a,function(a){var e=_("#diapos","");r=a.path;log.info((r||"/")+"loaded with "+a.dirs.length+
 		" subdirs and "+a.files.length+" files found");if(r.length){var s=r.replace(/[^\/]+\/$/,"/"),P=document.createElement("li");css(P,"diapo up loaded");P.setAttribute("title",loc.updir);P.onclick=function(){l(s)};e.appendChild(P);var h="",g="";r.split("/").forEach(function(a){a&&(h+=a+"/",g+="<button onclick=\"walli.cd('"+h+"')\">"+htmlencode(a)+"</button>")});_("#path",g);c()}else _("#path","");var n=function(a,b,q,s){var t=function(){var q=document.createElement("img");q.onload=function(){osd.inc();
 		log.debug(a+" loaded");css(this.parentNode,"+loaded")};q.onclick=b;return q}(),c=document.createElement("li");css(c,"diapo "+q);c.appendChild(t);c.setAttribute("title",d(a));void 0!=s&&(t.id="diapo"+s,(H||x)&&append(c,'<input type="checkbox" id="chk'+s+'" n="'+s+'" onchange="walli.zwap('+s+')"/><label for="chk'+s+'"></label>'));(F[a]||[]).length&&append(c,'<span class="minicom">'+(999<F[a].length?Math.floor(F[a].length/1E3)+"K+":F[a].length)+"</span>");e.appendChild(c);t.src="?!=mini&file="+encodeURIComponent(a)};
-		m=a.files;U=a.dirs;F=a.coms;q&&q();osd.start(m.length+U.length);a.dirs.forEach(function(a){n(a,function(){l(a)},"dir")});a.files.forEach(function(a,q){setTimeout(function(){n(a,function(){walli.show(q,0)},"",q)},q)});a.files.length&&H&&b("all");V();v();x&&_("#diag")&&walli.diag();G[r]&&z(0,0)})}function g(a,q){if(W[a]){var b=p.clientWidth,e=p.clientHeight,s=W[a],c=s.h,d=s.w;d>b&&(d=b,c=Math.floor(d*(s.h/s.w)));c>e&&(c=e,d=Math.floor(c*(s.w/s.h)));css(f[a],{width:d+"px",height:c+"px",left:Math.floor((b-
-		d)/2+2*b*q)+"px",top:Math.floor((e-c)/2)+"px"})}}function M(){Q&&(I&&clearTimeout(I),I=setTimeout(walli.next,1E3*J))}function D(a){J+=a;0>J&&(J=0);osd.loc("delay",{s:J})}function aa(){css(document.body,"-sleep");document.body.onmousemove=document.body.ontouchstart=function(a){if(a.x!=ba||a.y!=ca)ba=a.x,ca=a.y,aa()};B&&clearTimeout(B);B=setTimeout(ha,1E3*ia)}function ha(){B&&(B=clearTimeout(B));css(document.body,"+sleep")}function X(a){Q!==a&&((Q=a)?(M(),a=document.documentElement,a.requestFullscreen?
+		m=a.files;U=a.dirs;F=a.coms;q&&q();osd.start(m.length+U.length);a.dirs.forEach(function(a){n(a,function(){l(a)},"dir")});a.files.forEach(function(a,q){setTimeout(function(){n(a,function(){walli.show(q,0)},"",q)},q)});a.files.length&&H&&b("all");V();v();x&&_("#diag")&&walli.diag();G[r]&&z(0,0)})}function g(a,q){if(W[a]){var b=p.clientWidth,e=p.clientHeight,s=W[a],c=s.h,d=s.w;d>b&&(d=b,c=Math.floor(s.h/s.w*d));c>e&&(c=e,d=Math.floor(s.w/s.h*c));css(f[a],{width:d+"px",height:c+"px",left:Math.floor((b-
+		d)/2+b*q*2)+"px",top:Math.floor((e-c)/2)+"px"})}}function M(){Q&&(I&&clearTimeout(I),I=setTimeout(walli.next,1E3*J))}function D(a){J+=a;0>J&&(J=0);osd.loc("delay",{s:J})}function aa(){css(document.body,"-sleep");document.body.onmousemove=document.body.ontouchstart=function(a){if(a.x!=ba||a.y!=ca)ba=a.x,ca=a.y,aa()};B&&clearTimeout(B);B=setTimeout(ha,1E3*ia)}function ha(){B&&(B=clearTimeout(B));css(document.body,"+sleep")}function X(a){Q!==a&&((Q=a)?(M(),a=document.documentElement,a.requestFullscreen?
 		a.requestFullscreen():a.mozRequestFullScreen?a.mozRequestFullScreen():a.webkitRequestFullScreen&&a.webkitRequestFullScreen(),css("#bplay","+active"),css("#view","+play"),osd.loc("play"),aa()):(I&&(I=clearTimeout(I)),B&&(B=clearTimeout(B)),document.body.onmousemove=document.body.ontouchstart=!1,css(document.body,"-sleep"),css("#bplay","-active"),css("#view","-play"),osd.loc("stop")))}function C(a){Y!==a&&(Y=a,log.debug("switch to "+a+" mode"),n=!0,"tof"==Y?(E&&(clearInterval(E),E=!1),css(K,"+active"),
 		css("#thumb","-active")):(n=!1,X(!1),osd.hide(),css(f[0],""),css(f[1],""),css(K,"-active"),css("#exif","-active"),css("#thumb","+active"),v()),V())}function da(a){var b=_("#diapo"+k).parentNode,t=_("#minicom"+k);t&&b.removeChild(t);0<a&&append(b,'<span id="minicom'+k+'" class="minicom">'+a+"</span>")}function Z(a,b){if(b||n&&R!==a)R=a,n&&(css(f[1-h],""),g(1-h,2)),a?(css("#bcom","+active"),css(K,"+com"+(b?"fix":"")),hash.set("com",1)):(css("#bcom","-active"),css(K,"-com"),css(K,"-comfix"),hash.del("com")),
 		n&&setTimeout(function(){g(h,0)},550)}function $(a){var b="",t=F[a];t&&t.length?(t.forEach(function(e,s){b+="<li><header>"+e.who+' <span title="'+e.when.replace("T"," ")+'">'+loc.reldate(e.when)+"</span></header><content>"+e.what.replace("\n","<br/>")+"</content>"+(e.own?'<button class="del" onclick="walli.rmcom(\''+a.replace("'","\\'")+"',"+e.id+')">'+loc.bdel+"</button>":"")+"</li>"}),_(N,b),N.scrollTop=N.scrollHeight,_("#comcount",999<t.length?Math.floor(t.length/1E3)+"K+":t.length)):(_(N,loc.nocom),
