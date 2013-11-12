@@ -576,6 +576,8 @@ $intro=$withintro
 	? @file_get_contents($ROOT_DIR.$INTRO_FILE)
 	: false;
 
+header('Content-Type: text/html; charset=utf-8');
+
 ?>
 <!doctype html>
 <!--
@@ -584,9 +586,9 @@ stand-alone image wall - https://github.com/nikopol/walli
 -->
 <html>
 <head>
-	<meta charset="utf-8"/>
 	<meta http-equiv="X-UA-Compatible" content="IE=Edge"/>
-	<!--<meta id="viewport" name="viewport" content="height=device-height,width=device-width,initial-scale=1.0,maximum-scale=1.0"/>-->
+	<meta name="description" content="<?php print($TITLE);?> - Image Wall"/>
+	<meta name="keywords" content="walli,picture,image,wall,thumbnail"/>
 	<meta name="apple-mobile-web-app-capable" content="yes"/>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="shorcut icon" type="image/png" href="icons/favicon.png" />
@@ -599,11 +601,13 @@ stand-alone image wall - https://github.com/nikopol/walli
 <body>
 <!--[if lte IE 8]>
 <div class="warning">
-	<p><strong>Warning:</strong>This site is not compatible with your old browser.</p>
+	<p>Warning! This site is not compatible with your old browser.</p>
 	<p>try it with chrome or firefox for a shiny experience</p>
 </div>
 <![endif]-->
-	<noscript><p><strong>Warning:</strong>You must enable Javascript to visit this site.</p></noscript>
+	<noscript class="warning">
+		Warning! You must enable Javascript to visit this site.
+	</noscript>
 	<div id="mask"><div id="loading"></div></div>
 <?php if($withadm){ ?>
 	<input type="file" id="iupload" accept="image/*" multiple/>
