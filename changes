@@ -1,6 +1,10 @@
 WALLi - ChangeLog
 https://github.com/nikopol/walli
 
+2013-11-12 / 0.7
+  - minor base css updates
+  - minor header updates
+
 2013-08-07 / 0.6
   - exif information panel 
   - auto rotate thumbnail images based on exif
