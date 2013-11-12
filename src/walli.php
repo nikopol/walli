@@ -110,6 +110,7 @@ function redirect($uri='?'){
 function cache($nbd=60){
 	header('Cache-Control: public');
 	header('Expires: '.gmdate('D, d M Y H:i:s', time()+(60*60*24*$nbd)).' GMT');
+	header('ETag: '.(100*VERSION));
 }
 
 function nocache(){
