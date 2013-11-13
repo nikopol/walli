@@ -77,7 +77,7 @@ $UPLOAD_POSTPROCESS = false;
 
 /*CONSTANTS*/
 
-define('VERSION','0.6');
+define('VERSION','0.7');
 define('MINI_SIZE',150);
 define('COOKIE_UID','wallid');
 define('COOKIE_GOD','wallia');
@@ -132,7 +132,7 @@ function notfound($w){
 function check_path($f){
 	$f=preg_replace('/\/$/','',$f);
 	$f=preg_replace('/^\/+/','',$f);  //avoid root dir
-	$f=preg_replace('/\.\.+/','',$f); //avoid parent dirs
+	$f=preg_replace('/(^|\/)\.\.+\//','',$f); //avoid parent dirs
 	return $f;
 }
 
