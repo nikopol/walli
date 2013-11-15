@@ -1,4 +1,4 @@
-WALLi v0.6 (c) niko 2012-2013
+WALLi v0.7 (c) niko 2012-2013
 -----------------------------
 "all-in-one" Images Wall
 
