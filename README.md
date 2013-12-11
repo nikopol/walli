@@ -3,22 +3,22 @@ WALLi v0.7 (c) niko 2012-2013
 "all-in-one" Images Wall
 
 the purpose of this project is to provide an *all-in-one* php file, without any 
-configuration required (they are optionals), into a directory containing 
-sub-dirs and/or images to "browse" them with a modern browser or mobile 
-device.
+configuration required (but optional), into a directory containing sub-dirs 
+and/or images to "browse" them with a modern browser or mobile device.
 
 **FEATURES**
 
+  - all-in-one single file
   - support chrome, firefox, IE9+, IOS, Android
   - thumbnail
-  - multi themes (more to come/show customization below)
+  - multi themes (show customization below)
   - multi subs directories
   - auto locale supported (en & fr for the moment)
   - comments by image
   - slideshow mode by directory
   - download a zip of selected images
-  - permalink supported
-  - google analytics supported
+  - permalink support
+  - google analytics support
   - mini admin included (upload/delete images,stats,mkdir,cache control)
   - keyboard shortcuts (h or ? for help)
   - exif infos
@@ -91,7 +91,7 @@ steps:
 	ln -sf themes/yours.css walli.css
 
 	#configure your http server to handle walli/ directory
-	#test it via http://localhost/pathtwalli/walli/src/walli.php
+	#test it via http://localhost/path/to/walli/src/walli.php
 	#when it's done, to minify it
 	#  return walli/src
 	cd ..
@@ -100,14 +100,6 @@ steps:
 	bin/minify-all
 
 if you do, don't hesitate to pull request your themes/improvments =)
-
-**TODO**
-
-  - more themes
-  - improve layout for phone
-  - support for audio files
-  - star/notation system?
-  - pluggable transition system
 
 **CREDITS**
 
