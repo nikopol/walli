@@ -795,7 +795,9 @@ walli = (function(){
 				if(e.touches) e = e.touches[0];
 				img[nimg].className = 'touch';
 				touch = {
+					c: touch.c || 0,
 					d: true,
+					m: false,
 					x: e.pageX,
 					l: parseInt(img[nimg].style.left,10),
 					h: setTimeout(noswipe,TOUCHTTL)
@@ -805,6 +807,7 @@ walli = (function(){
 			slide.onmousemove = 
 			slide.ontouchmove = function(e){
 				if(touch.d) {
+					touch.m = true;
 					e.preventDefault();
 					if(e.touches) e = e.touches[0];
 					var dx = e.pageX-touch.x;
@@ -825,10 +828,22 @@ walli = (function(){
 				e.preventDefault();
 				if(touch.d) {
 					clearTimeout(touch.h);
-					noswipe();
+					if(touch.c) {
+						//double tap
+						clearTimeout(touch.c);
+						noswipe();
+						walli.toggleplay();
+					} else if(!touch.m)
+						//single tap
+						touch.c = setTimeout(function(){
+							noswipe();
+							walli.next();
+						},250);
+					else
+						noswipe();
 				}
 			};
-		
+
 			img = [_('#img0'), _('#img1')];
 			slide.ondragstart = 
 			img[0].ondragstart =
