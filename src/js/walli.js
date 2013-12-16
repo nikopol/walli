@@ -329,7 +329,8 @@ walli = (function(){
 		zip = true,        //zip download flag
 		smx = 0,           //sleep mouse pos
 		smy = 0,           //sleep mouse pos
-		cur = {};          //cursor pos
+		cur = {},          //cursor pos
+		thumb = {};        //thumbnail parameter
 
 	function layout(){
 		//auto resize diapos
@@ -449,7 +450,7 @@ walli = (function(){
 				if((coms[url]||[]).length)
 					append(d,'<span class="minicom">'+numk(coms[url].length)+'</span>');
 				diapos.appendChild(d);
-				image.src = '?!=mini&file='+encodeURIComponent(url);
+				image.src = '?!=mini&file='+encodeURIComponent(url)+'&w='+(thumb.size||150)+'&h='+(thumb.size||150);
 			};
 			files = ls.files;
 			dirs = ls.dirs;
@@ -766,6 +767,7 @@ walli = (function(){
 		setup: function(o) {
 			comok = o.comments;
 			refresh = o.refresh;
+			thumb = o.thumbnail;
 			god = o.god;
 			zip = o.zip;
 	

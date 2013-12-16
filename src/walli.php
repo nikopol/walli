@@ -77,8 +77,7 @@ $UPLOAD_POSTPROCESS = false;
 
 /*CONSTANTS*/
 
-define('VERSION','0.7');
-define('MINI_SIZE',150);
+define('VERSION','0.8');
 define('COOKIE_UID','wallid');
 define('COOKIE_GOD','wallia');
 define('FILEMATCH','\.(png|jpe?g|gif)$');
@@ -99,6 +98,10 @@ $withcom   = $WITH_COMMENTS && $SYS_DIR && file_exists($SYS_DIR);
 $withadm   = $ADMIN_LOGIN && $ADMIN_PWD;
 $withintro = $INTRO_FILE && file_exists($ROOT_DIR.$INTRO_FILE);
 $withzip   = $WITH_ZIPDL && class_exists('ZipArchive');
+
+/* THEME GLOBALS */
+
+@include_once('themes/theme.inc.php');
 
 /*TOOLS*/
 
@@ -217,32 +220,48 @@ function ls($path='',$pattern='',$recurse=0){
 	return array('path'=>$path,'files'=>$files,'dirs'=>$dirs,'size'=>$size);
 }
 
-function iconify($file,$size){
-	list($srcw,$srch)=getimagesize($file);
-	$rot=$srcx=$srcy=0;
-	if(function_exists('exif_read_data')){
-		$e=@exif_read_data($file,null,true);
-		$o=$e && isset($e['IFD0']['Orientation']) ? $e['IFD0']['Orientation'] : 0;
-		if($o==6)      $rot=270;
-		else if($o==3) $rot=180;
-		else if($o==8) $rot=90;
-	}
-	if($srcw>$srch){
-		$srcx=floor(($srcw-$srch)/2);
-		$srcs=$srch;
-	}else{
-		$srcy=floor(($srch-$srcw)/2);
-		$srcs=$srcw;
-	}
+function iconify($file,$w,$h){
+	list($imgw,$imgh)=getimagesize($file);
 	if(preg_match('/\.png$/i',$file))      $src=@imagecreatefrompng($file);
 	else if(preg_match('/\.gif$/i',$file)) $src=@imagecreatefromgif($file);
 	else                                   $src=@imagecreatefromjpeg($file);
-	$dst=imagecreatetruecolor($size,$size);
-	if($src) {
-		imagecopyresampled($dst, $src, 0, 0, $srcx, $srcy, $size, $size, $srcs, $srcs);
+	$dst=imagecreatetruecolor($w,$h);
+	if($src){
+		if(function_exists('exif_read_data')){
+			//autorotate if needed
+			$e=@exif_read_data($file,null,true);
+			$o=$e && isset($e['IFD0']['Orientation']) ? $e['IFD0']['Orientation'] : 0;
+			if($o==6)      $rot=270;
+			else if($o==3) $rot=180;
+			else if($o==8) $rot=90;
+			else $rot=0;
+			if($rot){
+				$tmp=imagerotate($src,$rot,0);
+				imagedestroy($src);
+				$src=$tmp;
+				$imgw=imagesx($src);
+				$imgh=imagesy($src);
+			}
+		}
+		$srcx=$srcy=$srcw=$srch=0;
+		$ri=$imgh/$imgw;
+		$r=$h/$w;
+		if($r==$ri){
+			$srcw=$imgw;
+			$srch=$imgh;
+		} else if ($r>$ri) {
+			$srcw=floor($imgh/$r);
+			$srcx=floor(($imgw-$srcw)/2);
+			$srch=$imgh;
+		} else if ($r<$ri) {
+			$srcw=$imgw;
+			$srch=floor($imgw*$r);
+			$srcy=floor(($imgh-$srch)/2);
+		}
+ 		// die("img($imgw x $imgh) usr($w x $h) r=$r ri=$ri  srcx=$srcx srcy=$srcy srcw=$srcw srch=$srch");
+		imagecopyresampled($dst, $src, 0, 0, $srcx, $srcy, $w, $h, $srcw, $srch);
 		imagedestroy($src);
-		if($rot) $dst=imagerotate($dst,$rot,0);
-	} //todo else
+	}
 	return $dst;
 }
 
@@ -294,46 +313,50 @@ function GET_exif(){
 
 function GET_mini(){
 	$fn=$_GET['file'];
+	$w=$_GET['w'];
+	$h=$_GET['h'];
 	$file=get_file_path($fn);
 	if(!file_exists($file)) notfound($file);
-	$cachefile=get_sys_file($fn.'.mini.png',0);
+	$isdir=is_dir($file);
+	$cachefile=get_sys_file(($isdir?'dir-':'').$fn.'.'.$w.'x'.$h.'.png',0);
 	header('Content-Type: image/png');
 	cache();
 	if($cachefile && file_exists($cachefile)){
 		@readfile($cachefile);
 		exit;
 	}
-	if(is_dir($file)){
+	if($isdir){
 		$list=ls($fn,FILEMATCH,1);
 		$nb=count($list['files']);
 		if($nb<9){
-			$cachefile=get_sys_file($fn.'-'.$nb.'.mini.png',0);
+			$cachefile=get_sys_file('dir-'.$fn.'.'.$w.'x'.$h.'x'.$nb.'.png',0);
 			if($cachefile && file_exists($cachefile)){
 				@readfile($cachefile);
 				exit;
 			}
 		}
 		for($n=0; $n<$nb; $n++){
-			$sf=get_sys_file($fn.'-'.$n.'.mini.png',0);
+			$sf=get_sys_file('dir-'.$fn.'.'.$w.'x'.$h.'x'.$n.'.png',0);
 			if(file_exists($sf)) @unlink($sf);
 		}
-		$mini=imagecreatetruecolor(MINI_SIZE,MINI_SIZE);
+		$mini=imagecreatetruecolor($w,$h);
 		$bgc=imagecolorallocate($mini,255,255,255);
 		imagefill($mini,0,0,$bgc);
-		$size=floor((MINI_SIZE-2)/3);
+		$sizew=floor(($w-2)/3);
+		$sizeh=floor(($h-2)/3);
 		$n=0;
 		shuffle($list['files']);
 		foreach($list['files'] as $f){
-			$img=iconify(get_file_path($f),$size-2);
-			$x=($n % 3) * $size;
-			$y=floor($n / 3) * $size;
-			imagecopyresampled($mini, $img, $x+2, $y+2, 0, 0, $size-2, $size-2, $size-2, $size-2);
+			$img=iconify(get_file_path($f),$sizew-2,$sizeh-2);
+			$x=($n % 3) * $sizew;
+			$y=floor($n / 3) * $sizeh;
+			imagecopyresampled($mini, $img, $x+2, $y+2, 0, 0, $sizew-2, $sizeh-2, $sizew-2, $sizeh-2);
 			imagedestroy($img);
 			$n++;
 			if($n>8) break;
 		}
 	} else
-		$mini=iconify($file,MINI_SIZE);
+		$mini=iconify($file,$w,$h);
 	if($cachefile) @imagepng($mini,$cachefile);
 	imagepng($mini);
 	imagedestroy($mini);
@@ -582,7 +605,7 @@ header('Content-Type: text/html; charset=utf-8');
 ?>
 <!doctype html>
 <!--
-WALLi v<?php print(VERSION) ?> (c) NiKo 2012-2013
+WALLi v<?php print(VERSION) ?> (c) NiKo 2012-2014
 stand-alone image wall - https://github.com/nikopol/walli
 -->
 <html>
@@ -593,9 +616,9 @@ stand-alone image wall - https://github.com/nikopol/walli
 	<meta name="apple-mobile-web-app-capable" content="yes"/>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="shorcut icon" type="image/png" href="icons/favicon.png" />
-	<link href="css/walli.css" rel="stylesheet" type="text/css"/>
+	<link href="themes/theme.css" rel="stylesheet" type="text/css"/>
 <?php if( preg_match('/android|ipad|mobile/mi',$_SERVER['HTTP_USER_AGENT']) ){ ?>
-	<link href="css/mobile.css" rel="stylesheet" type="text/css"/>	
+	<link href="themes/mobile.css" rel="stylesheet" type="text/css"/>	
 <?php } ?>
 	<title><?php print($TITLE);?></title>
 </head>
@@ -684,7 +707,12 @@ stand-alone image wall - https://github.com/nikopol/walli
 				comments: <?php print($withcom?'true':'false')?>,
 				admin: <?php print($withadm?'true':'false')?>,
 				zip: <?php print($withzip?'true':'false')?>,
-				god: <?php print($godmode?'true':'false')?>
+				god: <?php print($godmode?'true':'false')?>,
+				thumbnail: {
+					engine: "<?php print($THUMB_ENGINE?$THUMB_ENGINE:'default')?>",
+					size: <?php print($THUMB_SIZE?$THUMB_SIZE:'0')?>,
+					margin: <?php print($THUMB_MARGIN?$THUMB_MARGIN:'0')?>
+				}
 			});
 		});
 	</script>

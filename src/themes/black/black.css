@@ -270,7 +270,7 @@ li.diapo.loaded.cursor {
 	width: 160px;
 	bottom: 200px;
 	opacity: 0;
-	background: url(../icons/prev.png) no-repeat 115px center rgba(0,0,0,0.4);
+	background: url(black/img/prev.png) no-repeat 115px center rgba(0,0,0,0.4);
 	-webkit-border-radius: 0 190px 190px 0;
 	-moz-border-radius: 0 190px 190px 0;
 	border-radius: 0 190px 190px 0;
@@ -287,7 +287,7 @@ li.diapo.loaded.cursor {
 	width: 160px;
 	bottom: 200px;
 	opacity: 0;
-	background: url(../icons/next.png) no-repeat 15px center rgba(0,0,0,0.4);
+	background: url(black/img/next.png) no-repeat 15px center rgba(0,0,0,0.4);
 	-webkit-border-radius: 190px 0 0 190px;
 	-moz-border-radius: 190px 0 0 190px;
 	border-radius: 190px 0 0 190px;
@@ -302,7 +302,7 @@ li.diapo.loaded.cursor {
 	top: 104px;
 	width: 48px;
 	height: 48px;
-	background: url(../icons/comment.png) no-repeat center center;
+	background: url(black/img/comment.png) no-repeat center center;
 }
 
 #viewbar button#bcom span {
@@ -323,7 +323,7 @@ li.diapo.loaded.cursor {
 	top: 60px;
 	width: 48px;
 	height: 42px;
-	background: url(../icons/play.png) no-repeat center center;
+	background: url(black/img/play.png) no-repeat center center;
 }
 
 #viewbar button#bthumb {
@@ -331,7 +331,7 @@ li.diapo.loaded.cursor {
 	top: 6px;
 	width: 48px;
 	height: 48px;
-	background: url(../icons/thumbs.png) no-repeat center center;
+	background: url(black/img/thumbs.png) no-repeat center center;
 }
 
 /* LOADING */
@@ -372,10 +372,10 @@ li.diapo.loaded.cursor {
 
 /* ADMIN BAR */
 
-#blogin  { background: url(../icons/black/login.png) no-repeat center center; }
-#blogout { background: url(../icons/black/logout.png) no-repeat center center; }
-#bmkdir  { background: url(../icons/black/mkdir.png) no-repeat center center; }
-#bupload { background: url(../icons/black/upload.png) no-repeat center center; }
-#bflush  { background: url(../icons/black/reset.png) no-repeat center center; }
-#bdel    { background: url(../icons/black/del.png) no-repeat center center; }
-#bdiag   { background: url(../icons/black/diag.png) no-repeat center center; }
+#blogin  { background: url(black/img/login.png) no-repeat center center; }
+#blogout { background: url(black/img/logout.png) no-repeat center center; }
+#bmkdir  { background: url(black/img/mkdir.png) no-repeat center center; }
+#bupload { background: url(black/img/upload.png) no-repeat center center; }
+#bflush  { background: url(black/img/reset.png) no-repeat center center; }
+#bdel    { background: url(black/img/del.png) no-repeat center center; }
+#bdiag   { background: url(black/img/diag.png) no-repeat center center; }
