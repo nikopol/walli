@@ -318,7 +318,7 @@ function GET_mini(){
 	$file=get_file_path($fn);
 	if(!file_exists($file)) notfound($file);
 	$isdir=is_dir($file);
-	$cachefile=get_sys_file(($isdir?'dir-':'').$fn.'.'.$w.'x'.$h.'.png',0);
+	$cachefile=get_sys_file(($isdir?'dir-':'').$fn.'-'.$w.'x'.$h.'.png',0);
 	header('Content-Type: image/png');
 	cache();
 	if($cachefile && file_exists($cachefile)){
@@ -329,14 +329,14 @@ function GET_mini(){
 		$list=ls($fn,FILEMATCH,1);
 		$nb=count($list['files']);
 		if($nb<9){
-			$cachefile=get_sys_file('dir-'.$fn.'.'.$w.'x'.$h.'x'.$nb.'.png',0);
+			$cachefile=get_sys_file('dir-'.$fn.'-'.$w.'x'.$h.'x'.$nb.'.png',0);
 			if($cachefile && file_exists($cachefile)){
 				@readfile($cachefile);
 				exit;
 			}
 		}
 		for($n=0; $n<$nb; $n++){
-			$sf=get_sys_file('dir-'.$fn.'.'.$w.'x'.$h.'x'.$n.'.png',0);
+			$sf=get_sys_file('dir-'.$fn.'-'.$w.'x'.$h.'x'.$n.'.png',0);
 			if(file_exists($sf)) @unlink($sf);
 		}
 		$mini=imagecreatetruecolor($w,$h);
