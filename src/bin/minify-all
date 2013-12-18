@@ -2,14 +2,21 @@
 
 cd $(dirname $0)/..
 
-[[ -f css/walli.css ]] && mv -f css/walli.css css/walli.css.last
+[[ -f themes/theme.css ]] && mv -f themes/theme.css themes/theme.css.last
+[[ -f themes/theme.inc.php ]] && mv -f themes/theme.inc.php themes/theme.inc.php.last
+[[ -f themes/favicon.png ]] && mv -f themes/favicon.png themes/favicon.png.last
 
-for FILE in $(cd css/themes;ls *.css)
+for F in $( cd themes && find -maxdepth 1 -type d | grep -e '/' | tr -d './' )
 do
-	F=${FILE%.css}
 	echo -e "\n==[ $F template ]==========================================\n";
-	ln -sf themes/$F.css css/walli.css
+	cd themes
+	ln -sf $F/$F.css theme.css
+	ln -sf $F/$F.inc.php theme.inc.php
+	ln -sf $F/img/favicon.png  favicon.png
+	cd ..
 	bin/minify < walli.php > ../index-$F.php
 done
 
-[[ -f css/walli.css.last ]] && mv -f css/walli.css.last css/walli.css
+[[ -f themes/theme.css.last ]] && mv -f themes/theme.css.last themes/theme.css
+[[ -f themes/theme.inc.php.last ]] && mv -f themes/theme.inc.php.last themes/theme.inc.php
+[[ -f themes/favicon.png.last ]] && mv -f themes/favicon.png.last themes/favicon.png

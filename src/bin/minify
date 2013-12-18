@@ -49,6 +49,17 @@ sub imagedata {
 	'data:'.$mime.';base64,'.$data;
 }
 
+sub php_minify {
+	my $file = shift;
+	my @raw = load $file;
+	warn "$file loaded with ".scalar @raw." lines\n";
+	@raw = 
+		grep { $_ }
+		map { chomp; $_ } 
+		map { s/<\?php|\?>//gi; $_ }
+		@raw;
+}
+
 sub css_minify {
 	my( $file, $pfx ) = @_;
 	$pfx = '' unless $pfx;
@@ -211,6 +222,12 @@ for my $l ( <STDIN> ) {
 			$l =~ s/$file/$data/;
 		}
 		$mini .= $l;
+	} elsif( $l =~ /^([\s\t]*)\@?include\s*\(\s*['"]([^'"]+)/i ) {
+		my $pfx = $1;
+		my $src = $2;
+		$mini .= $src eq 'config.inc.php'
+			? $l
+			: "$pfx".join("\n$pfx",php_minify($src))."\n";
 	} else {
 		$mini .= $l;
 	}

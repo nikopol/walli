@@ -1,6 +1,11 @@
 WALLi - ChangeLog
 https://github.com/nikopol/walli
 
+2013-12-17 / 0.8
+  - thumbnail layout configurable
+  - themes tree revamped
+  - theme puzzle added
+
 2013-11-12 / 0.7
   - minor base css updates
   - minor header updates

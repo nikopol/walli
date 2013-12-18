@@ -312,7 +312,7 @@ li.diapo.loaded span.minicom {
 	line-height: 17px;
 	text-align: center;
 	color: #fff;
-	background: transparent url(../icons/mini-comment.png) no-repeat center center;
+	background: #666;
 }
 
 li.diapo.loaded.up:hover {
@@ -623,11 +623,11 @@ body.sleep #viewbar {
 }
 
 #diag li.ok {
-	background-image: url(../icons/ok.png);
+	background-color: #a44;
 }
 
 #diag li.bad {
-	background-image: url(../icons/bad.png);
+	background-color: #4a4;
 }
 
 body.sleep #godbar {

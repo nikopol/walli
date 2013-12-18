@@ -187,6 +187,10 @@ li.diapo.loaded.cursor {
 	text-shadow: 0 0 10px #fff;
 }
 
+li.diapo.loaded span.minicom {
+	background: transparent url(black/img/mini-comment.png) no-repeat center center;
+}
+
 /*SLIDES*/
 
 #view {
@@ -379,3 +383,13 @@ li.diapo.loaded.cursor {
 #bflush  { background: url(black/img/reset.png) no-repeat center center; }
 #bdel    { background: url(black/img/del.png) no-repeat center center; }
 #bdiag   { background: url(black/img/diag.png) no-repeat center center; }
+
+#diag li.ok {
+	background-color: transparent;
+	background-image: url(black/img/ok.png);
+}
+
+#diag li.bad {
+	background-color: transparent;
+	background-image: url(black/img/bad.png);
+}

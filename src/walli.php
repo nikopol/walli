@@ -101,7 +101,7 @@ $withzip   = $WITH_ZIPDL && class_exists('ZipArchive');
 
 /* THEME GLOBALS */
 
-@include_once('themes/theme.inc.php');
+@include('themes/theme.inc.php');
 
 /*TOOLS*/
 
@@ -615,7 +615,7 @@ stand-alone image wall - https://github.com/nikopol/walli
 	<meta name="keywords" content="walli,picture,image,wall,thumbnail"/>
 	<meta name="apple-mobile-web-app-capable" content="yes"/>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link rel="shorcut icon" type="image/png" href="icons/favicon.png" />
+	<link rel="shorcut icon" type="image/png" href="themes/favicon.png" />
 	<link href="themes/theme.css" rel="stylesheet" type="text/css"/>
 <?php if( preg_match('/android|ipad|mobile/mi',$_SERVER['HTTP_USER_AGENT']) ){ ?>
 	<link href="themes/mobile.css" rel="stylesheet" type="text/css"/>	
@@ -710,7 +710,7 @@ stand-alone image wall - https://github.com/nikopol/walli
 				god: <?php print($godmode?'true':'false')?>,
 				thumbnail: {
 					engine: "<?php print($THUMB_ENGINE?$THUMB_ENGINE:'default')?>",
-					size: <?php print($THUMB_SIZE?$THUMB_SIZE:'0')?>,
+					size: <?php print($THUMB_SIZE?$THUMB_SIZE:'150')?>,
 					margin: <?php print($THUMB_MARGIN?$THUMB_MARGIN:'0')?>
 				}
 			});
