@@ -2,12 +2,12 @@
 
 /*MAIN*/
 
-@import url(http://fonts.googleapis.com/css?family=Baumans);
+@import url(http://fonts.googleapis.com/css?family=Righteous);
 @import url(base.css);
 
 body {
-	background: #000;
-	font: normal 16px "Baumans";
+	background: #fff;
+	font: normal 16px "Righteous";
 	color: #ccc;
 }
 
@@ -21,7 +21,7 @@ button {
 input[type="text"],
 textarea,
 select {
-	font: normal 16px "Baumans";
+	font: normal 16px "Righteous";
 	border: none;
 	background-color: #222;
 	color: #fff;
@@ -52,8 +52,7 @@ select {
 /*OSD*/
 
 #osd {
-	font: normal 30px Baumans;
-	/*text-shadow: 0 4px 3px rgba(0, 0, 0, 0.4), 0 8px 10px rgba(0, 0, 0, 0.1), 0 8px 9px rgba(0, 0, 0, 0.1);*/
+	font: normal 30px Righteous;
 	background-color: rgba(0,0,0,0.4);
 	top: 5px;
 	left: 70px;
@@ -68,68 +67,50 @@ select {
 	margin-top: 7px;
 }
 
+#progressbar {
+	background-color: rgba(0, 0, 0, 0.2);
+}
+
 /*THUMB BAR*/
 
+#thumbbar {
+	background: #ccc;
+	box-shadow: #000 0 0 5px;
+}
+
 #thumbbar h1 {
-	font: bold 24px "Baumans";
-	color: #eee;
-	background: #333;
+	font: bold 32px "Righteous";
+	line-height: 34px;
+	/*color: #fff;*/
+	background-color: #555;
+	color: transparent;
+	text-shadow: 2px 2px 3px rgba(255,255,255,0.5);
+	-webkit-background-clip: text;
+	-moz-background-clip: text;
+	background-clip: text;
 }
 
 #thumbbar h1:hover {
-	background: #666;
-	text-shadow: 0 0 10px #fff;
 }
 
 #thumbbar button {
-	font: normal 18px Baumans;
-	color: #ccc;
-	background: #444;
-	padding: 0 30px 0 14px;
-	margin: 0 -9px 4px 0;
-}
-
-#thumbbar button:before {
-	content: "";
-	position: absolute;
-	display: block;
-	left: -14px;
-	top: 0;
-	height: 0;
-	width: 0;
-	border-color: #444 #444 #444 transparent;
-	border-style: solid;
-	border-width: 14px;
-}
-
-#thumbbar button:after {
-	content: "";
-	position: absolute;
-	display: block;
-	right: 0;
-	top: 0;
-	height: 0;
-	width: 0;
-	border-color: #000 #000 #000 #444;
-	border-style: solid;
-	border-width: 14px;
+	font: normal 18px Righteous;
+	color: #fff;
+	background: #aaa;
+	box-shadow: #999 4px 4px 0;
+	margin: 0 8px 0 0;
 }
 
 #thumbbar button:hover {
-	background: #666;
-	color: #eee;
-	text-shadow: 0 0 10px #fff;
+	background: #bbb;
 }
 
-#thumbbar button:hover:before {
-	border-color: #666 #666 #666 transparent;
+#thumbbar button:active {
+	box-shadow: none;
+	margin: 4px 4px 0 4px;
 }
 
-#thumbbar button:hover:after {
-	border-color: #000 #000 #000 #666;
-}
-
-#thumbbar button#bzip {
+/*#thumbbar button#bzip {
 	background: #666;
 }
 
@@ -147,11 +128,11 @@ select {
 }
 
 #thumbbar button#bzip:after {
-	border-color: #000 #000 #000 #666;
+	border-color: #fff #fff #fff #666;
 }
 
 #thumbbar button#bzip:hover:after {
-	border-color: #000 #000 #000 #888;
+	border-color: #fff #fff #fff #888;
 }
 
 #thumbbar button:first-child {
@@ -161,11 +142,15 @@ select {
 #thumbbar button:first-child:before {
 	border-width: 0;
 }
-
+*/
 /* DIAPOS */
 
+#diapos {
+}
+
 li.diapo {
-	background-color: #000;
+	background-color: #fff;
+	box-shadow: #333 1px 1px 8px;
 }
 
 li.diapo.loaded {
@@ -176,8 +161,8 @@ li.diapo:hover,
 li.diapo.cursor {
 	z-index: 2;
 	color: #eee;
-	-webkit-transform: scale(1.2);
-	-moz-transform: scale(1.2);
+	-webkit-transform: scale(1.1);
+	-moz-transform: scale(1.1);
 	-webkit-box-shadow: 0 0 20px rgba(0,0,0,.9);
 	-moz-box-shadow: 0 0 20px rgba(0,0,0,.9);
 	box-shadow: 0 0 20px rgba(0,0,0,.9);
@@ -196,7 +181,7 @@ li.diapo.cursor:after {
 	/*height: 40px;*/
 	/*margin-top: -40px;*/
 	bottom: 0;
-	background-color: rgba(0,0,0,.8);
+	background-color: rgba(0,0,0,.6);
 	padding: 5px 0;
 	color: #fff;
 	-webkit-transition: all 0.2s linear;
@@ -332,7 +317,7 @@ li.diapo.loaded span.minicom {
 	top: 4px;
 	width: 48px;
 	text-align: center;
-	font: bold 24px Baumans;
+	font: bold 24px Righteous;
 }
 
 #viewbar button#bcom:hover span {
@@ -359,7 +344,7 @@ li.diapo.loaded span.minicom {
 
 #mask #loading {
 	color: #fff;
-	font: normal 32px Baumans;
+	font: normal 32px Righteous;
 	text-shadow: 0 0 10px #fff;
 }
 
@@ -392,6 +377,15 @@ li.diapo.loaded span.minicom {
 
 
 /* ADMIN BAR */
+
+#godbar {
+	top: 10px;
+	width: 160px;
+}
+
+#godbar button {
+	float: right;
+}
 
 #blogin  { background: url(black/img/login.png) no-repeat center center; }
 #blogout { background: url(black/img/logout.png) no-repeat center center; }

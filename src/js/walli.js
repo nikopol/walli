@@ -415,6 +415,7 @@ walli = (function(){
 				bx=0, //box col
 				by=0, //box row
 				bm=[], //bitmap
+				nb=dirs.length+files.length,
 				bmresize=function(y,h){ //auto grow bitmap
 					while(bm.length<y+h) bm.push(0);
 				},
@@ -472,7 +473,6 @@ walli = (function(){
 					if((coms[url]||[]).length)
 						append(d,'<span class="minicom">'+numk(coms[url].length)+'</span>');
 					diapos.appendChild(d);
-
 					if(bx==0 && by==0){
 						bh=2;
 						bw=nc>1 ? 2 : 1;
@@ -483,6 +483,7 @@ walli = (function(){
 						bh=r>0.7 ? 2 : 1;
 						bw=1;					
 					}
+					if(nb<=nc) bh=1;
 					boxset(d,bx,by,bw,bh);
 					image.src = '?!=mini&file='+encodeURIComponent(url)+'&w='+bs[bw]+'&h='+bs[bh];
 					while(bmtest(bx,by,1,1)) {
@@ -492,8 +493,9 @@ walli = (function(){
 							by++;
 						}
 					}
+					nb--;
 				};
-				console.log('layout with '+nc+' columns');
+				//console.log('layout with '+nc+' columns');
 				_('#diapos','');
 				osd.start(files.length+dirs.length);
 				dirs.forEach(function(d){
