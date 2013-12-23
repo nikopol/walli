@@ -1,5 +1,6 @@
 <?php
-$THUMB_ENGINE = 'default';
-$THUMB_SIZE   = 150;
-$THUMB_MARGIN = 5;
+$THUMB=array(
+	'engine' => 'default',
+	'size'   => 150
+);
 ?>

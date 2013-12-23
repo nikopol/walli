@@ -197,22 +197,20 @@ li.diapo.loaded span.minicom {
 	background: #000;
 }
 
-/*#view #slide {
-	-webkit-perspective: 1200px;
+#view #slide {
 }
 
 #view img.left {
-	-webkit-transform: scale(0.1) rotateY(-90deg);
+	left: -200%;
 }
 
 #view img.right {
-	-webkit-transform: scale(0.1) rotateY(90deg);
+	left: 200%;
 }
 
 #view img.center {
-	-webkit-transform: scale(1) rotateY(0deg);
 }
-*/
+
 /*COMMENTS*/
 
 #view #comments {

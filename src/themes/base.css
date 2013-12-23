@@ -10,6 +10,7 @@
 
 body {
 	overflow: hidden;
+	-webkit-font-smoothing: subpixel-antialiased !important;
 }
 
 body.sleep {
@@ -63,9 +64,7 @@ button::-moz-focus-inner {
 /*COPYRIGHT*/
 
 #copyright {
-	color: #000;
 	position: absolute;
-	font: normal 10px Arial,Helvetica;
 	z-index: 99;
 	bottom: 2px;
 	right: 20px;
@@ -73,6 +72,7 @@ button::-moz-focus-inner {
 
 #copyright a,
 #copyright a:visited {
+	font: normal 10px Arial,Helvetica;
 	color: #aaa;
 }
 

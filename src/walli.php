@@ -54,7 +54,7 @@ $REFRESH_DELAY = 0;
 //set to false to disable comments
 //require $SYS_DIR correctly set to work
 //require also json support (php>=5.2)
-$WITH_COMMENTS = function_exists('json_encode');
+$WITH_COMMENTS = true;
 
 //set to true to enable zip download
 //require $SYS_DIR correctly set to work
@@ -85,6 +85,7 @@ define('FILEMATCH','\.(png|jpe?g|gif)$');
 /* GLOBALS */
 
 if(!function_exists('imagecopyresampled')) die("GD extension is required");
+if(!function_exists('json_encode')) die("JSON extension is required");
 
 $uid = empty($_COOKIE[COOKIE_UID])
 	? sha1($_SERVER['REMOTE_ADDR'].'-'.time())
@@ -101,6 +102,7 @@ $withzip   = $WITH_ZIPDL && class_exists('ZipArchive');
 
 /* THEME GLOBALS */
 
+$THUMB = array( 'engine' => 'default', 'size' => 150 );
 @include('themes/theme.inc.php');
 
 /*TOOLS*/
@@ -285,7 +287,7 @@ function godcheck(){
 	if(!$godmode) error(401,'unauthorized');
 }
 
-/*CLIENT API*/
+/*PUBLIC API*/
 
 function GET_ls(){
 	$path=check_path($_GET['path']);
@@ -708,11 +710,7 @@ stand-alone image wall - https://github.com/nikopol/walli
 				admin: <?php print($withadm?'true':'false')?>,
 				zip: <?php print($withzip?'true':'false')?>,
 				god: <?php print($godmode?'true':'false')?>,
-				thumbnail: {
-					engine: "<?php print($THUMB_ENGINE?$THUMB_ENGINE:'default')?>",
-					size: <?php print($THUMB_SIZE?$THUMB_SIZE:'150')?>,
-					margin: <?php print($THUMB_MARGIN?$THUMB_MARGIN:'0')?>
-				}
+				thumbnail: <?php print(json_encode($THUMB)) ?>
 			});
 		});
 	</script>

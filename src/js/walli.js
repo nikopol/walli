@@ -334,8 +334,11 @@ walli = (function(){
 
 	function layout(){
 		//auto resize diapos
-		var p = position('#thumbbar');
-		_('#diapos').style.top = (p.top+p.height)+'px';
+		var
+		o = _('#thumbbar'),
+		p = position(o),
+		s = window.getComputedStyle(o);
+		_('#diapos').style.top = (p.top+p.height+parseInt(s.getPropertyValue('marginBottom')))+'px';
 	}
 
 	function setbzip(c,t) {
@@ -398,7 +401,7 @@ walli = (function(){
 
 
 	var tengines = {
-		puzzle: {
+		boxed: {
 			make: function(){
 				var
 				boxs=thumb.size,
@@ -477,7 +480,7 @@ walli = (function(){
 						bh=2;
 						bw=nc>1 ? 2 : 1;
 					} else if((nc-bx)>1 && r>0.5 && !bmtest(bx,by,2,1)) {
-						bh=r>0.85 ? 2 : 1;
+						bh=r>0.8 ? 2 : 1;
 						bw=2;
 					} else {
 						bh=r>0.7 ? 2 : 1;

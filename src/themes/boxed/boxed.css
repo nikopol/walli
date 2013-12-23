@@ -1,6 +1,11 @@
 /* WALLi Black CSS - niko 2013 */
 
-/*MAIN*/
+/*-webkit-transform: translateZ(-90px) rotateX(65deg);
+-moz-transform: translateZ(-90px) rotateX(65deg);
+-ms-transform: translateZ(-90px) rotateX(65deg);
+-o-transform: translateZ(-90px) rotateX(65deg);
+transform: translateZ(-90px) rotateX(65deg);
+*//*MAIN*/
 
 @import url(http://fonts.googleapis.com/css?family=Righteous);
 @import url(base.css);
@@ -42,11 +47,14 @@ select {
 /*COPYRIGHT*/
 
 #copyright {
-	bottom: 22px;
-	right: -2px;
-	-webkit-transform: rotate(-90deg) translateY(10px) translateX(6px);
-	-moz-transform: rotate(-90deg);
-	transform: rotate(-90deg);
+	bottom: 2px;
+	right: 2px;
+}
+
+#copyright a,
+#copyright a:visited {
+	color: #aaa;
+	text-shadow: #fff 1px 0;
 }
 
 /*OSD*/
@@ -76,18 +84,14 @@ select {
 #thumbbar {
 	background: #ccc;
 	box-shadow: #000 0 0 5px;
+	margin-bottom: 5px;
 }
 
 #thumbbar h1 {
 	font: bold 32px "Righteous";
 	line-height: 34px;
-	/*color: #fff;*/
-	background-color: #555;
-	color: transparent;
-	text-shadow: 2px 2px 3px rgba(255,255,255,0.5);
-	-webkit-background-clip: text;
-	-moz-background-clip: text;
-	background-clip: text;
+	color: rgba(127,127,127,0.8);
+	text-shadow: 1px 1px 1px #ccc, 0 0 0 #000;
 }
 
 #thumbbar h1:hover {
@@ -190,7 +194,7 @@ li.diapo.cursor:after {
 }
 
 li.diapo.loaded span.minicom {
-	background: transparent url(puzzle/img/mini-comment.png) no-repeat center center;
+	background: transparent url(boxed/img/mini-comment.png) no-repeat center center;
 }
 
 /*SLIDES*/
@@ -199,22 +203,53 @@ li.diapo.loaded span.minicom {
 	background: #000;
 }
 
-/*#view #slide {
-	-webkit-perspective: 1200px;
+#view #slide {
+	-webkit-perspective-origin: 50% 50%;
+	-moz-perspective-origin: 50% 50%;
+	-ms-perspective-origin: 50% 50%;
+	perspective-origin: 50% 50%;
+	-webkit-perspective: 1300px;
+	-moz-perspective: 1300px;
+	-ms-perspective: 1300px;
+	perspective: 1300px;
+}
+
+#view img {
+	-webkit-backface-visibility: hidden;
+	box-sizing: border-box;
+	-webkit-transition: all 800;
+	-moz-transition: all 800;
+	-ms-transition: all 800;
+	transition: all 800;
+	-webkit-transform-style: preserve-3d;
+	-moz-transform-style: preserve-3d;
+	-ms-transform-style: preserve-3d;
+	transform-style: preserve-3d;
 }
 
 #view img.left {
-	-webkit-transform: scale(0.1) rotateY(-90deg);
+	z-index: 0;
+	opacity: 0;
+	-webkit-transform: translate3d(100%, 0, 0) rotateY(90deg) translate3d(100%, 0, 0);
+	-moz-transform: translate3d(100%, 0, 0) rotateY(90deg) translate3d(100%, 0, 0);
+	-ms-transform: translate3d(100%, 0, 0) rotateY(90deg) translate3d(100%, 0, 0);
+	transform: translate3d(100%, 0, 0) rotateY(90deg) translate3d(100%, 0, 0);
 }
 
 #view img.right {
-	-webkit-transform: scale(0.1) rotateY(90deg);
+	z-index: 0;
+	opacity: 0;
+	-webkit-transform: translate3d(-100%, 0, 0) rotateY(-90deg) translate3d(-100%, 0, 0);
+	-moz-transform: translate3d(-100%, 0, 0) rotateY(-90deg) translate3d(-100%, 0, 0);
+	-ms-transform: translate3d(-100%, 0, 0) rotateY(-90deg) translate3d(-100%, 0, 0);
+	transform: translate3d(-100%, 0, 0) rotateY(-90deg) translate3d(-100%, 0, 0);
 }
 
 #view img.center {
-	-webkit-transform: scale(1) rotateY(0deg);
+	z-index: 10;
+	opacity: 1;
 }
-*/
+
 /*COMMENTS*/
 
 #view #comments {
@@ -276,7 +311,7 @@ li.diapo.loaded span.minicom {
 	width: 160px;
 	bottom: 200px;
 	opacity: 0;
-	background: url(black/img/prev.png) no-repeat 115px center rgba(0,0,0,0.4);
+	background: url(boxed/img/prev.png) no-repeat 115px center rgba(0,0,0,0.4);
 	-webkit-border-radius: 0 190px 190px 0;
 	-moz-border-radius: 0 190px 190px 0;
 	border-radius: 0 190px 190px 0;
@@ -293,7 +328,7 @@ li.diapo.loaded span.minicom {
 	width: 160px;
 	bottom: 200px;
 	opacity: 0;
-	background: url(black/img/next.png) no-repeat 15px center rgba(0,0,0,0.4);
+	background: url(boxed/img/next.png) no-repeat 15px center rgba(0,0,0,0.4);
 	-webkit-border-radius: 190px 0 0 190px;
 	-moz-border-radius: 190px 0 0 190px;
 	border-radius: 190px 0 0 190px;
@@ -308,7 +343,7 @@ li.diapo.loaded span.minicom {
 	top: 104px;
 	width: 48px;
 	height: 48px;
-	background: url(black/img/comment.png) no-repeat center center;
+	background: url(boxed/img/comment.png) no-repeat center center;
 }
 
 #viewbar button#bcom span {
@@ -329,7 +364,7 @@ li.diapo.loaded span.minicom {
 	top: 60px;
 	width: 48px;
 	height: 42px;
-	background: url(black/img/play.png) no-repeat center center;
+	background: url(boxed/img/play.png) no-repeat center center;
 }
 
 #viewbar button#bthumb {
@@ -337,7 +372,7 @@ li.diapo.loaded span.minicom {
 	top: 6px;
 	width: 48px;
 	height: 48px;
-	background: url(black/img/thumbs.png) no-repeat center center;
+	background: url(boxed/img/thumbs.png) no-repeat center center;
 }
 
 /* LOADING */
@@ -379,7 +414,8 @@ li.diapo.loaded span.minicom {
 /* ADMIN BAR */
 
 #godbar {
-	top: 10px;
+	top: 8px;
+	right: 8px;
 	width: 160px;
 }
 
@@ -387,20 +423,28 @@ li.diapo.loaded span.minicom {
 	float: right;
 }
 
-#blogin  { background: url(black/img/login.png) no-repeat center center; }
-#blogout { background: url(black/img/logout.png) no-repeat center center; }
-#bmkdir  { background: url(black/img/mkdir.png) no-repeat center center; }
-#bupload { background: url(black/img/upload.png) no-repeat center center; }
-#bflush  { background: url(black/img/reset.png) no-repeat center center; }
-#bdel    { background: url(black/img/del.png) no-repeat center center; }
-#bdiag   { background: url(black/img/diag.png) no-repeat center center; }
+#blogin  { background: url(boxed/img/login.png) no-repeat center center; }
+#blogout { background: url(boxed/img/logout.png) no-repeat center center; }
+#bmkdir  { background: url(boxed/img/mkdir.png) no-repeat center center; }
+#bupload { background: url(boxed/img/upload.png) no-repeat center center; }
+#bflush  { background: url(boxed/img/reset.png) no-repeat center center; }
+#bdel    { background: url(boxed/img/del.png) no-repeat center center; }
+#bdiag   { background: url(boxed/img/diag.png) no-repeat center center; }
+
+#diag {
+	background: #ccc;
+	color: #777;
+	border-radius: 0;
+	top: 50px;
+	right: 20px;
+}
 
 #diag li.ok {
 	background-color: transparent;
-	background-image: url(puzzle/img/ok.png);
+	background-image: url(boxed/img/ok.png);
 }
 
 #diag li.bad {
 	background-color: transparent;
-	background-image: url(puzzle/img/bad.png);
+	background-image: url(boxed/img/bad.png);
 }
