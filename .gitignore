@@ -1,3 +1,7 @@
 .cache
+.walli
 walli.css.last
 test/
+src/themes/favicon.png
+src/themes/theme.css
+src/themes/theme.inc.php
