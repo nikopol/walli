@@ -1,13 +1,18 @@
 /* WALLi Black CSS - niko 2013 */
 
-/*MAIN*/
+/*-webkit-transform: translateZ(-90px) rotateX(65deg);
+-moz-transform: translateZ(-90px) rotateX(65deg);
+-ms-transform: translateZ(-90px) rotateX(65deg);
+-o-transform: translateZ(-90px) rotateX(65deg);
+transform: translateZ(-90px) rotateX(65deg);
+*//*MAIN*/
 
-@import url(http://fonts.googleapis.com/css?family=Baumans);
+@import url(http://fonts.googleapis.com/css?family=Righteous);
 @import url(base.css);
 
 body {
-	background: #000;
-	font: normal 16px "Baumans";
+	background: #fff;
+	font: normal 16px "Righteous";
 	color: #ccc;
 }
 
@@ -21,7 +26,7 @@ button {
 input[type="text"],
 textarea,
 select {
-	font: normal 16px "Baumans";
+	font: normal 16px "Righteous";
 	border: none;
 	background-color: #222;
 	color: #fff;
@@ -42,18 +47,20 @@ select {
 /*COPYRIGHT*/
 
 #copyright {
-	bottom: 22px;
-	right: -2px;
-	-webkit-transform: rotate(-90deg) translateY(10px) translateX(6px);
-	-moz-transform: rotate(-90deg);
-	transform: rotate(-90deg);
+	bottom: 2px;
+	right: 2px;
+}
+
+#copyright a,
+#copyright a:visited {
+	color: #aaa;
+	text-shadow: #fff 1px 0;
 }
 
 /*OSD*/
 
 #osd {
-	font: normal 30px Baumans;
-	/*text-shadow: 0 4px 3px rgba(0, 0, 0, 0.4), 0 8px 10px rgba(0, 0, 0, 0.1), 0 8px 9px rgba(0, 0, 0, 0.1);*/
+	font: normal 30px Righteous;
 	background-color: rgba(0,0,0,0.4);
 	top: 5px;
 	left: 70px;
@@ -68,68 +75,46 @@ select {
 	margin-top: 7px;
 }
 
+#progressbar {
+	background-color: rgba(0, 0, 0, 0.2);
+}
+
 /*THUMB BAR*/
 
+#thumbbar {
+	background: #ccc;
+	box-shadow: #000 0 0 5px;
+	margin-bottom: 5px;
+}
+
 #thumbbar h1 {
-	font: bold 24px "Baumans";
-	color: #eee;
-	background: #333;
+	font: bold 32px "Righteous";
+	line-height: 34px;
+	color: rgba(127,127,127,0.8);
+	text-shadow: 1px 1px 1px #ccc, 0 0 0 #000;
 }
 
 #thumbbar h1:hover {
-	background: #666;
-	text-shadow: 0 0 10px #fff;
 }
 
 #thumbbar button {
-	font: normal 18px Baumans;
-	color: #ccc;
-	background: #444;
-	padding: 0 30px 0 14px;
-	margin: 0 -9px 4px 0;
-}
-
-#thumbbar button:before {
-	content: "";
-	position: absolute;
-	display: block;
-	left: -14px;
-	top: 0;
-	height: 0;
-	width: 0;
-	border-color: #444 #444 #444 transparent;
-	border-style: solid;
-	border-width: 14px;
-}
-
-#thumbbar button:after {
-	content: "";
-	position: absolute;
-	display: block;
-	right: 0;
-	top: 0;
-	height: 0;
-	width: 0;
-	border-color: #000 #000 #000 #444;
-	border-style: solid;
-	border-width: 14px;
+	font: normal 18px Righteous;
+	color: #fff;
+	background: #aaa;
+	box-shadow: #999 4px 4px 0;
+	margin: 0 8px 0 0;
 }
 
 #thumbbar button:hover {
-	background: #666;
-	color: #eee;
-	text-shadow: 0 0 10px #fff;
+	background: #bbb;
 }
 
-#thumbbar button:hover:before {
-	border-color: #666 #666 #666 transparent;
+#thumbbar button:active {
+	box-shadow: none;
+	margin: 4px 4px 0 4px;
 }
 
-#thumbbar button:hover:after {
-	border-color: #000 #000 #000 #666;
-}
-
-#thumbbar button#bzip {
+/*#thumbbar button#bzip {
 	background: #666;
 }
 
@@ -147,11 +132,11 @@ select {
 }
 
 #thumbbar button#bzip:after {
-	border-color: #000 #000 #000 #666;
+	border-color: #fff #fff #fff #666;
 }
 
 #thumbbar button#bzip:hover:after {
-	border-color: #000 #000 #000 #888;
+	border-color: #fff #fff #fff #888;
 }
 
 #thumbbar button:first-child {
@@ -161,59 +146,68 @@ select {
 #thumbbar button:first-child:before {
 	border-width: 0;
 }
-
+*/
 /* DIAPOS */
 
+#diapos {
+}
+
 li.diapo {
-	background-color: #000;
+	background-color: #fff;
+	box-shadow: #333 1px 1px 8px;
 }
 
 li.diapo.loaded {
 	color: #999;
 }
 
-li.diapo.loaded:hover,
-li.diapo.loaded.cursor {
+li.diapo:hover,
+li.diapo.cursor {
 	z-index: 2;
 	color: #eee;
-	-webkit-transform: scale(1.2);
-	-moz-transform: scale(1.2);
+	-webkit-transform: scale(1.1);
+	-moz-transform: scale(1.1);
 	-webkit-box-shadow: 0 0 20px rgba(0,0,0,.9);
 	-moz-box-shadow: 0 0 20px rgba(0,0,0,.9);
 	box-shadow: 0 0 20px rgba(0,0,0,.9);
 	-webkit-transition: all 0.2s linear;
 	-moz-transition: all 0.2s linear;
 	transition: all 0.2s linear;
-	text-shadow: 0 0 10px #fff;
+}
+
+li.diapo:hover:after,
+li.diapo.cursor:after {
+	content: attr(title);
+	display: table-cell;
+	vertical-align: middle;
+	position: absolute;
+	width: 100%;
+	/*height: 40px;*/
+	/*margin-top: -40px;*/
+	bottom: 0;
+	background-color: rgba(0,0,0,.6);
+	padding: 5px 0;
+	color: #fff;
+	-webkit-transition: all 0.2s linear;
+	-moz-transition: all 0.2s linear;
+	transition: all 0.2s linear;
+}
+
+li.diapo.loaded span.minicom {
+	background: transparent url(boxed/img/mini-comment.png) no-repeat center center;
 }
 
 /*SLIDES*/
 
 #view {
-	background: #000;
+	background: #555;
 }
 
-/*#view #slide {
-	-webkit-perspective: 1200px;
-}
-
-#view img.left {
-	-webkit-transform: scale(0.1) rotateY(-90deg);
-}
-
-#view img.right {
-	-webkit-transform: scale(0.1) rotateY(90deg);
-}
-
-#view img.center {
-	-webkit-transform: scale(1) rotateY(0deg);
-}
-*/
 /*COMMENTS*/
 
 #view #comments {
 	color: #fff;
-	background-color: #000;
+	background-color: #555;
 }
 
 #coms li {
@@ -270,7 +264,7 @@ li.diapo.loaded.cursor {
 	width: 160px;
 	bottom: 200px;
 	opacity: 0;
-	background: url(../icons/prev.png) no-repeat 115px center rgba(0,0,0,0.4);
+	background: url(boxed/img/prev.png) no-repeat 115px center rgba(0,0,0,0.4);
 	-webkit-border-radius: 0 190px 190px 0;
 	-moz-border-radius: 0 190px 190px 0;
 	border-radius: 0 190px 190px 0;
@@ -287,7 +281,7 @@ li.diapo.loaded.cursor {
 	width: 160px;
 	bottom: 200px;
 	opacity: 0;
-	background: url(../icons/next.png) no-repeat 15px center rgba(0,0,0,0.4);
+	background: url(boxed/img/next.png) no-repeat 15px center rgba(0,0,0,0.4);
 	-webkit-border-radius: 190px 0 0 190px;
 	-moz-border-radius: 190px 0 0 190px;
 	border-radius: 190px 0 0 190px;
@@ -302,7 +296,7 @@ li.diapo.loaded.cursor {
 	top: 104px;
 	width: 48px;
 	height: 48px;
-	background: url(../icons/comment.png) no-repeat center center;
+	background: url(boxed/img/comment.png) no-repeat center center;
 }
 
 #viewbar button#bcom span {
@@ -311,7 +305,7 @@ li.diapo.loaded.cursor {
 	top: 4px;
 	width: 48px;
 	text-align: center;
-	font: bold 24px Baumans;
+	font: bold 24px Righteous;
 }
 
 #viewbar button#bcom:hover span {
@@ -323,7 +317,7 @@ li.diapo.loaded.cursor {
 	top: 60px;
 	width: 48px;
 	height: 42px;
-	background: url(../icons/play.png) no-repeat center center;
+	background: url(boxed/img/play.png) no-repeat center center;
 }
 
 #viewbar button#bthumb {
@@ -331,14 +325,14 @@ li.diapo.loaded.cursor {
 	top: 6px;
 	width: 48px;
 	height: 48px;
-	background: url(../icons/thumbs.png) no-repeat center center;
+	background: url(boxed/img/thumbs.png) no-repeat center center;
 }
 
 /* LOADING */
 
 #mask #loading {
 	color: #fff;
-	font: normal 32px Baumans;
+	font: normal 32px Righteous;
 	text-shadow: 0 0 10px #fff;
 }
 
@@ -372,10 +366,38 @@ li.diapo.loaded.cursor {
 
 /* ADMIN BAR */
 
-#blogin  { background: url(../icons/black/login.png) no-repeat center center; }
-#blogout { background: url(../icons/black/logout.png) no-repeat center center; }
-#bmkdir  { background: url(../icons/black/mkdir.png) no-repeat center center; }
-#bupload { background: url(../icons/black/upload.png) no-repeat center center; }
-#bflush  { background: url(../icons/black/reset.png) no-repeat center center; }
-#bdel    { background: url(../icons/black/del.png) no-repeat center center; }
-#bdiag   { background: url(../icons/black/diag.png) no-repeat center center; }
+#godbar {
+	top: 8px;
+	right: 8px;
+	width: 160px;
+}
+
+#godbar button {
+	float: right;
+}
+
+#blogin  { background: url(boxed/img/login.png) no-repeat center center; }
+#blogout { background: url(boxed/img/logout.png) no-repeat center center; }
+#bmkdir  { background: url(boxed/img/mkdir.png) no-repeat center center; }
+#bupload { background: url(boxed/img/upload.png) no-repeat center center; }
+#bflush  { background: url(boxed/img/reset.png) no-repeat center center; }
+#bdel    { background: url(boxed/img/del.png) no-repeat center center; }
+#bdiag   { background: url(boxed/img/diag.png) no-repeat center center; }
+
+#diag {
+	background: #ccc;
+	color: #777;
+	border-radius: 0;
+	top: 50px;
+	right: 20px;
+}
+
+#diag li.ok {
+	background-color: transparent;
+	background-image: url(boxed/img/ok.png);
+}
+
+#diag li.bad {
+	background-color: transparent;
+	background-image: url(boxed/img/bad.png);
+}

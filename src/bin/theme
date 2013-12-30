@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+cd `dirname $0`/../themes
+ln -sf $1/$1.css theme.css
+ln -sf $1/$1.inc.php theme.inc.php
+ln -sf $1/img/favicon.*

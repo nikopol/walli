@@ -6,7 +6,7 @@
 @import url(base.css);
 
 body {
-	background: #fff url(../images/bg.jpg) repeat;
+	background: #fff url(loulou/img/bg.jpg) repeat;
 	font: normal 16px "Satisfy";
 	color: #aaa;
 }
@@ -193,6 +193,9 @@ li.diapo.loaded span.minicom {
 	font-size: 10px;
 	line-height: 18px;
 	font-weight: bold;
+	background: transparent url(loulou/img/mini-comment.png) no-repeat center center;
+}
+
 }
 
 li.diapo input[type="checkbox"] {
@@ -207,11 +210,11 @@ li.diapo input[type="checkbox"] + label {
 	left: 16px;
 	width: 16px;
 	height: 16px;
-	background: transparent url(../icons/uncheck.png) no-repeat center center;
+	background: transparent url(loulou/img/uncheck.png) no-repeat center center;
 }
 
 li.diapo input[type="checkbox"]:checked + label {
-	background: transparent url(../icons/check.png) no-repeat center center;
+	background: transparent url(loulou/img/check.png) no-repeat center center;
 }
 
 li.diapo.loaded:hover,
@@ -229,7 +232,6 @@ li.diapo.loaded.cursor {
 	transition: all 0.2s linear;
 }
 
-
 /*COMMENTS*/
 
 #view.com #slide {
@@ -246,11 +248,11 @@ li.diapo.loaded.cursor {
 
 #view #comments {
 	color: #666;
-	background: #fff url(../images/bg.jpg) repeat;
+	background: #fff url(loulou/img/bg.jpg) repeat;
 }
 
 #coms {
-	background: #fff url(../images/bg.jpg) repeat;
+	background: #fff url(loulou/img/bg.jpg) repeat;
 }
 
 #coms li {
@@ -341,7 +343,7 @@ li.diapo.loaded.cursor {
 	width: 160px;
 	bottom: 200px;
 	opacity: 0;
-	background: url(../icons/loulou/arrow_left.png) no-repeat 115px center rgba(0,0,0,0.4);
+	background: url(loulou/img/arrow_left.png) no-repeat 115px center rgba(0,0,0,0.4);
 	-webkit-border-radius: 0 190px 190px 0;
 	-moz-border-radius: 0 190px 190px 0;
 	border-radius: 0 190px 190px 0;
@@ -358,7 +360,7 @@ li.diapo.loaded.cursor {
 	width: 160px;
 	bottom: 200px;
 	opacity: 0;
-	background: url(../icons/loulou/arrow_right.png) no-repeat 15px center rgba(0,0,0,0.4);
+	background: url(loulou/img/arrow_right.png) no-repeat 15px center rgba(0,0,0,0.4);
 	-webkit-border-radius: 190px 0 0 190px;
 	-moz-border-radius: 190px 0 0 190px;
 	border-radius: 190px 0 0 190px;
@@ -373,7 +375,7 @@ li.diapo.loaded.cursor {
 	top: 6px;
 	width: 32px;
 	height: 32px;
-	background: url(../icons/loulou/comment_edit.png) no-repeat center center;
+	background: url(loulou/img/comment_edit.png) no-repeat center center;
 }
 
 #viewbar button#bcom span {
@@ -394,7 +396,7 @@ li.diapo.loaded.cursor {
 	top: 6px;
 	width: 32px;
 	height: 32px;
-	background: url(../icons/loulou/film.png) no-repeat center center;
+	background: url(loulou/img/film.png) no-repeat center center;
 }
 
 #viewbar button#bthumb {
@@ -402,7 +404,7 @@ li.diapo.loaded.cursor {
 	top: 6px;
 	width: 32px;
 	height: 32px;
-	background: url(../icons/loulou/small_tiles.png) no-repeat center center;
+	background: url(loulou/img/small_tiles.png) no-repeat center center;
 }
 
 /* LOADING */
@@ -456,16 +458,26 @@ li.diapo.loaded.cursor {
 	float: right;
 }
 
-#blogin  { background: url(../icons/login.png) repeat center center; }
-#blogout { background: url(../icons/logout.png) repeat center center; }
-#bupload { background: url(../icons/upload.png) repeat center center; }
-#bmkdir  { background: url(../icons/mkdir.png) repeat center center; }
-#bflush  { background: url(../icons/reset.png) repeat center center; }
-#bdel    { background: url(../icons/del.png) repeat center center; }
-#bdiag   { background: url(../icons/diag.png) repeat center center; }
+#blogin  { background: url(loulou/img/login.png) repeat center center; }
+#blogout { background: url(loulou/img/logout.png) repeat center center; }
+#bupload { background: url(loulou/img/upload.png) repeat center center; }
+#bmkdir  { background: url(loulou/img/mkdir.png) repeat center center; }
+#bflush  { background: url(loulou/img/reset.png) repeat center center; }
+#bdel    { background: url(loulou/img/del.png) repeat center center; }
+#bdiag   { background: url(loulou/img/diag.png) repeat center center; }
 
 #diag {
 	top: 50px;
 	right: 20px;
 	font: 16px arial,monaco;
+}
+
+#diag li.ok {
+	background-color: transparent;
+	background-image: url(loulou/img/ok.png);
+}
+
+#diag li.bad {
+	background-color: transparent;
+	background-image: url(loulou/img/bad.png);
 }

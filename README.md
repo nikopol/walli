@@ -1,4 +1,4 @@
-WALLi v0.7 (c) niko 2012-2013
+WALLi v0.8 (c) niko 2012-2013
 -----------------------------
 "all-in-one" Images Wall
 
@@ -14,14 +14,14 @@ and/or images to "browse" them with a modern browser or mobile device.
   - multi themes (show customization below)
   - multi subs directories
   - auto locale supported (en & fr for the moment)
-  - comments by image
+  - comments by image (optional)
   - slideshow mode by directory
-  - download a zip of selected images
+  - download a zip of selected images (optional)
   - permalink support
-  - google analytics support
-  - mini admin included (upload/delete images,stats,mkdir,cache control)
+  - google analytics support (optional)
+  - mini admin included (upload/delete images,stats,mkdir,cache control) (optional)
   - keyboard shortcuts (h or ? for help)
-  - exif infos
+  - exif infos (if php exif support is enabled)
 
 **LOULOU THEME SCREENSHOTS**
 
@@ -37,7 +37,7 @@ and/or images to "browse" them with a modern browser or mobile device.
 **INSTALL**
 
 select the index-***.php you prefer (each one provide a different look/css), 
-put it an http served directory, rename it index.php, and that's it.  
+put it an http served directory, rename it index.php, and that's it.
   
 you can also edit some parameters in your index.php, such as the page title, 
 the cache directory, etc.  
