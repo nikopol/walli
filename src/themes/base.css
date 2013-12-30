@@ -390,7 +390,7 @@ li.diapo input[type="checkbox"] {
 	100% { transform: scale(1.2); }
 }
 
-/*SLIDER*/
+/*SLIDERS*/
 
 #view #slide {
 	position: absolute;	
@@ -413,6 +413,53 @@ li.diapo input[type="checkbox"] {
 
 #view.comfix #slide {
 	left: 360px;
+}
+
+#view #slide.box {
+	-webkit-perspective-origin: 50% 50%;
+	-moz-perspective-origin: 50% 50%;
+	-ms-perspective-origin: 50% 50%;
+	perspective-origin: 50% 50%;
+	-webkit-perspective: 1300px;
+	-moz-perspective: 1300px;
+	-ms-perspective: 1300px;
+	perspective: 1300px;
+}
+
+#view #slide.box img {
+	-webkit-backface-visibility: hidden;
+	box-sizing: border-box;
+	-webkit-transition: all 800;
+	-moz-transition: all 800;
+	-ms-transition: all 800;
+	transition: all 800;
+	-webkit-transform-style: preserve-3d;
+	-moz-transform-style: preserve-3d;
+	-ms-transform-style: preserve-3d;
+	transform-style: preserve-3d;
+}
+
+#view #slide.box img.left {
+	z-index: 0;
+	opacity: 0;
+	-webkit-transform: translate3d(100%, 0, 0) rotateY(90deg) translate3d(100%, 0, 0);
+	-moz-transform: translate3d(100%, 0, 0) rotateY(90deg) translate3d(100%, 0, 0);
+	-ms-transform: translate3d(100%, 0, 0) rotateY(90deg) translate3d(100%, 0, 0);
+	transform: translate3d(100%, 0, 0) rotateY(90deg) translate3d(100%, 0, 0);
+}
+
+#view #slide.box img.right {
+	z-index: 0;
+	opacity: 0;
+	-webkit-transform: translate3d(-100%, 0, 0) rotateY(-90deg) translate3d(-100%, 0, 0);
+	-moz-transform: translate3d(-100%, 0, 0) rotateY(-90deg) translate3d(-100%, 0, 0);
+	-ms-transform: translate3d(-100%, 0, 0) rotateY(-90deg) translate3d(-100%, 0, 0);
+	transform: translate3d(-100%, 0, 0) rotateY(-90deg) translate3d(-100%, 0, 0);
+}
+
+#view #slide.box img.center {
+	z-index: 10;
+	opacity: 1;
 }
 
 /*COMMENTS*/

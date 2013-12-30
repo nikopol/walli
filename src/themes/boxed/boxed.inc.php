@@ -4,4 +4,5 @@ $THUMB=array(
 	'size'   => 150,
 	'margin' => 5
 );
+$SLIDER='box';
 ?>

@@ -706,11 +706,12 @@ stand-alone image wall - https://github.com/nikopol/walli
 		ready(function(){
 			walli.setup({
 				refresh: <?php print($REFRESH_DELAY) ?>,
-				comments: <?php print($withcom?'true':'false')?>,
-				admin: <?php print($withadm?'true':'false')?>,
-				zip: <?php print($withzip?'true':'false')?>,
-				god: <?php print($godmode?'true':'false')?>,
-				thumbnail: <?php print(json_encode($THUMB)) ?>
+				comments: <?php print($withcom?'true':'false') ?>,
+				admin: <?php print($withadm?'true':'false') ?>,
+				zip: <?php print($withzip?'true':'false') ?>,
+				god: <?php print($godmode?'true':'false') ?>,
+				thumbnail: <?php print(json_encode($THUMB)) ?>,
+				slider: <?php print($SLIDER?"'$SLIDER'":'default') ?> 
 			});
 		});
 	</script>

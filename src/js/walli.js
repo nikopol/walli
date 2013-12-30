@@ -330,7 +330,167 @@ walli = (function(){
 		smx = 0,           //sleep mouse pos
 		smy = 0,           //sleep mouse pos
 		cur = {},          //cursor pos
-		thumb = {};        //thumbnail parameter
+		thumb,             //thumbnail params
+		slider,            //slider engine
+
+		//thumbnail engines
+		thumbs = {
+			boxed: {
+				make: function(){
+					var
+					boxs=thumb.size,
+					boxm=thumb.margin,
+					dad=_('#diapos'),
+					bt=[0,boxs+boxm*2,boxs*2+boxm*4], //boxes sizes with margin
+					bs=[0,boxs,boxs*2+boxm*2], //boxes sizes without margin
+					nc=Math.floor(_(dad).clientWidth/bt[1]); //nb column
+					if(nc<1) nc=1;
+					if(nc==thumb.lastnc) return;
+					thumb.lastnc=nc;
+					var
+					bn=0, //box num
+					bx=0, //box col
+					by=0, //box row
+					bm=[], //bitmap
+					nb=dirs.length+files.length,
+					bmresize=function(y,h){ //auto grow bitmap
+						while(bm.length<y+h) bm.push(0);
+					},
+					mask=function(x,w){ //calc x+w bit mask
+						var mx,i;
+						for(mx=i=0;i<w;mx+=1<<i++);
+						mx<<=x;
+						return mx;
+					},
+					bmset=function(x,y,w,h){ //set bits
+						var i,mx=mask(x,w);
+						bmresize(y,h);
+						for(i=0;i<h;++i) bm[y+i]|=mx;
+					},
+					bmtest=function(x,y,w,h){ //test bits
+						var i,mx=mask(x,w);
+						bmresize(y,h);
+						for(i=0;i<h;++i) if(bm[y+i]&mx) return true;
+						return false;
+					},
+					boxset=function(o,x,y,w,h){
+						bmset(x,y,w,h);
+						css(o,{
+							position: 'absolute',
+							margin: boxm,
+							left: (bt[1]*x)+'px',
+							top: (bt[1]*y)+'px',
+							width: bs[w]+'px',
+							height: bs[h]+'px'
+						});
+					},
+					add=function(url,click,cls,id){
+						var image = (function(){
+							var
+							n = files.length-1,
+							o = document.createElement('img'),
+							u = url;
+							o.onload = function(){
+								osd.inc();
+								log.debug(u+' loaded');
+								css(this.parentNode,'+loaded');
+							};
+							o.onclick = click;
+							return o;
+						})(),
+						bh,bw,r=Math.random(),
+						d = document.createElement('li');
+						css(d,'diapo '+cls);
+						d.appendChild(image);
+						d.setAttribute('title',cleantitle(url));
+						if(id != undefined){
+							image.id = 'diapo'+id;
+							if(zip || god) append(d,'<input type="checkbox" id="chk'+id+'" n="'+id+'" onchange="walli.zwap('+id+')"/><label for="chk'+id+'"></label>');
+						}
+						if((coms[url]||[]).length)
+							append(d,'<span class="minicom">'+numk(coms[url].length)+'</span>');
+						diapos.appendChild(d);
+						if(bx==0 && by==0){
+							bh=2;
+							bw=nc>1 ? 2 : 1;
+						} else if((nc-bx)>1 && r>0.5 && !bmtest(bx,by,2,1)) {
+							bh=r>0.8 && nb>nc ? 2 : 1;
+							bw=2;
+						} else {
+							bh=r>0.7 && nb>nc ? 2 : 1;
+							bw=1;					
+						}
+						boxset(d,bx,by,bw,bh);
+						image.src = '?!=mini&file='+encodeURIComponent(url)+'&w='+bs[bw]+'&h='+bs[bh];
+						while(bmtest(bx,by,1,1)) {
+							bx++;
+							if(bx>=nc) {
+								bx=0;
+								by++;
+							}
+						}
+						nb--;
+					};
+					//console.log('layout with '+nc+' columns');
+					_('#diapos','');
+					osd.start(files.length+dirs.length);
+					dirs.forEach(function(d){
+						add(d,function(){loadpath(d)},'dir')
+					});
+					files.forEach(function(d,i){
+						//delayed loading for big folder (todo: improve)
+						setTimeout(function(){add(d,function(){walli.show(i,0)},'',i)},i)
+					});
+				},
+				build: function(){
+					thumb.lastnc=0;
+					this.make();
+				},
+				resize: function(){ this.make() },
+				rotate: function(){ this.make() }
+			},
+			default: {
+				build: function(){
+					var add = function(url,click,cls,id){
+						var image = (function(){
+							var
+								n = files.length-1,
+								o = document.createElement('img'),
+								u = url;
+							o.onload = function(){
+								osd.inc();
+								log.debug(u+' loaded');
+								css(this.parentNode,'+loaded');
+							};
+							o.onclick = click;
+							return o;
+						})(),
+						d = document.createElement('li');
+						css(d,'diapo '+cls);
+						d.appendChild(image);
+						d.setAttribute('title',cleantitle(url));
+						if(id != undefined){
+							image.id = 'diapo'+id;
+							if(zip || god) append(d,'<input type="checkbox" id="chk'+id+'" n="'+id+'" onchange="walli.zwap('+id+')"/><label for="chk'+id+'"></label>');
+						}
+						if((coms[url]||[]).length)
+							append(d,'<span class="minicom">'+numk(coms[url].length)+'</span>');
+						diapos.appendChild(d);
+						image.src = '?!=mini&file='+encodeURIComponent(url)+'&w='+thumb.size+'&h='+thumb.size;
+					};
+					osd.start(files.length+dirs.length);
+					dirs.forEach(function(d){
+						add(d,function(){loadpath(d)},'dir')
+					});
+					files.forEach(function(d,i){
+						//delayed loading for big folder (todo: improve)
+						setTimeout(function(){add(d,function(){walli.show(i,0)},'',i)},i)
+					});
+				},
+				resize: function(){ return },
+				rotate: function(){ return }
+			}
+		};
 
 	function layout(){
 		//auto resize diapos
@@ -398,165 +558,6 @@ walli = (function(){
 				});
 			},refresh*1000);
 	}
-
-
-	var tengines = {
-		boxed: {
-			make: function(){
-				var
-				boxs=thumb.size,
-				boxm=thumb.margin,
-				dad=_('#diapos'),
-				bt=[0,boxs+boxm*2,boxs*2+boxm*4], //boxes sizes with margin
-				bs=[0,boxs,boxs*2+boxm*2], //boxes sizes without margin
-				nc=Math.floor(_(dad).clientWidth/bt[1]); //nb column
-				if(nc<1) nc=1;
-				if(nc==thumb.lastnc) return;
-				thumb.lastnc=nc;
-				var
-				bn=0, //box num
-				bx=0, //box col
-				by=0, //box row
-				bm=[], //bitmap
-				nb=dirs.length+files.length,
-				bmresize=function(y,h){ //auto grow bitmap
-					while(bm.length<y+h) bm.push(0);
-				},
-				mask=function(x,w){ //calc x+w bit mask
-					var mx,i;
-					for(mx=i=0;i<w;mx+=1<<i++);
-					mx<<=x;
-					return mx;
-				},
-				bmset=function(x,y,w,h){ //set bits
-					var i,mx=mask(x,w);
-					bmresize(y,h);
-					for(i=0;i<h;++i) bm[y+i]|=mx;
-				},
-				bmtest=function(x,y,w,h){ //test bits
-					var i,mx=mask(x,w);
-					bmresize(y,h);
-					for(i=0;i<h;++i) if(bm[y+i]&mx) return true;
-					return false;
-				},
-				boxset=function(o,x,y,w,h){
-					bmset(x,y,w,h);
-					css(o,{
-						position: 'absolute',
-						margin: boxm,
-						left: (bt[1]*x)+'px',
-						top: (bt[1]*y)+'px',
-						width: bs[w]+'px',
-						height: bs[h]+'px'
-					});
-				},
-				add=function(url,click,cls,id){
-					var image = (function(){
-						var
-						n = files.length-1,
-						o = document.createElement('img'),
-						u = url;
-						o.onload = function(){
-							osd.inc();
-							log.debug(u+' loaded');
-							css(this.parentNode,'+loaded');
-						};
-						o.onclick = click;
-						return o;
-					})(),
-					bh,bw,r=Math.random(),
-					d = document.createElement('li');
-					css(d,'diapo '+cls);
-					d.appendChild(image);
-					d.setAttribute('title',cleantitle(url));
-					if(id != undefined){
-						image.id = 'diapo'+id;
-						if(zip || god) append(d,'<input type="checkbox" id="chk'+id+'" n="'+id+'" onchange="walli.zwap('+id+')"/><label for="chk'+id+'"></label>');
-					}
-					if((coms[url]||[]).length)
-						append(d,'<span class="minicom">'+numk(coms[url].length)+'</span>');
-					diapos.appendChild(d);
-					if(bx==0 && by==0){
-						bh=2;
-						bw=nc>1 ? 2 : 1;
-					} else if((nc-bx)>1 && r>0.5 && !bmtest(bx,by,2,1)) {
-						bh=r>0.8 && nb>nc ? 2 : 1;
-						bw=2;
-					} else {
-						bh=r>0.7 && nb>nc ? 2 : 1;
-						bw=1;					
-					}
-					boxset(d,bx,by,bw,bh);
-					image.src = '?!=mini&file='+encodeURIComponent(url)+'&w='+bs[bw]+'&h='+bs[bh];
-					while(bmtest(bx,by,1,1)) {
-						bx++;
-						if(bx>=nc) {
-							bx=0;
-							by++;
-						}
-					}
-					nb--;
-				};
-				//console.log('layout with '+nc+' columns');
-				_('#diapos','');
-				osd.start(files.length+dirs.length);
-				dirs.forEach(function(d){
-					add(d,function(){loadpath(d)},'dir')
-				});
-				files.forEach(function(d,i){
-					//delayed loading for big folder (todo: improve)
-					setTimeout(function(){add(d,function(){walli.show(i,0)},'',i)},i)
-				});
-			},
-			build: function(){
-				thumb.lastnc=0;
-				this.make();
-			},
-			resize: function(){ this.make() },
-			rotate: function(){ this.make() }
-		},
-		default: {
-			build: function(){
-				var add = function(url,click,cls,id){
-					var image = (function(){
-						var
-							n = files.length-1,
-							o = document.createElement('img'),
-							u = url;
-						o.onload = function(){
-							osd.inc();
-							log.debug(u+' loaded');
-							css(this.parentNode,'+loaded');
-						};
-						o.onclick = click;
-						return o;
-					})(),
-					d = document.createElement('li');
-					css(d,'diapo '+cls);
-					d.appendChild(image);
-					d.setAttribute('title',cleantitle(url));
-					if(id != undefined){
-						image.id = 'diapo'+id;
-						if(zip || god) append(d,'<input type="checkbox" id="chk'+id+'" n="'+id+'" onchange="walli.zwap('+id+')"/><label for="chk'+id+'"></label>');
-					}
-					if((coms[url]||[]).length)
-						append(d,'<span class="minicom">'+numk(coms[url].length)+'</span>');
-					diapos.appendChild(d);
-					image.src = '?!=mini&file='+encodeURIComponent(url)+'&w='+thumb.size+'&h='+thumb.size;
-				};
-				osd.start(files.length+dirs.length);
-				dirs.forEach(function(d){
-					add(d,function(){loadpath(d)},'dir')
-				});
-				files.forEach(function(d,i){
-					//delayed loading for big folder (todo: improve)
-					setTimeout(function(){add(d,function(){walli.show(i,0)},'',i)},i)
-				});
-			},
-			resize: function(){ return },
-			rotate: function(){ return }
-		}
-	};
 
 	function loadpath(p,cb){
 		unsetcheck();
@@ -902,13 +903,14 @@ walli = (function(){
 			god = o.god;
 			zip = o.zip;
 			thumb = o.thumbnail || {engine:'default',size:150,margin:0};
-			thumb.layout = tengines[thumb.engine] || tengines.default;
-	
+			thumb.layout = thumbs[thumb.engine] || thumbs.default;
+			slider = o.slider || 'default';
+
 			view = _('#view');
 			cul = _('#coms');
 
 			slide = _('#slide');
-			//slide.onresize = function(){ log.debug('slide='+this.clientWidth); };
+			css(slide,'+'+slider);
 			slide.onmousewheel = function(e){
 				if(showing) {
 					var delta = e.wheelDelta || e.detail/3;
@@ -1267,13 +1269,23 @@ walli = (function(){
 				img[nimg].src = i.src;
 				if(p) {
 					//slide
-					css(img[nimg],p<0?'left':'right');
-					calcpos(nimg,p);					
-					slide.appendChild(img[nimg]);
-					calcpos(nimg,0);
-					css(img[nimg],'animated center');				
-					css(img[1-nimg],'animated '+(p>0?'left':'right'));
-					calcpos(1-nimg,-p);
+					if(slider=='box') {
+						css(img[nimg],p<0?'left':'right');
+						calcpos(nimg,0);
+						slide.appendChild(img[nimg]);
+						calcpos(nimg,0);
+						css(img[nimg],'animated center');
+						css(img[1-nimg],'animated '+(p>0?'left':'right'));
+						calcpos(1-nimg,0);
+					} else {
+						css(img[nimg],p<0?'left':'right');
+						calcpos(nimg,p);
+						slide.appendChild(img[nimg]);
+						calcpos(nimg,0);
+						css(img[nimg],'animated center');
+						css(img[1-nimg],'animated '+(p>0?'left':'right'));
+						calcpos(1-nimg,-p);
+					}
 				} else {
 					//zoom from diapo
 					css(img[nimg],'');
