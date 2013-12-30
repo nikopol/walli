@@ -480,13 +480,12 @@ walli = (function(){
 						bh=2;
 						bw=nc>1 ? 2 : 1;
 					} else if((nc-bx)>1 && r>0.5 && !bmtest(bx,by,2,1)) {
-						bh=r>0.8 ? 2 : 1;
+						bh=r>0.8 && nb>nc ? 2 : 1;
 						bw=2;
 					} else {
-						bh=r>0.7 ? 2 : 1;
+						bh=r>0.7 && nb>nc ? 2 : 1;
 						bw=1;					
 					}
-					if(nb<=nc) bh=1;
 					boxset(d,bx,by,bw,bh);
 					image.src = '?!=mini&file='+encodeURIComponent(url)+'&w='+bs[bw]+'&h='+bs[bh];
 					while(bmtest(bx,by,1,1)) {
