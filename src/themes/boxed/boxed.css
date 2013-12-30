@@ -200,14 +200,14 @@ li.diapo.loaded span.minicom {
 /*SLIDES*/
 
 #view {
-	background: #000;
+	background: #555;
 }
 
 /*COMMENTS*/
 
 #view #comments {
 	color: #fff;
-	background-color: #000;
+	background-color: #555;
 }
 
 #coms li {

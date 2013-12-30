@@ -1256,16 +1256,14 @@ walli = (function(){
 				n < 0 ? files.length+n :
 				n >= files.length ? n%files.length :
 				n;
-			//log.debug('display #'+idx+' '+files[idx]);
 			if(!showing) setmode('tof');
 			css('#mask','+active');
 			loadimg(idx,function(ni,i){
-				//log.debug("load "+ni+" ok p="+p);
 				css('#mask','-active');
 				if(showing) nimg = 1-nimg; //switch image element idx
 				else p=0;                  //zoom from thumbnail
 				att[nimg] = { w:i.width, h:i.height };
-				slide.removeChild(img[nimg]); /*remove&append to force redraw*/
+				slide.removeChild(img[nimg]); //remove&append to force redraw
 				img[nimg].src = i.src;
 				if(p) {
 					//slide
@@ -1273,7 +1271,6 @@ walli = (function(){
 						css(img[nimg],p<0?'left':'right');
 						calcpos(nimg,0);
 						slide.appendChild(img[nimg]);
-						calcpos(nimg,0);
 						css(img[nimg],'animated center');
 						css(img[1-nimg],'animated '+(p>0?'left':'right'));
 						calcpos(1-nimg,0);
