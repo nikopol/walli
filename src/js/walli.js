@@ -525,7 +525,7 @@ walli = (function(){
 			cb(n,null);
 			loading--;
 		};
-		i.src = encodeURIComponent(f);
+		i.src = encodeURIComponent(f);show
 	}
 
 	function cleantitle(f){
@@ -1271,6 +1271,7 @@ walli = (function(){
 						css(img[nimg],p<0?'left':'right');
 						calcpos(nimg,0);
 						slide.appendChild(img[nimg]);
+						calcpos(nimg,0);
 						css(img[nimg],'animated center');
 						css(img[1-nimg],'animated '+(p>0?'left':'right'));
 						calcpos(1-nimg,0);
