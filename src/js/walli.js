@@ -1,6 +1,5 @@
-// WALLi JS
+// WALLi JS - niko 2012
 // https://github.com/nikopol/walli
-// niko 2012-2013
 
 /*LOCALE*/
 
@@ -410,7 +409,7 @@ walli = (function(){
 						if((coms[url]||[]).length)
 							append(d,'<span class="minicom">'+numk(coms[url].length)+'</span>');
 						diapos.appendChild(d);
-						if(bx==0 && by==0){
+						if(cls=='dir' || (bx==0 && by==0)){
 							bh=2;
 							bw=nc>1 ? 2 : 1;
 						} else if((nc-bx)>1 && r>0.5 && !bmtest(bx,by,2,1)) {
@@ -431,7 +430,6 @@ walli = (function(){
 						}
 						nb--;
 					};
-					//console.log('layout with '+nc+' columns');
 					_('#diapos','');
 					osd.start(files.length+dirs.length);
 					dirs.forEach(function(d){
@@ -439,7 +437,7 @@ walli = (function(){
 					});
 					files.forEach(function(d,i){
 						//delayed loading for big folder (todo: improve)
-						setTimeout(function(){add(d,function(){walli.show(i,0)},'',i)},i)
+						setTimeout(function(){add(d,function(){walli.show(i,0)},'',i)},i*10)
 					});
 				},
 				build: function(){
