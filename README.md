@@ -1,5 +1,5 @@
-WALLi v0.8 (c) niko 2012-2013
------------------------------
+WALLi v0.8 (c) niko 2012
+------------------------
 "all-in-one" Images Wall
 
 the purpose of this project is to provide an *all-in-one* php file, without any 
