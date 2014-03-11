@@ -523,7 +523,7 @@ walli = (function(){
 			cb(n,null);
 			loading--;
 		};
-		i.src = encodeURIComponent(f);show
+		i.src = encodeURIComponent(f);
 	}
 
 	function cleantitle(f){

@@ -711,7 +711,7 @@ stand-alone image wall - https://github.com/nikopol/walli
 				zip: <?php print($withzip?'true':'false') ?>,
 				god: <?php print($godmode?'true':'false') ?>,
 				thumbnail: <?php print(json_encode($THUMB)) ?>,
-				slider: <?php print($SLIDER?"'$SLIDER'":'default') ?> 
+				slider: "<?php print($SLIDER?$SLIDER:'default')?>"
 			});
 		});
 	</script>
