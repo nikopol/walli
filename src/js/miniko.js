@@ -1,5 +1,5 @@
-// miniko.js 0.5
-// ~L~ nikomomo@gmail.com 2012-2013
+// miniko.js 0.6
+// ~L~ nikomomo@gmail.com 2012-2014
 // https://github.com/nikopol/miniko.js
 
 /*
@@ -9,8 +9,10 @@ if content is provided, all matching element will have it.
 
   _(element,[content])    : return the element provided
   _("#id",[content])      : return the element by id
-  _(".class",[content])   : return an elements array matching a classname
+  _("<element>",[content]): create and return element
   _("selector",[content]) : return an elements array matching a selector
+
+  all these methods setup innerHTML if content is provided
 
 **manipulation**
 
@@ -18,10 +20,11 @@ if content is provided, all matching element will have it.
 
 **style**  
 
-  css(sel,'class')        : set classname to matching element(s)
-  css(sel,'+class')       : add class to matching element(s)
-  css(sel,'-class')       : remove class to matching element(s)
-  css(sel,'*class')       : toggle class to matching element(s)
+  css(sel,'class')        : set/overwrite classname to matching element(s)
+  css(sel,'+C1-C2*C3')    : add C1 to matching element(s) and
+                            remove C2 to matching element(s) and
+                            toggle C3 to matching element(s)
+  css(sel,'?class')       : return the count of class in matchinf element(s)
   css(sel,{style:value})  : style's values to matching element(s)
   
 **geometry**
@@ -56,16 +59,19 @@ if content is provided, all matching element will have it.
 	"use strict";
 	var
 	D = W.document,
-	A = function(o){ return o instanceof Array ? o : [o]; };
+	//A = function(o){ return o ? (o instanceof Array ? o : [o]) : []; };
+	A = function(o){ return o===null ? [] : o instanceof Array ? o : [o] };
 
 	W._ = function(s,h){
 		var o,l,n;
 		if(typeof(s)=='object')
 			o = s;
 		else if(s.length) {
-			if(s[0]=='#' && !/[ \.\>\<]/.test(s))
+			if(s[0]=='#' && !/[ ,\.\>\<]/.test(s))
 				o = D.getElementById(s.substr(1));
-			else {
+			else if(s.match(/^<([^>]+)>$/)) {
+				o = D.createElement(RegExp.$1);
+			} else {
 				l = D.querySelectorAll(s);
 				for(o=[],n=0; n<l.length; ++n) o.push(l[n]);
 			}
@@ -74,34 +80,42 @@ if content is provided, all matching element will have it.
 		return o;
 	};
 
-	W.append = function(s,h){
-		var o = _(s);
-		if(o)
-			A(o).forEach(function(e){
-				var c = D.createElement('div');
-				c.innerHTML = h;
-				while(c.childNodes.length) e.appendChild(c.childNodes[0]);
-			});
+	W.append = function(s,c){
+		var o=_(s);
+		if(c==undefined) return o;
+		A(o).forEach(function(e){
+			var n,d=_('<div>',c);
+			for(n=0; n<d.childNodes.length; ++n)
+				e.appendChild(d.childNodes[n]);
+		});
 		return o;
 	};
 
 	W.css = function(s,c){
-		var o = _(s),z,l;
-		if(!o) return;
-		if(c==undefined) return o instanceof Array ? o : o.className;
-		if(typeof c=='object')
-			A(o).forEach(function(e){ for(z in c) e.style[z] = c[z] });
-		else if(/^([\+\-\*])(.+)$/.test(c)) {
-			z = RegExp.$1;
-			c = RegExp.$2;
-			A(o).forEach(function(e){
-				l = e.className.split(/\s+/).filter(function(n){return n});
-				if(z!='-' && l.indexOf(c)==-1)
-					l.push(c);  //add class
-				else if(z!='+')
-					l=l.filter(function(n){return n!=c}); //remove class
-				o.className = l.join(' ');
+		var o=_(s),m,z,v,q=/([\+\-\*])([^\+\-\*\s]+)/g;
+		if(c==undefined) return o;
+		if(typeof(c)=="object") {
+				A(o).forEach(function(e){
+					for(m in c) e.style[m] = c[m];
+				});
+		} else if( /^[\+\-\*]/.test(c) ) {
+			while((m = q.exec(c)) !== null) {
+				z = m[1];
+				v = m[2];
+				A(o).forEach(function(e){
+					var w = e.className.split(/\s+/).filter(function(n){return n});
+					if(z!='-' && w.indexOf(v)==-1) w.push(v); //add class
+					else if(z!='+') w=w.filter(function(n){return n!=v}); //remove class
+					e.className = w.join(' ');
+				});
+			}
+		} else if( c[0]=='?' ) {
+			m = 0;
+			c = c.substr(1);
+			A(o).forEach(function(e){ 
+				m += e.className.split(' ').filter(function(d){ return d==c }).length; 
 			});
+			o = m;
 		} else
 			A(o).forEach(function(e){ e.className = c });
 		return o;

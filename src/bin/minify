@@ -8,12 +8,15 @@ use warnings;
 use JSON;
 use LWP::UserAgent;
 use MIME::Base64;
+use URI::Escape;
 
 die "usage: $0 [-wc] < wally.php > wally-allinone-minified.php\n" if grep { /--?(h|help)/ } @ARGV;
 my $woclosure = grep { /--?(wc|woclosure|withoutclosure)/ } @ARGV;
 
 my $read = 0;
 my $mini = '';
+my $maxsize = 32768;
+
 
 sub load {
 	my( $file, $pfx ) = @_;
@@ -47,6 +50,26 @@ sub imagedata {
 		$ext =~ /ttf|woff|eot/i ? 'application/x-font-'.$ext :
 		'application/octet-stream';
 	'data:'.$mime.';base64,'.$data;
+}
+
+sub svgdata {
+	my( $file, $pfx ) = @_;
+	$pfx = '' unless $pfx;
+	return $file if $file =~ /^(http|data\:)/i;
+	my $ext = ( $file =~ /\.([^\.]+)$/ ) ? $1 : '?';
+	my $raw = load $file, $pfx;
+	my $len = length $raw;
+	my $data = $raw;
+	$data =~ s/\<\!\-\-.*?\-\-\>//gm;
+	$data =~ s/\<\?xml.*?\?\>//igm;
+	$data =~ s/\<\!DOCTYPE .*?\>//igm;
+	$data =~ s/\>\s+\</></gm;
+	$data =~ s/[\n\r\t]+//gm;
+	$data =~ s/'/"/gm;
+	$data = uri_escape($data);
+	my $zip = length $data;
+	warn "$pfx$file encoded from $len to $zip (",int(100*($len-$zip)/$len),"%)\n";
+	'data:image/svg+xml;utf8,'.$data;
 }
 
 sub php_minify {
@@ -83,20 +106,26 @@ sub css_minify {
 			$l = $url =~ /\.css$/i
 				? join("\n",css_minify($path.$url,$pfx))."\n"
 				: "$l\n";
-		} elsif( $l =~ m/url\(\'?\"?([^\)'"]+)\'?\"?\)/ ){
+		} elsif( $l =~ m/url\((\'?\"?[^\)'"]+\'?\"?)\)/ ){
 			#embed local images
-			my $url = $1;
+			my $org = $1;
+			my $url = $org;
+			$url =~ s/^['"]//;
+			$url =~ s/['"]$//;
 			if( $url !~ /^(http|data\:)/i && $url =~ /\.(jpe?g|gif|png)$/i ) {
-				my $b64 = imagedata $path.$url, $pfx;
-				$l =~ s/$url/$b64/;
+				my $b64 = '"'.imagedata($path.$url, $pfx).'"';
+				$l =~ s/$org/$b64/;
+			} elsif( $url !~ /^(http|data\:)/i && $url =~ /\.svg$/i ) {
+				my $svg = "'".svgdata($path.$url, $pfx)."'";
+				$l =~ s/$org/$svg/;
 			}
 		}
 		$mini .= $l if $l;
 	}
 	$mini =~ s/\r+//g;         #remove \r
 	$mini =~ s/(^\s+|\s*$)//g; #remove lead/end spaces
-	$mini =~ s/ *\: */:/g;   #remove spaces around :
-	$mini =~ s/\; +/;/g;      #remove spaces after ;
+	$mini =~ s/ *\: */:/g;     #remove spaces around :
+	$mini =~ s/\; +/;/g;       #remove spaces after ;
 	$mini =~ s/\s*\{\s*/{/g;   #remove spaces around {
 	$mini =~ s/\s*\}\s*/}/g;   #remove spaces around }
 	$mini =~ s/ +/ /g;         #reduce multiple spaces 
@@ -215,10 +244,17 @@ for my $l ( <STDIN> ) {
 			: "$pfx<style>\n".
 			  "$pfx\t".join("\n$pfx\t",css_merge(css_minify($src)))."\n".
 			  "$pfx</style>\n";
-	} elsif( $l =~ /=['"]([^'"]+\.(jpg|png|gif))[\'\"]/i ) {
+	} elsif( $l =~ /=['"]([^'"]+\.(jpe?g|png|gif|ico))[\'\"]/i ) {
 		my $file = $1;
 		if( -s $file < 32768 ){
 			my $data = imagedata $file;
+			$l =~ s/$file/$data/;
+		}
+		$mini .= $l;
+	} elsif( $l =~ /=['"]([^'"]+\.svg)[\'\"]/i ) {
+		my $file = $1;
+		if( -s $file < 32768 ){
+			my $data = svgdata $file;
 			$l =~ s/$file/$data/;
 		}
 		$mini .= $l;

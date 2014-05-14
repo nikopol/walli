@@ -696,11 +696,11 @@ stand-alone image wall - https://github.com/nikopol/walli
 	<div id="help"></div>
 
 	<!--[if IE]>
-	<script src="js/ie.js"></script>
+	<script src="js/ie.min.js"></script>
 	<![endif]-->
 
-	<script src="js/miniko.js"></script>
-	<script src="js/minitools.js"></script>
+	<script src="js/miniko.min.js"></script>
+	<script src="js/minitools.min.js"></script>
 	<script src="js/walli.js"></script>
 	<script>
 		ready(function(){

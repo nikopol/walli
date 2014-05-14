@@ -1,5 +1,5 @@
-// minitools.js 0.2
-// ~L~ nikomomo@gmail.com 2012-2013
+// minitools.js 0.3
+// ~L~ nikomomo@gmail.com 2012-2014
 // https://github.com/nikopol/minitools.js
 
 /*
@@ -44,35 +44,39 @@ var
 hash=(function(){
 	"use strict";
 	var h, p,
-	encode=function(s){ return s.replace(/ /g,'%20').replace(/#/,'%23') },
-	decode=function(s){ return s.replace(/%20/g,' ').replace(/%23/,'#') },
+	hash=function(){ return document.location.href.replace(/^.*?#/,'') },
+	encode=function(s){ return s.replace(/&/g,'%26').replace(/=/g,'%3D') },
+	decode=function(s){ return decodeURIComponent(s) },
 	serialize=function(){
 		var a=[], k;
-		for (k in h) a.push(k+"="+h[k]);
-		p=a.join("|");
-		document.location.hash="#"+encode(p);
+		for (k in h) a.push(encode(k)+"="+encode(h[k]));
+		document.location.hash="#"+a.join("&");
 		return true;
 	},
 	unserialize=function(){
 		h={};
-		p=decode(document.location.hash.substr(1));
+		p=hash();
 		if(p.length) {
-			var lst=p.split("|");
+			var lst=p.split("&");
 			lst.forEach(function(l){
-				var kv=l.split('=');
-				if(kv.length>1) h[kv.shift()] = kv.join('=');
+				var kv=l.split("=");
+				if(kv.length>1) h[decode(kv[0])] = decode(kv[1]);
 			});
 		}
 	};
 	unserialize();
 	return {
-		del: function(key){ if(key in h){ delete h[key]; return serialize(h) } return false },
+		del: function(key){ if(h[key]!=undefined){ delete h[key]; return serialize(h) } return false },
 		set: function(key,val){ return serialize(typeof(key)=='object' ? h = key : h[key] = val) },
-		get: function(key){ return key==undefined ? h : decode(h[key]||'') },
+		get: function(key){ return key==undefined ? h : h[key]||'' },
+		link: function(o){
+			var z=[];
+			if(o) for(var k in o) z.push(k+'='+encode(o[k]));
+			return '#'+z.join('&');
+		},
 		onchange: function(cb){
 			window.onhashchange=function(){
-				var q=decode(document.location.hash.substr(1));
-				if(q!=p){
+				if(hash()!=p){
 					unserialize();
 					if(cb) cb();
 				}
@@ -94,7 +98,7 @@ hotkeys=(function(){
 	},
 	MASKEYS={ ALT:1,CONTROL:2,CTRL:2,SHIFT:4 },
 	list=[],
-	cold=function(){ return /INPUT|SELECT|TEXTAREA/.test(document.activeElement.tagName) },
+	cold=function(){ return /INPUT|SELECT|TEXTAREA|KBD/.test(document.activeElement.tagName) },
 	trigger=function(e){
 		if(!e) e=window.event;
 		var i, k,
@@ -103,7 +107,7 @@ hotkeys=(function(){
 		for(i in list) {
 			k=list[i];
 			if((e.which==k.key || chr==k.key) && msk==k.mask) {
-				if(k.glob || !cold()) {
+				if(k.glob || !cold() || k.key==27) {
 					k.fn(e);
 					e.stopPropagation();
 					e.preventDefault();
