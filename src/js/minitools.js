@@ -45,7 +45,7 @@ hash=(function(){
 	"use strict";
 	var h, p,
 	hash=function(){ return document.location.href.replace(/^.*?#/,'') },
-	encode=function(s){ return s.replace(/&/g,'%26').replace(/=/g,'%3D') },
+	encode=function(s){ return s.toString().replace(/&/g,'%26').replace(/=/g,'%3D') },
 	decode=function(s){ return decodeURIComponent(s) },
 	serialize=function(skipevent){
 		var a=[], k;
