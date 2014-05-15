@@ -726,12 +726,12 @@ walli = (function(){
 		if(b) {
 			css('#bcom','+active');
 			css(view,'+com'+(fix ? 'fix' : ''));
-			hash.set('com',1);
+			hash.set('com',1,true);
 		} else {
 			css('#bcom','-active');
 			css(view,'-com');
 			css(view,'-comfix');
-			hash.del('com');
+			hash.del('com',true);
 		}
 		if(showing)
 			setTimeout(function(){
@@ -796,10 +796,10 @@ walli = (function(){
 
 	function sethash(){
 		if(showing) {
-			hash.set('f',files[idx]);
+			hash.set('f',files[idx],true);
 		} else {
-			if(path) hash.set('f',path);
-			else hash.del('f');
+			if(path) hash.set('f',path,true);
+			else hash.del('f',true);
 		}
 	}
 

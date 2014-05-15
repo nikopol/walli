@@ -47,9 +47,10 @@ hash=(function(){
 	hash=function(){ return document.location.href.replace(/^.*?#/,'') },
 	encode=function(s){ return s.replace(/&/g,'%26').replace(/=/g,'%3D') },
 	decode=function(s){ return decodeURIComponent(s) },
-	serialize=function(){
+	serialize=function(skipevent){
 		var a=[], k;
 		for (k in h) a.push(encode(k)+"="+encode(h[k]));
+		if(skipevent) p=a.join("&");
 		document.location.hash="#"+a.join("&");
 		return true;
 	},
@@ -66,8 +67,8 @@ hash=(function(){
 	};
 	unserialize();
 	return {
-		del: function(key){ if(h[key]!=undefined){ delete h[key]; return serialize(h) } return false },
-		set: function(key,val){ return serialize(typeof(key)=='object' ? h = key : h[key] = val) },
+		del: function(key,skipevent){ if(h[key]!=undefined){ delete h[key]; return serialize(skipevent) } return false },
+		set: function(key,val,skipevent){ return serialize(skipevent,typeof(key)=='object' ? h = key : h[key] = val) },
 		get: function(key){ return key==undefined ? h : h[key]||'' },
 		link: function(o){
 			var z=[];
