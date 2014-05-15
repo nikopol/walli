@@ -955,7 +955,7 @@ walli = (function(){
 						clearTimeout(touch.h);
 						touch = {};
 						img[nimg].className = 'animated';
-						dx>TOUCHDELTA ? walli.next() : walli.prev();
+						dx>TOUCHDELTA ? walli.prev() : walli.next();
 					}
 				}
 			};
@@ -1270,12 +1270,12 @@ walli = (function(){
 				if(p) {
 					//slide
 					if(slider=='box') {
-						css(img[nimg],p<0?'left':'right');
+						css(img[nimg],p>0?'left':'right');
 						calcpos(nimg,0);
 						slide.appendChild(img[nimg]);
 						calcpos(nimg,0);
 						css(img[nimg],'animated center');
-						css(img[1-nimg],'animated '+(p>0?'left':'right'));
+						css(img[1-nimg],'animated '+(p<0?'left':'right'));
 						calcpos(1-nimg,0);
 					} else {
 						css(img[nimg],p<0?'left':'right');
