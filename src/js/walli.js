@@ -394,6 +394,10 @@ walli = (function(){
 								log.debug(u+' loaded');
 								css(this.parentNode,'+loaded');
 							};
+							o.onerror = function(){
+								osd.inc();
+								log.error('loading '+u);
+							}
 							o.onclick = click;
 							return o;
 						})(),
