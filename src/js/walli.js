@@ -955,7 +955,7 @@ walli = (function(){
 						clearTimeout(touch.h);
 						touch = {};
 						img[nimg].className = 'animated';
-						dx>TOUCHDELTA ? walli.prev() : walli.next();
+						dx>TOUCHDELTA ? walli.next() : walli.prev();
 					}
 				}
 			};
