@@ -1,4 +1,4 @@
-// miniko.js 0.6
+// miniko.js 0.7
 // ~L~ nikomomo@gmail.com 2012-2014
 // https://github.com/nikopol/miniko.js
 
@@ -9,7 +9,7 @@ if content is provided, all matching element will have it.
 
   _(element,[content])    : return the element provided
   _("#id",[content])      : return the element by id
-  _("<element>",[content]): create and return element
+  _("<el>...</el>")       : create and return element(s)
   _("selector",[content]) : return an elements array matching a selector
 
   all these methods setup innerHTML if content is provided
@@ -69,8 +69,10 @@ if content is provided, all matching element will have it.
 		else if(s.length) {
 			if(s[0]=='#' && !/[ ,\.\>\<]/.test(s))
 				o = D.getElementById(s.substr(1));
-			else if(s.match(/^<([^>]+)>$/)) {
-				o = D.createElement(RegExp.$1);
+			else if(/^<.+>$/.test(s)) {
+				(n = D.createElement('div')).innerHTML = s;
+				l = [].slice.call(n.childNodes);
+				o = l.length ? ( l.length>1 ? l : l[0] ) : undefined;
 			} else {
 				l = D.querySelectorAll(s);
 				for(o=[],n=0; n<l.length; ++n) o.push(l[n]);

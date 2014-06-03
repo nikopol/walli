@@ -1,4 +1,4 @@
-// WALLi JS - niko 2012
+// WALLi JS - niko 2012 - 2014
 // https://github.com/nikopol/walli
 
 /*LOCALE*/
@@ -283,7 +283,8 @@ osd = (function(){
 				css(p,'-active');
 				if(cb) cb();
 			}
-			_('#progressbar').style.width = max ? Math.floor(position('#progress').width*n/max)+'px' : 0;
+			//_('#progressbar').style.width = max ? Math.floor(position('#progress').width*n/max)+'px' : 0;
+			css('#progressbar',{width: max ? Math.floor(position('#progress').width*n/max)+'px' : 0});
 		},
 		inc: function(){ osd.set(++val) }
 	};
@@ -500,7 +501,8 @@ walli = (function(){
 		o = _('#thumbbar'),
 		p = position(o),
 		s = window.getComputedStyle(o);
-		_('#diapos').style.top = (p.top+p.height+parseInt(s.getPropertyValue('marginBottom')))+'px';
+		//_('#diapos').style.top = (p.top+p.height+parseInt(s.getPropertyValue('marginBottom')))+'px';
+		css('#diapos',{top: (p.top+p.height+parseInt(s.getPropertyValue('marginBottom')))+'px'});
 	}
 
 	function setbzip(c,t) {
@@ -565,7 +567,7 @@ walli = (function(){
 		unsetcheck();
 		log.debug('loading path '+(p || '/'));
 		setbzip('hide',loc.dlall);
-		if(god) _('#bdel').className='hide';
+		if(god) css('#bdel','hide');
 		chkfiles = [];
 		osd.hide();
 		ajax('?!=ls&path='+p, function(ls){
@@ -1102,7 +1104,7 @@ walli = (function(){
 			//manage intro
 			var i = _('#intro');
 			if(i) {
-				var itimer = setTimeout(function(){ css(i,'hide'); }, 5000);
+				var itimer = setTimeout(function(){ css(i,'hide') }, 5000);
 				i.onclick=function(){
 					clearTimeout(itimer);
 					css(i,'hide');
@@ -1242,10 +1244,10 @@ walli = (function(){
 			}
 			if(chkfiles.length) {
 				setbzip('selected',loc.tpl('dlsel',{nb:chkfiles.length}));
-				if(god) _('#bdel').className='';
+				if(god) css('#bdel','');
 			} else {
 				setbzip('all',loc.dlall);
-				if(god) _('#bdel').className='hide';
+				if(god) css('#bdel','hide');
 			}
 
 		},
