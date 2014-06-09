@@ -1,4 +1,4 @@
-// minitools.js 0.3
+// minitools.js 0.4
 // ~L~ nikomomo@gmail.com 2012-2014
 // https://github.com/nikopol/minitools.js
 
@@ -9,13 +9,15 @@ minitools.js is a collection of small js helpers for "modern" browsers.
 
 manage variables in the url anchor.
 
-  hash.set({page:"home",skin:"default"});  //set the complete anchor
-  hash.set("key","value");                 //set a variable
-  all=hash.get();                          //get all variables in an js object
-  val=hash.get("key");                     //get a variable
-  hash.del("key");                         //remove a variable
-  hash.set({});                            //remove all variables
-  hash.onchange(function(vars){ ... });    //setup a callback called on anchor update
+  hash.set({page:"home",skin:"default"}[,noev]);  //set the complete anchor
+  hash.set("key","value"[,noev]);                 //set a variable
+  all=hash.get();                                 //get all variables in an js object
+  val=hash.get("key");                            //get a variable
+  hash.del("key"[,noev]);                         //remove a variable
+  hash.set({});                                   //remove all variables
+  hash.onchange(function(vars){ ... });           //setup a callback called on anchor update
+
+  note: set and del trigger the onchange callback, except if you give true as noev parameter
 
 ** hotkeys **
 
@@ -44,12 +46,13 @@ var
 hash=(function(){
 	"use strict";
 	var h, p,
-	hash=function(){ return document.location.href.replace(/^.*?#/,'') },
+	hash=function(){ return document.location.hash.slice(1) },
 	encode=function(s){ return s.replace(/&/g,'%26').replace(/=/g,'%3D') },
 	decode=function(s){ return decodeURIComponent(s) },
-	serialize=function(){
+	serialize=function(noev){
 		var a=[], k;
 		for (k in h) a.push(encode(k)+"="+encode(h[k]));
+		if(noev) p=a.join("&");
 		document.location.hash="#"+a.join("&");
 		return true;
 	},
@@ -66,9 +69,9 @@ hash=(function(){
 	};
 	unserialize();
 	return {
-		del: function(key){ if(h[key]!=undefined){ delete h[key]; return serialize(h) } return false },
-		set: function(key,val){ return serialize(typeof(key)=='object' ? h = key : h[key] = val) },
-		get: function(key){ return key==undefined ? h : h[key]||'' },
+		del: function(key,noev){ if(h.hasOwnProperty(key)){ delete h[key]; return serialize(noev) } return false },
+		set: function(key,val,noev){ return typeof(key)=='object' ? serialize(val,h=key) : serialize(noev,h[key]=val) },
+		get: function(key){ return arguments.length ? h[key]||'' : h },
 		link: function(o){
 			var z=[];
 			if(o) for(var k in o) z.push(k+'='+encode(o[k]));
